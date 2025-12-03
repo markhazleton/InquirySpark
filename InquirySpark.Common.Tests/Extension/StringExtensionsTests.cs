@@ -161,11 +161,18 @@ public class StringExtensionsTests
     /// Defines the test method IndexOfNthTestValueNegativeNth.
     /// </summary>
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
     public void IndexOfNthTestValueNegativeNth()
     {
         string myTest = "333333";
-        var RunTest = myTest.IndexOfNth("3", -1);
+        try
+        {
+            var result = myTest.IndexOfNth("3", -1);
+            Assert.Fail("Expected ArgumentException was not thrown.");
+        }
+        catch (ArgumentException)
+        {
+            // Expected exception
+        }
     }
 
     /// <summary>

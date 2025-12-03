@@ -2,7 +2,7 @@ using InquirySpark.Common.SDK.Services;
 using InquirySpark.Repository.Database;
 using InquirySpark.Repository.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
