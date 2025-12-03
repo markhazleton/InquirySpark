@@ -15,12 +15,12 @@ builder.Services.AddDefaultIdentity<ControlSparkUser>(options => options.SignIn.
     .AddEntityFrameworkStores<ControlSparkUserContext>();
 
 
-var inquirySparkContextConnectionString = builder.Configuration.GetConnectionString("InquirySparkContext")
-    ?? throw new InvalidOperationException("Connection string 'InquirySparkContext' not found.");
+var inquirySparkContextConnectionString = builder.Configuration.GetConnectionString("InquirySparkConnection")
+    ?? throw new InvalidOperationException("Connection string 'InquirySparkConnection' not found.");
 
 builder.Services.AddDbContext<InquirySparkContext>(options =>
 {
-    options.UseSqlServer(inquirySparkContextConnectionString);
+    options.UseSqlite(inquirySparkContextConnectionString);
 });
 
 // Add services to the container.
@@ -46,7 +46,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication(); ;
+app.UseAuthentication();
 
 app.UseAuthorization();
 app.MapRazorPages();
