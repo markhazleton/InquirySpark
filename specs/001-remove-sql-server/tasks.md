@@ -1,4 +1,4 @@
-# Tasks: SQL Server Dependency Removal Baseline
+## Tasks: SQL Server Dependency Removal Baseline
 
 **Input**: Design documents from `/specs/001-remove-sql-server/`
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/, quickstart.md
@@ -7,9 +7,9 @@
 
 Purpose: establish repository-wide tooling and documentation required before touching application code.
 
-- [ ] T001 Create `global.json` to pin .NET SDK 10.0.100 at global.json
-- [ ] T002 Document immutable SQLite asset locations and checksum policy in docs/copilot/session-2025-12-04/sqlite-data-assets.md
-- [ ] T003 Add shared environment template describing provider paths and read-only flags at eng/sqlite.env.example
+- [ ] T001 Pin .NET SDK 10.0.100 for all contributors at global.json
+- [ ] T002 [P] Capture immutable SQLite asset locations, checksums, and distribution policy in docs/copilot/session-2025-12-04/sqlite-data-assets.md
+- [ ] T003 [P] Publish provider environment template (connection strings, read-only flags) at eng/sqlite.env.example
 
 ---
 
@@ -17,12 +17,12 @@ Purpose: establish repository-wide tooling and documentation required before tou
 
 Purpose: remove SQL Server from shared infrastructure and stand up the SQLite configuration plumbing. No user story work can start until this phase is finished.
 
-- [ ] T004 Create Directory.Build.props with TreatWarningsAsErrors, Nullable, ImplicitUsings, and AnalysisLevel settings at Directory.Build.props
-- [ ] T005 Remove `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.Data.SqlClient`, and related references from InquirySpark.Repository/InquirySpark.Repository.csproj, InquirySpark.WebApi/InquirySpark.WebApi.csproj, InquirySpark.Web/InquirySpark.Web.csproj, InquirySpark.Admin/InquirySpark.Admin.csproj, and InquirySpark.Common/InquirySpark.Common.csproj
-- [ ] T006 Archive legacy SQL Server scripts by unloading InquirySpark.Database/InquirySpark.Database.sqlproj from InquirySpark.sln and capturing its purpose in docs/copilot/session-2025-12-04/legacy-sqlserver-project.md
-- [ ] T007 Add centralized `SqliteOptionsConfigurator` with read-only enforcement at InquirySpark.Repository/Configuration/SqliteOptionsConfigurator.cs
-- [ ] T008 Update InquirySpark.Repository/Database/InquirySparkContext.cs to consume `SqliteOptionsConfigurator`, disable `Database.Migrate()`, and guard against schema writes
-- [ ] T009 Harden InquirySpark.Repository/Services/DbContextHelper.cs to surface SQLite-specific exceptions with actionable error messages
+- [ ] T004 Create the shared persistence configuration record and validation helpers at InquirySpark.Common/Models/PersistenceProviderConfig.cs
+- [ ] T005 [P] Implement the centralized SqliteOptionsConfigurator with read-only enforcement at InquirySpark.Repository/Configuration/SqliteOptionsConfigurator.cs
+- [ ] T006 Refactor InquirySpark.Repository/Database/InquirySparkContext.cs to consume the configurator, disable `Database.Migrate()`, and guard against schema writes
+- [ ] T007 [P] Harden InquirySpark.Repository/Services/DbContextHelper.cs so SQLite exceptions surface actionable provider diagnostics
+- [ ] T008 Remove Microsoft.EntityFrameworkCore.SqlServer, Microsoft.Data.SqlClient, and related imports from InquirySpark.Repository/InquirySpark.Repository.csproj, InquirySpark.WebApi/InquirySpark.WebApi.csproj, InquirySpark.Web/InquirySpark.Web.csproj, InquirySpark.Admin/InquirySpark.Admin.csproj, and InquirySpark.Common/InquirySpark.Common.csproj
+- [ ] T009 Archive legacy SQL Server artifacts by unloading InquirySpark.Database/InquirySpark.Database.sqlproj from InquirySpark.sln and documenting the history in docs/copilot/session-2025-12-04/legacy-sqlserver-project.md
 
 ---
 
@@ -32,13 +32,20 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 **Independent Test**: `dotnet restore` + `dotnet build InquirySpark.sln` succeeds on a clean machine without SQL Server installed, and each application starts using SQLite providers without attempting migrations.
 
-- [ ] T010 [P] [US1] Add MSTest coverage that validates `InquirySparkContext` resolves `Microsoft.Data.Sqlite` connections using the configurator at InquirySpark.Common.Tests/Providers/SqliteProviderTests.cs
-- [ ] T011 [US1] Update InquirySpark.WebApi/Program.cs to register `PersistenceProviderConfig`, call `UseSqlite`, and remove SQL Server–specific builder logic
-- [ ] T012 [P] [US1] Update InquirySpark.Admin/Program.cs to rely on `SqliteOptionsConfigurator` and delete SQL Server connection scaffolding
-- [ ] T013 [P] [US1] Update InquirySpark.Web/Program.cs to wire the shared SQLite configuration and fail fast if the `.db` file is missing
-- [ ] T014 [US1] Replace SQL Server `ConnectionStrings` sections with `Data Source=...;Mode=ReadOnly` entries inside InquirySpark.WebApi/appsettings.Development.json, InquirySpark.Admin/appsettings.Development.json, and InquirySpark.Web/appsettings.Development.json
-- [ ] T015 [US1] Mark immutable `.db` assets as `Content` with `CopyIfNewer` metadata in InquirySpark.Admin/InquirySpark.Admin.csproj (and any other project that bundles the database)
-- [ ] T016 [US1] Update root README.md “Getting Started” guidance to remove SQL Server prerequisites and document the SQLite-only workflow
+### Tests for User Story 1
+
+- [ ] T010 [P] [US1] Add MSTest coverage proving SqliteOptionsConfigurator builds Microsoft.Data.Sqlite connections at InquirySpark.Common.Tests/Providers/SqliteProviderTests.cs
+
+### Implementation for User Story 1
+
+- [ ] T011 [US1] Update InquirySpark.WebApi/Program.cs to register PersistenceProviderConfig, call `UseSqlite`, and remove SQL Server builder logic
+- [ ] T012 [P] [US1] Update InquirySpark.Admin/Program.cs to share the configurator and delete SQL Server scaffolding
+- [ ] T013 [P] [US1] Update InquirySpark.Web/Program.cs to wire the shared SQLite configuration and fail fast when the `.db` file is missing
+- [ ] T014 [US1] Replace SQL Server connection strings with `Data Source=...;Mode=ReadOnly` entries inside InquirySpark.WebApi/appsettings.json and InquirySpark.WebApi/appsettings.Development.json
+- [ ] T015 [P] [US1] Apply the SQLite connection string pattern to InquirySpark.Admin/appsettings.json and InquirySpark.Admin/appsettings.Development.json
+- [ ] T016 [P] [US1] Apply the SQLite connection string pattern to InquirySpark.Web/appsettings.json and InquirySpark.Web/appsettings.Development.json
+- [ ] T017 [US1] Mark immutable `.db` assets as `Content` with `CopyIfNewer` metadata in InquirySpark.Admin/InquirySpark.Admin.csproj (and any other project bundling the database)
+- [ ] T018 [US1] Update README.md “Getting Started” guidance to remove SQL Server prerequisites and highlight the SQLite-only workflow
 
 **Checkpoint**: US1 delivers an independently testable MVP once the above tasks pass.
 
@@ -50,11 +57,13 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 **Independent Test**: GitHub Actions (or equivalent) workflow runs `dotnet build InquirySpark.sln -warnaserror` and `dotnet test InquirySpark.sln` successfully on the first attempt.
 
-- [ ] T017 [P] [US2] Extend Directory.Build.props with analyzer packages, `AnalysisLevel=latest`, and deterministic build flags for every project
-- [ ] T018 [US2] Tighten `.editorconfig` (repo root) to elevate nullable, style, and analyzer diagnostics that guard against regression
-- [ ] T019 [US2] Author `.github/workflows/sqlite-baseline.yml` to run `dotnet build -warnaserror` and `dotnet test` on Windows and Linux agents
-- [ ] T020 [P] [US2] Create eng/BuildVerification.ps1 that developers run locally to mimic the CI commands and fail if warnings appear
-- [ ] T021 [US2] Publish a build verification checklist covering restore/build/test steps at docs/copilot/session-2025-12-04/sqlite-build-checklist.md
+### Implementation for User Story 2
+
+- [ ] T019 [US2] Author Directory.Build.props to turn on TreatWarningsAsErrors, Nullable, ImplicitUsings, and `AnalysisLevel=latest` for all projects at the repository root
+- [ ] T020 [P] [US2] Tighten .editorconfig (repo root) to elevate nullable, style, and analyzer diagnostics aligned with the SQLite baseline
+- [ ] T021 [US2] Create `.github/workflows/sqlite-baseline.yml` that runs `dotnet build -warnaserror` and `dotnet test` across Windows and Linux agents
+- [ ] T022 [P] [US2] Implement eng/BuildVerification.ps1 so developers replicate the CI commands locally and fail if warnings appear
+- [ ] T023 [US2] Publish the build verification checklist covering restore/build/test expectations at docs/copilot/session-2025-12-04/sqlite-build-checklist.md
 
 **Checkpoint**: US2 is complete when CI and local scripts enforce the warning-free baseline.
 
@@ -66,11 +75,18 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 **Independent Test**: Hitting `/api/system/health` and `/api/system/database/state` on each host returns SQLite metadata, QA smoke tests pass, and deployment docs describe the new verification steps.
 
-- [ ] T022 [P] [US3] Implement the System Health controller that matches `contracts/system-health.openapi.yaml` at InquirySpark.WebApi/Controllers/SystemHealthController.cs
-- [ ] T023 [US3] Add Admin and Web diagnostics UI snippets (e.g., InquirySpark.Admin/Views/Shared/_SystemHealthPartial.cshtml and InquirySpark.Web/Pages/Shared/_SystemHealthPartial.cshtml) that surface provider status
-- [ ] T024 [P] [US3] Add integration tests hitting the new health endpoints using Microsoft.AspNetCore.Mvc.Testing at InquirySpark.Common.Tests/Integration/SystemHealthTests.cs
-- [ ] T025 [US3] Update deployment run-books with SQLite health verification steps at docs/copilot/session-2025-12-04/sqlite-operational-readiness.md
-- [ ] T026 [US3] Refresh specs/001-remove-sql-server/quickstart.md to include the health-endpoint smoke test procedure
+### Tests for User Story 3
+
+- [ ] T024 [P] [US3] Add integration tests targeting the health endpoints with Microsoft.AspNetCore.Mvc.Testing at InquirySpark.Common.Tests/Integration/SystemHealthTests.cs
+
+### Implementation for User Story 3
+
+- [ ] T025 [US3] Implement SystemHealthController that matches contracts/system-health.openapi.yaml at InquirySpark.WebApi/Controllers/SystemHealthController.cs
+- [ ] T026 [P] [US3] Expose `/api/system/database/state` metadata within the same controller, enforcing read-only detection logic
+- [ ] T027 [US3] Add Admin diagnostics UI partial at InquirySpark.Admin/Views/Shared/_SystemHealthPartial.cshtml showing provider status from the API
+- [ ] T028 [P] [US3] Add Web diagnostics UI partial at InquirySpark.Web/Pages/Shared/_SystemHealthPartial.cshtml mirroring the Admin status output
+- [ ] T029 [US3] Update deployment run-books with SQLite health verification steps at docs/copilot/session-2025-12-04/sqlite-operational-readiness.md
+- [ ] T030 [US3] Refresh specs/001-remove-sql-server/quickstart.md to include the health-endpoint smoke test procedure and troubleshooting guidance
 
 **Checkpoint**: US3 finishes when operational docs and automated tests confirm parity with the new baseline.
 
@@ -80,9 +96,9 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 Purpose: ensure the repository meets documentation, cleanliness, and verification expectations once all user stories land.
 
-- [ ] T027 Run `dotnet build InquirySpark.sln -warnaserror` and `dotnet test InquirySpark.sln` (capturing logs) to prove the final baseline, and store the transcript in docs/copilot/session-2025-12-04/sqlite-baseline-validation.md
-- [ ] T028 Verify no SQLite `.db` artifacts changed by checking `git status` and documenting the check inside docs/copilot/session-2025-12-04/sqlite-data-assets.md
-- [ ] T029 Conduct a documentation sweep (README.md, docs/copilot references, Quickstart) to ensure consistent terminology and link coverage
+- [ ] T031 Run `dotnet build InquirySpark.sln -warnaserror` and `dotnet test InquirySpark.sln`, capturing logs in docs/copilot/session-2025-12-04/sqlite-baseline-validation.md
+- [ ] T032 [P] Verify no SQLite `.db` artifacts changed by checking `git status` and documenting the check in docs/copilot/session-2025-12-04/sqlite-data-assets.md
+- [ ] T033 Record the final terminology and documentation sweep in docs/copilot/session-2025-12-04/sqlite-terminology-review.md
 
 ---
 
@@ -97,9 +113,9 @@ Purpose: ensure the repository meets documentation, cleanliness, and verificatio
 
 ## Parallel Execution Examples
 
-- **US1**: T012 and T013 can proceed concurrently because they touch different Program.cs files; T010 can run in parallel once T007–T008 ship.
-- **US2**: T017 and T020 are parallelizable since one edits Directory.Build.props while the other adds a script under `eng/`.
-- **US3**: T022 and T023 can run simultaneously (API vs. UI), and T024 can begin once T022 exposes the endpoints.
+- **US1**: T012 and T013 can proceed concurrently because they modify different Program.cs files; T010 runs in parallel once T005–T007 land.
+- **US2**: T020 and T022 are parallelizable since one edits .editorconfig while the other creates a PowerShell script.
+- **US3**: T025 and T027 run simultaneously (API vs. Admin UI), and T024 can begin as soon as T025 exposes the endpoints.
 
 ## Implementation Strategy
 
