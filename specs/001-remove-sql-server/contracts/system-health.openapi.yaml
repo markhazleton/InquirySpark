@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: InquirySpark System Health APIs
+  version: 1.0.0-sqlite
+  description: >-
+    Read-only endpoints that confirm each InquirySpark host is running against the
+    immutable SQLite provider after SQL Server removal.
+servers:
+  - url: https://localhost:5001
+    description: WebApi development server
+paths:
+  /api/system/health:
+    get:
+      summary: Get overall application health including persistence provider
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Successful status payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealthResponse'
+        '503':
+          description: Provider misconfiguration detected (e.g., missing SQLite file)
+  /api/system/database/state:
+    get:
+      summary: Inspect the active SQLite database file
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Returns metadata proving the `.db` asset is mounted read-only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseStateResponse'
+        '409':
+          description: A write-attempt or migration is detected and must be blocked
+components:
+  schemas:
+    SystemHealthResponse:
+      type: object
+      required: [status, provider]
+      properties:
+        status:
+          type: string
+          enum: [Healthy, Degraded, Unhealthy]
+        provider:
+          type: object
+          required: [name, connectionString, readOnly]
+          properties:
+            name:
+              type: string
+              example: Sqlite
+            connectionString:
+              type: string
+              description: Sanitized data source path
+            readOnly:
+              type: boolean
+              example: true
+        buildVersion:
+          type: string
+          description: Semantic version of the running host
+        diagnostics:
+          type: array
+          items:
+            type: string
+    DatabaseStateResponse:
+      type: object
+      required: [filePath, lastWriteUtc, checksum, writable]
+      properties:
+        filePath:
+          type: string
+        lastWriteUtc:
+          type: string
+          format: date-time
+        checksum:
+          type: string
+          description: Hash used to detect tampering
+        writable:
+          type: boolean
+          description: MUST be false for this feature

@@ -10,6 +10,7 @@
 ### Session 2025-12-04
 
 - Q: Should this feature migrate legacy SQL Server data into SQLite? → A: No, operate on the clean SQLite databases that already exist; any remaining legacy migrations stay outside this scope.
+- Q: Can this feature modify the existing SQLite `.db` files (schema or seeded data)? → A: No, those databases are already migrated and must remain unchanged; this effort only updates code and configuration to consume them as-is.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -65,6 +66,7 @@ The QA/quality lead needs to validate that removing SQL Server did not regress r
 - How are seed data scripts or stored procedures handled if they relied on SQL Server T-SQL features? The plan must cover equivalent provider-neutral replacements or deprecations.
 - How does the repository handle mixed environments where Admin already uses SQLite while other apps migrate simultaneously, ensuring shared migrations and context naming collisions are resolved?
 - If stakeholders later need historic SQL Server data, the repository must document that migrations occur in a separate initiative so developers do not expect automated import steps in this baseline.
+- What safeguards ensure the applications do not attempt to apply EF Core migrations or other schema changes against the read-only SQLite `.db` artifacts (e.g., migrations disabled, fail-fast checks)?
 
 ## Requirements *(mandatory)*
 
@@ -78,6 +80,7 @@ The QA/quality lead needs to validate that removing SQL Server did not regress r
 - **FR-006**: System MUST align CI/CD workflows, infrastructure scripts, and developer onboarding instructions with the SQL Server–free architecture, including environment variables, secrets, and health checks.
 - **FR-007**: System MUST document troubleshooting guidance for local developers (e.g., how to install/configure the new provider, run migrations, and reset demo data) so onboarding remains frictionless.
 - **FR-008**: System MUST provide automated verification (unit, integration, or smoke tests) that confirms critical repository functionality still works end-to-end using the new provider before merging to main.
+- **FR-009**: System MUST treat the provided SQLite `.db` files as immutable assets for this baseline; no schema migrations or manual edits to those databases occur within this scope.
 
 ### Key Entities
 
@@ -102,3 +105,4 @@ The QA/quality lead needs to validate that removing SQL Server did not regress r
 - Historical SQL Server data that needed to live in SQLite has already been migrated; this feature assumes the provided SQLite databases (with seed/demo data) are the source of truth and does not perform additional data migrations.
 - Removing SQL Server code should not change public API contracts; any behavioral changes must be explicitly reviewed with stakeholders.
 - Historical data migrations (e.g., InquirySpark.Database.sqlproj) can be archived or reworked without impacting compliance requirements; otherwise, exceptions will be documented.
+- The pre-migrated SQLite `.db` files remain read-only artifacts for this delivery; any schema evolution or content refresh will be scheduled as a separate feature.
