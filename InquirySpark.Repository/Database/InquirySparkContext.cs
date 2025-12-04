@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using InquirySpark.Common.Models;
+using InquirySpark.Repository.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Logging;
 
 namespace InquirySpark.Repository.Database;
 
@@ -134,7 +140,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.ApplicationId)
                 .HasName("Application_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("Application");
 
@@ -178,7 +184,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.ApplicationSurveyId)
                 .HasName("ApplicationSurvey_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("ApplicationSurvey");
 
@@ -213,7 +219,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.ApplicationUserId)
                 .HasName("ApplicationUser_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("ApplicationUser");
 
@@ -278,7 +284,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.ApplicationUserRoleId)
                 .HasName("ApplicationUserRole_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("ApplicationUserRole");
 
@@ -392,7 +398,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.ApplicationTypeId)
                 .HasName("ApplicationType_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("lu_ApplicationType");
 
@@ -416,7 +422,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.QuestionTypeId)
                 .HasName("aaaaaQuestionType_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("lu_QuestionType");
 
@@ -484,7 +490,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyTypeId)
                 .HasName("SurveyType_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("lu_SurveyType");
 
@@ -516,7 +522,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.UnitOfMeasureId)
                 .HasName("aaaaaUnitOfMeasure_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("lu_UnitOfMeasure");
 
@@ -536,7 +542,7 @@ public partial class InquirySparkContext : DbContext
 
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.QuestionId).IsClustered(false);
+            entity.HasKey(e => e.QuestionId);
 
             entity.ToTable("Question");
 
@@ -581,7 +587,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.QuestionAnswerId)
                 .HasName("QuestionAnswer_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("QuestionAnswer");
 
@@ -612,7 +618,7 @@ public partial class InquirySparkContext : DbContext
 
         modelBuilder.Entity<QuestionGroup>(entity =>
         {
-            entity.HasKey(e => e.QuestionGroupId).IsClustered(false);
+            entity.HasKey(e => e.QuestionGroupId);
 
             entity.ToTable("QuestionGroup");
 
@@ -649,7 +655,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.QuestionGroupMemberId)
                 .HasName("QuestionGroupMember_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("QuestionGroupMember");
 
@@ -680,7 +686,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.RoleId)
                 .HasName("aaaaaRole_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("Role");
 
@@ -732,7 +738,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyId)
                 .HasName("Survey_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("Survey");
 
@@ -808,7 +814,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyResponseId)
                 .HasName("SurveyResponse_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("SurveyResponse");
 
@@ -850,7 +856,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyAnswerId)
                 .HasName("SurveyResponseAnswer_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("SurveyResponseAnswer");
 
@@ -890,7 +896,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyAnswerErrorId)
                 .HasName("aaaaaSurveyResponseAnswer_Error_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("SurveyResponseAnswer_Error");
 
@@ -940,7 +946,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyResponseHistoryId)
                 .HasName("aaaaaSurveyResponseHistory_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("SurveyResponseHistory");
 
@@ -975,7 +981,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity.HasKey(e => e.SurveyResponseSequenceId)
                 .HasName("aaaaaSurveyResponseSequence_PK")
-                .IsClustered(false);
+                ;
 
             entity.ToTable("SurveyResponseSequence");
 
@@ -1993,6 +1999,45 @@ public partial class InquirySparkContext : DbContext
         });
 
         OnModelCreatingPartial(modelBuilder);
+    }
+
+    /// <summary>
+    /// Applies the shared SQLite configuration to the supplied options builder.
+    /// </summary>
+    /// <param name="optionsBuilder">Builder to configure.</param>
+    /// <param name="providerConfig">Shared provider configuration.</param>
+    /// <param name="loggerFactory">Optional logger factory for EF diagnostics.</param>
+    public static void Configure(
+        DbContextOptionsBuilder optionsBuilder,
+        PersistenceProviderConfig providerConfig,
+        ILoggerFactory? loggerFactory = null)
+    {
+        SqliteOptionsConfigurator.Configure(optionsBuilder, providerConfig, loggerFactory);
+    }
+
+    /// <summary>
+    /// Throws when callers attempt to run migrations or other schema-altering operations.
+    /// </summary>
+    /// <param name="database">Database facade to inspect.</param>
+    public static void GuardAgainstSchemaWrites(DatabaseFacade database)
+    {
+        ArgumentNullException.ThrowIfNull(database);
+
+        if (!database.IsSqlite())
+        {
+            throw new InvalidOperationException("Only the SQLite provider is supported for InquirySparkContext.");
+        }
+
+        var migrator = database.GetService<IMigrator>();
+        if (migrator is null)
+        {
+            return;
+        }
+
+        if (database.GetPendingMigrations().Any())
+        {
+            throw new InvalidOperationException("Pending EF Core migrations detected. Schema changes are disabled for the immutable SQLite baseline.");
+        }
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

@@ -1,4 +1,4 @@
-namespace ControlSpark.WebMvc.Models
+namespace InquirySpark.Admin.Models
 {
     public class ErrorViewModel
     {

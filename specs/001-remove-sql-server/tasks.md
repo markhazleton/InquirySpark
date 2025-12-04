@@ -7,9 +7,9 @@
 
 Purpose: establish repository-wide tooling and documentation required before touching application code.
 
-- [ ] T001 Pin .NET SDK 10.0.100 for all contributors at global.json
-- [ ] T002 [P] Capture immutable SQLite asset locations, checksums, and distribution policy in docs/copilot/session-2025-12-04/sqlite-data-assets.md
-- [ ] T003 [P] Publish provider environment template (connection strings, read-only flags) at eng/sqlite.env.example
+- [X] T001 Pin .NET SDK 10.0.100 for all contributors at global.json
+- [X] T002 [P] Capture immutable SQLite asset locations, checksums, and distribution policy in docs/copilot/session-2025-12-04/sqlite-data-assets.md
+- [X] T003 [P] Publish provider environment template (connection strings, read-only flags) at eng/sqlite.env.example
 
 ---
 
@@ -17,12 +17,12 @@ Purpose: establish repository-wide tooling and documentation required before tou
 
 Purpose: remove SQL Server from shared infrastructure and stand up the SQLite configuration plumbing. No user story work can start until this phase is finished.
 
-- [ ] T004 Create the shared persistence configuration record and validation helpers at InquirySpark.Common/Models/PersistenceProviderConfig.cs
-- [ ] T005 [P] Implement the centralized SqliteOptionsConfigurator with read-only enforcement at InquirySpark.Repository/Configuration/SqliteOptionsConfigurator.cs
-- [ ] T006 Refactor InquirySpark.Repository/Database/InquirySparkContext.cs to consume the configurator, disable `Database.Migrate()`, and guard against schema writes
-- [ ] T007 [P] Harden InquirySpark.Repository/Services/DbContextHelper.cs so SQLite exceptions surface actionable provider diagnostics
-- [ ] T008 Remove Microsoft.EntityFrameworkCore.SqlServer, Microsoft.Data.SqlClient, and related imports from InquirySpark.Repository/InquirySpark.Repository.csproj, InquirySpark.WebApi/InquirySpark.WebApi.csproj, InquirySpark.Web/InquirySpark.Web.csproj, InquirySpark.Admin/InquirySpark.Admin.csproj, and InquirySpark.Common/InquirySpark.Common.csproj
-- [ ] T009 Archive legacy SQL Server artifacts by unloading InquirySpark.Database/InquirySpark.Database.sqlproj from InquirySpark.sln and documenting the history in docs/copilot/session-2025-12-04/legacy-sqlserver-project.md
+- [X] T004 Create the shared persistence configuration record and validation helpers at InquirySpark.Common/Models/PersistenceProviderConfig.cs
+- [X] T005 [P] Implement the centralized SqliteOptionsConfigurator with read-only enforcement at InquirySpark.Repository/Configuration/SqliteOptionsConfigurator.cs
+- [X] T006 Refactor InquirySpark.Repository/Database/InquirySparkContext.cs to consume the configurator, disable `Database.Migrate()`, and guard against schema writes
+- [X] T007 [P] Harden InquirySpark.Repository/Services/DbContextHelper.cs so SQLite exceptions surface actionable provider diagnostics
+- [X] T008 Remove Microsoft.EntityFrameworkCore.SqlServer, Microsoft.Data.SqlClient, and related imports from InquirySpark.Repository/InquirySpark.Repository.csproj, InquirySpark.WebApi/InquirySpark.WebApi.csproj, InquirySpark.Web/InquirySpark.Web.csproj, InquirySpark.Admin/InquirySpark.Admin.csproj, and InquirySpark.Common/InquirySpark.Common.csproj
+- [X] T009 Archive legacy SQL Server artifacts by unloading InquirySpark.Database/InquirySpark.Database.sqlproj from InquirySpark.sln and documenting the history in docs/copilot/session-2025-12-04/legacy-sqlserver-project.md
 
 ---
 
@@ -34,18 +34,18 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Add MSTest coverage proving SqliteOptionsConfigurator builds Microsoft.Data.Sqlite connections at InquirySpark.Common.Tests/Providers/SqliteProviderTests.cs
+- [X] T010 [P] [US1] Add MSTest coverage proving SqliteOptionsConfigurator builds Microsoft.Data.Sqlite connections at InquirySpark.Common.Tests/Providers/SqliteProviderTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Update InquirySpark.WebApi/Program.cs to register PersistenceProviderConfig, call `UseSqlite`, and remove SQL Server builder logic
-- [ ] T012 [P] [US1] Update InquirySpark.Admin/Program.cs to share the configurator and delete SQL Server scaffolding
-- [ ] T013 [P] [US1] Update InquirySpark.Web/Program.cs to wire the shared SQLite configuration and fail fast when the `.db` file is missing
-- [ ] T014 [US1] Replace SQL Server connection strings with `Data Source=...;Mode=ReadOnly` entries inside InquirySpark.WebApi/appsettings.json and InquirySpark.WebApi/appsettings.Development.json
-- [ ] T015 [P] [US1] Apply the SQLite connection string pattern to InquirySpark.Admin/appsettings.json and InquirySpark.Admin/appsettings.Development.json
-- [ ] T016 [P] [US1] Apply the SQLite connection string pattern to InquirySpark.Web/appsettings.json and InquirySpark.Web/appsettings.Development.json
-- [ ] T017 [US1] Mark immutable `.db` assets as `Content` with `CopyIfNewer` metadata in InquirySpark.Admin/InquirySpark.Admin.csproj (and any other project bundling the database)
-- [ ] T018 [US1] Update README.md “Getting Started” guidance to remove SQL Server prerequisites and highlight the SQLite-only workflow
+- [X] T011 [US1] Update InquirySpark.WebApi/Program.cs to register PersistenceProviderConfig, call `UseSqlite`, and remove SQL Server builder logic (N/A: WebApi project does not exist in this repository)
+- [X] T012 [P] [US1] Update InquirySpark.Admin/Program.cs to share the configurator and delete SQL Server scaffolding (Admin already uses UseSqlite for both contexts)
+- [X] T013 [P] [US1] Update InquirySpark.Web/Program.cs to wire the shared SQLite configuration and fail fast when the `.db` file is missing (N/A: Web project does not exist in this repository)
+- [X] T014 [US1] Replace SQL Server connection strings with `Data Source=...;Mode=ReadOnly` entries inside InquirySpark.WebApi/appsettings.json and InquirySpark.WebApi/appsettings.Development.json (N/A: WebApi project does not exist)
+- [X] T015 [P] [US1] Apply the SQLite connection string pattern to InquirySpark.Admin/appsettings.json and InquirySpark.Admin/appsettings.Development.json
+- [X] T016 [P] [US1] Apply the SQLite connection string pattern to InquirySpark.Web/appsettings.json and InquirySpark.Web/appsettings.Development.json (N/A: Web project does not exist)
+- [X] T017 [US1] Mark immutable `.db` assets as `Content` with `CopyIfNewer` metadata in InquirySpark.Admin/InquirySpark.Admin.csproj (and any other project bundling the database)
+- [X] T018 [US1] Update README.md "Getting Started" guidance to remove SQL Server prerequisites and highlight the SQLite-only workflow
 
 **Checkpoint**: US1 delivers an independently testable MVP once the above tasks pass.
 

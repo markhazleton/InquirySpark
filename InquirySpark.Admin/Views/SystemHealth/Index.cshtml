@@ -1,0 +1,76 @@
+@model SystemHealthViewModel
+@{
+    ViewData["Title"] = "System Health";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-heart-pulse"></i> System Health</h2>
+        <span class="badge bg-light text-dark">
+            <i class="bi bi-clock"></i> @Model.CheckedAt.ToString("yyyy-MM-dd HH:mm:ss") UTC
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="border-bottom pb-2 mb-3">
+                    <i class="bi bi-database"></i> InquirySpark Database
+                </h4>
+                @Html.Partial("_DatabaseStatusPartial", Model.InquirySparkStatus)
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>
+                <i class="bi bi-info-circle"></i> 
+                Monitoring SQLite provider health and read-only enforcement
+            </span>
+            <a href="@Url.Action("Index", "SystemHealth")" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mt-4">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0"><i class="bi bi-shield-check"></i> Health Check Expectations</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="text-success"><i class="bi bi-check-circle"></i> Expected State</h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check text-success"></i> Provider: Microsoft.EntityFrameworkCore.Sqlite</li>
+                    <li><i class="bi bi-check text-success"></i> Connection String contains <code>Mode=ReadOnly</code></li>
+                    <li><i class="bi bi-check text-success"></i> Database file exists on disk</li>
+                    <li><i class="bi bi-check text-success"></i> File permissions set to read-only</li>
+                    <li><i class="bi bi-check text-success"></i> Can connect successfully</li>
+                    <li><i class="bi bi-check text-success"></i> PRAGMA integrity_check returns "ok"</li>
+                    <li><i class="bi bi-check text-success"></i> Table count > 0</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5 class="text-danger"><i class="bi bi-x-circle"></i> Failure Scenarios</h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-x text-danger"></i> <strong>Missing Database:</strong> File not found on disk</li>
+                    <li><i class="bi bi-x text-danger"></i> <strong>Corrupted Database:</strong> PRAGMA integrity_check fails</li>
+                    <li><i class="bi bi-x text-danger"></i> <strong>Write Mode:</strong> Connection string missing <code>Mode=ReadOnly</code></li>
+                    <li><i class="bi bi-x text-danger"></i> <strong>Connection Failure:</strong> Cannot establish connection</li>
+                    <li><i class="bi bi-x text-danger"></i> <strong>Empty Database:</strong> Table count = 0</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-4">
+    <h5 class="alert-heading"><i class="bi bi-lightbulb"></i> Troubleshooting Tips</h5>
+    <ul class="mb-0">
+        <li><strong>Database file missing:</strong> Ensure <code>data/sqlite/*.db</code> files are present in the repository root</li>
+        <li><strong>Connection errors:</strong> Check <code>appsettings.json</code> connection string paths (relative to project root)</li>
+        <li><strong>Integrity failures:</strong> Restore databases from git: <code>git checkout HEAD -- data/sqlite/*.db</code></li>
+        <li><strong>Read-only violations:</strong> Verify connection strings include <code>Mode=ReadOnly</code> parameter</li>
+    </ul>
+</div>

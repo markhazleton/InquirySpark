@@ -49,6 +49,15 @@
 		<Folder Include="wwwroot\images\" />
 		<Folder Include="wwwroot\lib\" />
 	</ItemGroup>
+
+	<!-- Immutable SQLite Database Assets -->
+	<ItemGroup>
+		<Content Include="..\..\data\sqlite\*.db">
+			<Link>data\sqlite\%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 	<ItemGroup>
 		<None Include="wwwroot\js\site.js" />
 	</ItemGroup>

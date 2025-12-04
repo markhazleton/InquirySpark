@@ -1,4 +1,4 @@
-﻿using ControlSpark.WebMvc.Models;
+﻿using InquirySpark.Admin.Models;
 using System.Diagnostics;
 
 namespace InquirySpark.Admin.Controllers
