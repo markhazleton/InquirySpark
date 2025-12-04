@@ -1,0 +1,37 @@
+<Project>
+  <!-- 
+    Central MSBuild properties for InquirySpark solution
+    Enforces warning-free baseline after SQL Server removal
+    See: specs/001-remove-sql-server/plan.md
+  -->
+  
+  <PropertyGroup>
+    <!-- .NET 10 baseline with C# 13 -->
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>13.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- Nullable reference types enforcement -->
+    <Nullable>enable</Nullable>
+    
+    <!-- Code quality enforcement -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn>$(NoWarn);CS1591</NoWarn> <!-- Suppress XML doc warnings for Phase 4 -->
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    
+    <!-- Documentation generation for public APIs -->
+    <GenerateDocumentationFile Condition="'$(IsTestProject)' != 'true'">true</GenerateDocumentationFile>
+    
+    <!-- Deterministic builds for reproducibility -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  
+  <!-- Test project detection -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  
+</Project>

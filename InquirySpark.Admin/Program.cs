@@ -9,7 +9,6 @@ var connectionString = builder.Configuration.GetConnectionString("ControlSparkUs
     ?? throw new InvalidOperationException("Connection string 'ControlSparkUserContextConnection' not found.");
 
 builder.Services.AddDbContext<InquirySpark.Admin.Areas.Identity.Data.ControlSparkUserContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 builder.Services.AddDefaultIdentity<ControlSparkUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<InquirySpark.Admin.Areas.Identity.Data.ControlSparkUserContext>();

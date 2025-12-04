@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InquirySpark.Common\InquirySpark.Common.csproj" />
+    <ProjectReference Include="..\InquirySpark.Repository\InquirySpark.Repository.csproj" />
   </ItemGroup>
 
 </Project>

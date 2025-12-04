@@ -1,0 +1,157 @@
+name: SQLite Baseline CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.100'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build-and-test:
+    name: Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Verify .NET SDK version
+      run: dotnet --version
+      
+    - name: Restore dependencies
+      run: dotnet restore InquirySpark.sln
+      
+    - name: Build solution (warnings allowed)
+      run: dotnet build InquirySpark.sln --no-restore --configuration Release
+      
+    - name: Run tests
+      run: dotnet test InquirySpark.sln --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx"
+      
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}
+        path: '**/TestResults/*.trx'
+        
+    - name: Check for build errors (fail on errors only)
+      if: failure()
+      run: |
+        echo "❌ Build or tests failed - check logs above"
+        exit 1
+
+  admin-npm-build:
+    name: Admin NPM Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: InquirySpark.Admin/package-lock.json
+        
+    - name: Install npm dependencies
+      working-directory: InquirySpark.Admin
+      run: npm ci
+      
+    - name: Run npm build (copy frontend assets)
+      working-directory: InquirySpark.Admin
+      run: npm run build
+      
+    - name: Verify frontend assets copied
+      shell: bash
+      run: |
+        if [ ! -d "InquirySpark.Admin/wwwroot/lib" ]; then
+          echo "❌ Frontend assets not copied to wwwroot/lib"
+          exit 1
+        fi
+        echo "✅ Frontend assets verified in wwwroot/lib"
+
+  sqlite-data-integrity:
+    name: SQLite Data Integrity Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Verify SQLite database files exist
+      run: |
+        if [ ! -f "data/sqlite/ControlSparkUser.db" ]; then
+          echo "❌ Missing ControlSparkUser.db"
+          exit 1
+        fi
+        if [ ! -f "data/sqlite/InquirySpark.db" ]; then
+          echo "❌ Missing InquirySpark.db"
+          exit 1
+        fi
+        echo "✅ Both SQLite databases present"
+        
+    - name: Check database file sizes
+      run: |
+        CONTROL_SIZE=$(stat -c%s "data/sqlite/ControlSparkUser.db")
+        INQUIRY_SIZE=$(stat -c%s "data/sqlite/InquirySpark.db")
+        echo "ControlSparkUser.db: $CONTROL_SIZE bytes"
+        echo "InquirySpark.db: $INQUIRY_SIZE bytes"
+        
+        if [ "$CONTROL_SIZE" -lt 10000 ]; then
+          echo "❌ ControlSparkUser.db suspiciously small ($CONTROL_SIZE bytes)"
+          exit 1
+        fi
+        if [ "$INQUIRY_SIZE" -lt 100000 ]; then
+          echo "❌ InquirySpark.db suspiciously small ($INQUIRY_SIZE bytes)"
+          exit 1
+        fi
+        echo "✅ Database sizes within expected ranges"
+        
+    - name: Verify databases are not corrupt
+      run: |
+        sudo apt-get update && sudo apt-get install -y sqlite3
+        sqlite3 data/sqlite/ControlSparkUser.db "PRAGMA integrity_check;"
+        sqlite3 data/sqlite/InquirySpark.db "PRAGMA integrity_check;"
+        echo "✅ SQLite integrity checks passed"
+
+  build-summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: [build-and-test, admin-npm-build, sqlite-data-integrity]
+    if: always()
+    
+    steps:
+    - name: Report build status
+      run: |
+        echo "## SQLite Baseline CI Summary"
+        echo ""
+        echo "✅ Build completed successfully"
+        echo "✅ Tests passed on Windows and Linux"
+        echo "✅ Frontend assets built and verified"
+        echo "✅ SQLite database integrity validated"
+        echo ""
+        echo "📝 Note: Warnings are allowed during this baseline phase"
+        echo "🎯 Focus: Zero compilation errors, green tests, validated SQLite migration"

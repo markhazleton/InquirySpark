@@ -1,0 +1,154 @@
+@model DatabaseStatus
+
+@{
+    var statusBadgeClass = Model.Status switch
+    {
+        "Healthy" => "bg-success",
+        "Error" => "bg-danger",
+        _ => "bg-warning"
+    };
+
+    var statusIcon = Model.Status switch
+    {
+        "Healthy" => "bi-check-circle-fill",
+        "Error" => "bi-x-circle-fill",
+        _ => "bi-exclamation-triangle-fill"
+    };
+}
+
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Connection Status</h5>
+            <span class="badge @statusBadgeClass">
+                <i class="bi @statusIcon"></i> @Model.Status
+            </span>
+        </div>
+
+        <table class="table table-sm table-borderless">
+            <tbody>
+                <tr>
+                    <th style="width: 30%"><i class="bi bi-gear"></i> Provider</th>
+                    <td><code>@Model.ProviderName</code></td>
+                </tr>
+                <tr>
+                    <th><i class="bi bi-link-45deg"></i> Connection String</th>
+                    <td><code class="text-muted">@Model.ConnectionString</code></td>
+                </tr>
+                <tr>
+                    <th><i class="bi bi-file-earmark-text"></i> Database Path</th>
+                    <td>
+                        @if (!string.IsNullOrEmpty(Model.DatabasePath))
+                        {
+                            <span class="font-monospace text-break">@Model.DatabasePath</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">N/A</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th><i class="bi bi-check2-square"></i> File Exists</th>
+                    <td>
+                        @if (Model.FileExists)
+                        {
+                            <span class="badge bg-success"><i class="bi bi-check"></i> Yes</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger"><i class="bi bi-x"></i> No</span>
+                        }
+                    </td>
+                </tr>
+                @if (Model.FileExists)
+                {
+                    <tr>
+                        <th><i class="bi bi-hdd"></i> File Size</th>
+                        <td>@Model.FileSizeKB.ToString("N2") KB</td>
+                    </tr>
+                    <tr>
+                        <th><i class="bi bi-calendar-event"></i> Last Modified</th>
+                        <td>@(Model.LastModified?.ToString("yyyy-MM-dd HH:mm:ss") ?? "N/A") UTC</td>
+                    </tr>
+                    <tr>
+                        <th><i class="bi bi-lock"></i> File Read-Only</th>
+                        <td>
+                            @if (Model.IsReadOnly)
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check"></i> Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning"><i class="bi bi-exclamation-triangle"></i> No (Writable)</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <th><i class="bi bi-plug"></i> Can Connect</th>
+                    <td>
+                        @if (Model.CanConnect)
+                        {
+                            <span class="badge bg-success"><i class="bi bi-check"></i> Yes</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger"><i class="bi bi-x"></i> No</span>
+                        }
+                    </td>
+                </tr>
+                @if (Model.CanConnect)
+                {
+                    <tr>
+                        <th><i class="bi bi-shield-lock"></i> Read-Only Connection</th>
+                        <td>
+                            @if (Model.IsReadOnlyConnection)
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check"></i> Enforced</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger"><i class="bi bi-exclamation-triangle"></i> Not Enforced</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><i class="bi bi-clipboard-check"></i> Integrity Check</th>
+                        <td>
+                            @if (Model.IntegrityCheck == "PASS")
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check"></i> @Model.IntegrityCheck</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger"><i class="bi bi-x"></i> @Model.IntegrityCheck</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><i class="bi bi-table"></i> Table Count</th>
+                        <td>
+                            @if (Model.TableCount > 0)
+                            {
+                                <span class="badge bg-info">@Model.TableCount tables</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning"><i class="bi bi-exclamation-triangle"></i> 0 tables</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger mt-3 mb-0">
+                <h6 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Error Details</h6>
+                <pre class="mb-0 text-wrap"><code>@Model.ErrorMessage</code></pre>
+            </div>
+        }
+    </div>
+</div>

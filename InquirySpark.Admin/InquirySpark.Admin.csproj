@@ -3,7 +3,6 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<ApplicationIcon>favicon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 	<PropertyGroup>
@@ -20,10 +19,7 @@
 	  <None Remove="CodeTemplates\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.17.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="10.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0">
@@ -50,10 +46,17 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Areas\Inquiry\Data\" />
-		<Folder Include="Areas\Inquiry\Models\" />
 		<Folder Include="wwwroot\images\" />
 		<Folder Include="wwwroot\lib\" />
+	</ItemGroup>
+
+	<!-- Immutable SQLite Database Assets -->
+	<ItemGroup>
+		<Content Include="..\..\data\sqlite\*.db">
+			<Link>data\sqlite\%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="wwwroot\js\site.js" />
