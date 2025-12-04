@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace GemSpark.Admin.Areas.Identity.Models;
+namespace InquirySpark.Admin.Areas.Identity.Models;
 
 /// <summary>
 /// Class WebSiteModel.

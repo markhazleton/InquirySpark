@@ -1,7 +1,21 @@
-﻿namespace ControlSpark.WebMvc.Controllers
+﻿namespace InquirySpark.Admin.Controllers;
+
+/// <summary>
+/// Provides a base controller with logging support for all admin controllers.
+/// </summary>
+public abstract class BaseController : Controller
 {
-    public abstract class BaseController(ILogger<BaseController> logger) : Controller
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseController"/> class.
+    /// </summary>
+    /// <param name="logger">The logger instance for the controller.</param>
+    protected BaseController(ILogger<BaseController> logger)
     {
-        protected readonly ILogger<BaseController> _logger = logger;
+        _logger = logger;
     }
+
+    /// <summary>
+    /// The logger instance for the controller.
+    /// </summary>
+    protected readonly ILogger<BaseController> _logger;
 }

@@ -1,4 +1,4 @@
-﻿namespace ControlSpark.WebMvc.Areas.Identity.Data;
+﻿namespace InquirySpark.Admin.Areas.Identity.Data;
 
 public abstract class BaseEntity
 {

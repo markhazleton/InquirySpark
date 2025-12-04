@@ -5,53 +5,57 @@
 using ControlSpark.WebMvc.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Linq;
 using System.Text.Json;
 
-namespace ControlSpark.WebMvc.Areas.Identity.Pages.Account.Manage
+namespace ControlSpark.WebMvc.Areas.Identity.Pages.Account.Manage;
+
+public class DownloadPersonalDataModel(
+    UserManager<ControlSparkUser> userManager,
+    ILogger<DownloadPersonalDataModel> logger) : PageModel
 {
-    public class DownloadPersonalDataModel(
-        UserManager<ControlSparkUser> userManager,
-        ILogger<DownloadPersonalDataModel> logger) : PageModel
+    private readonly UserManager<ControlSparkUser> _userManager = userManager;
+    private readonly ILogger<DownloadPersonalDataModel> _logger = logger;
+
+    public IActionResult OnGet()
     {
-        private readonly UserManager<ControlSparkUser> _userManager = userManager;
-        private readonly ILogger<DownloadPersonalDataModel> _logger = logger;
+        return NotFound();
+    }
 
-        public IActionResult OnGet()
+    /// <summary>
+    /// Handles POST requests to download the personal data of the current user.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="IActionResult"/> that contains the user's personal data as a downloadable JSON file,
+    /// or a NotFound result if the user cannot be loaded.
+    /// </returns>
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
         {
-            return NotFound();
+            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        _logger.LogInformation("User with ID '{UserId}' asked for their personal data.", _userManager.GetUserId(User));
+
+        // Only include personal data for download
+        var personalData = new Dictionary<string, string>();
+        var personalDataProps = typeof(ControlSparkUser).GetProperties().Where(
+                        prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+        foreach (var p in personalDataProps)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            _logger.LogInformation("User with ID '{UserId}' asked for their personal data.", _userManager.GetUserId(User));
-
-            // Only include personal data for download
-            var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(ControlSparkUser).GetProperties().Where(
-                            prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
-            foreach (var p in personalDataProps)
-            {
-                personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
-            }
-
-            var logins = await _userManager.GetLoginsAsync(user);
-            foreach (var l in logins)
-            {
-                personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
-            }
-
-            personalData.Add($"Authenticator Key", await _userManager.GetAuthenticatorKeyAsync(user));
-
-            Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.json");
-            return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData), "application/json");
+            personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
         }
+
+        var logins = await _userManager.GetLoginsAsync(user);
+        foreach (var l in logins)
+        {
+            personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
+        }
+
+        personalData.Add($"Authenticator Key", await _userManager.GetAuthenticatorKeyAsync(user));
+
+        Response.Headers.Append("Content-Disposition", "attachment; filename=PersonalData.json");
+        return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData), "application/json");
     }
 }

@@ -1,0 +1,40 @@
+@*
+    Shared Table Layout with Bootstrap 5 Best Practices
+    Usage: 
+    - Add "table-responsive" wrapper for mobile responsiveness
+    - Use Bootstrap 5 table classes: table, table-striped, table-hover, table-sm
+    - DataTables automatically initializes on tables with "table" class
+    - Use Bootstrap Icons for action buttons
+    - Supports light/dark mode via Bootswatch themes
+*@
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="bi bi-table me-2"></i>
+            @ViewData["Title"]
+        </h5>
+        @if (ViewData["CreateAction"] != null)
+        {
+            <a asp-action="@ViewData["CreateAction"]" class="btn btn-light btn-sm">
+                <i class="bi bi-plus-circle me-1"></i>
+                Create New
+            </a>
+        }
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Optional: Add custom DataTables configuration if needed
+        $(document).ready(function() {
+            // Tables are automatically initialized by site.js
+            console.log('Table view loaded');
+        });
+    </script>
+}

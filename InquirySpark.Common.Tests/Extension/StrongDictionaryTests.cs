@@ -16,7 +16,7 @@ public class StrongDictionaryTests
     {
         var myTest = new StrongDictionary<int, string>();
         myTest.Add(1, "test");
-        Assert.AreEqual(1, myTest.GetList().Count);
+        Assert.HasCount(1, myTest.GetList());
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class StrongDictionaryTests
     public void AjaxDictionaryTest()
     {
         var myTest = new StrongDictionary<int, string>();
-        Assert.AreNotEqual(null, myTest);
+        Assert.IsNotNull(myTest);
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ public class StrongDictionaryTests
     public void AjaxDictionaryTest1()
     {
         var myTest = new StrongDictionary<int, string>();
-        Assert.AreNotEqual(null, myTest);
+        Assert.IsNotNull(myTest);
     }
 
     /// <summary>

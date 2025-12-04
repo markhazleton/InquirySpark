@@ -12,11 +12,9 @@ public class LogExtensionsTests
         string type = "test";
 
         // Act
-        var result = LogExtensions.IsSimpleType(
-            type.GetType());
+        var result = LogExtensions.IsSimpleType(type.GetType());
 
         // Assert
-        Assert.IsNotNull(result);
         Assert.IsTrue(result);
     }
 }

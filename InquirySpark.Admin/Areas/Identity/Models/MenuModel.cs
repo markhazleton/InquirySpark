@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace GemSpark.Admin.Areas.Identity.Models;
+namespace InquirySpark.Admin.Areas.Identity.Models;
 
 
 

@@ -8,11 +8,11 @@ builder.Configuration.AddUserSecrets<Program>();
 var connectionString = builder.Configuration.GetConnectionString("ControlSparkUserContextConnection")
     ?? throw new InvalidOperationException("Connection string 'ControlSparkUserContextConnection' not found.");
 
-builder.Services.AddDbContext<ControlSparkUserContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<InquirySpark.Admin.Areas.Identity.Data.ControlSparkUserContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 builder.Services.AddDefaultIdentity<ControlSparkUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ControlSparkUserContext>();
+    .AddEntityFrameworkStores<InquirySpark.Admin.Areas.Identity.Data.ControlSparkUserContext>();
 
 
 var inquirySparkContextConnectionString = builder.Configuration.GetConnectionString("InquirySparkConnection")
@@ -26,6 +26,13 @@ builder.Services.AddDbContext<InquirySparkContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
+
+// ⚠️ CRITICAL: Register HttpClientUtility FIRST
+builder.Services.AddHttpClientUtility();
+
+// Then register Bootswatch theme switcher
+builder.Services.AddBootswatchThemeSwitcher();
 
 builder.Services.AddSession(options =>
 {
@@ -44,7 +51,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseHttpsRedirection();
+
+// Static files serve RCL embedded resources automatically from _content/ path
 app.UseStaticFiles();
+app.UseBootswatchAll();
+
 app.UseRouting();
 app.UseAuthentication();
 

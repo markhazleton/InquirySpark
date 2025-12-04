@@ -43,7 +43,7 @@ public class EnumExtensionTests
         var result = myTest.GetDisplayName();
 
         // Assert
-        Assert.AreEqual(result, "1st");
+        Assert.AreEqual("1st", result);
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class EnumExtensionTests
         var result = myTest.GetDisplayName();
 
         // Assert
-        Assert.AreEqual(result, "Second");
+        Assert.AreEqual("Second", result);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class EnumExtensionTests
         var result = myTest.ToDictionary();
 
         // Assert
-        Assert.AreEqual(result.Count, 3);
+        Assert.HasCount(3, result);
     }
 
 }

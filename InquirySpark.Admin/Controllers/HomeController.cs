@@ -1,7 +1,7 @@
 ﻿using ControlSpark.WebMvc.Models;
 using System.Diagnostics;
 
-namespace ControlSpark.WebMvc.Controllers
+namespace InquirySpark.Admin.Controllers
 {
     public class HomeController(ILogger<BaseController> logger) : BaseController(logger)
     {

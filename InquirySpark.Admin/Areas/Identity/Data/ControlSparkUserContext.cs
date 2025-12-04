@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ControlSpark.WebMvc.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using static GemSpark.Admin.Areas.Identity.Models.WebsiteModel;
+using static InquirySpark.Admin.Areas.Identity.Models.WebsiteModel;
 
-namespace ControlSpark.WebMvc.Areas.Identity.Data;
+namespace InquirySpark.Admin.Areas.Identity.Data;
 
-public class ControlSparkUserContext(DbContextOptions<ControlSparkUserContext> options) : IdentityDbContext<ControlSparkUser>(options)
+public class ControlSparkUserContext(DbContextOptions<Data.ControlSparkUserContext> options) : IdentityDbContext<ControlSparkUser>(options)
 {
     protected override void OnModelCreating(ModelBuilder builder)
     {
