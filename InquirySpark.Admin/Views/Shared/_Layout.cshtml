@@ -1,25 +1,19 @@
-﻿@using WebSpark.Bootswatch.Services
-@using WebSpark.Bootswatch.Helpers
-@inject StyleCache StyleCache
 @{
     var currentYear = DateTime.Now.Year.ToString();
 }
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="@(BootswatchThemeHelper.GetCurrentColorMode(Context))">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Mwh.Sample.Core.WebApi - Mark Hazleton">
+    <meta name="description" content="InquirySpark Admin - Mark Hazleton">
     <meta name="author" content="Mark Hazleton">
     <link rel="icon" href="~/favicon.ico" type="image/x-icon">
 
     <title>@ViewData["Title"] - InquirySpark Admin</title>
 
-    @{
-        var themeName = BootswatchThemeHelper.GetCurrentThemeName(Context);
-        var themeUrl = BootswatchThemeHelper.GetThemeUrl(StyleCache, themeName);
-    }
-    <link id="bootswatch-theme-stylesheet" rel="stylesheet" href="@themeUrl" />
+    <!-- Bootstrap CSS (from npm) -->
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true" />
     
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" asp-append-version="true" />
@@ -54,7 +48,7 @@
     <!-- jQuery (required for DataTables) -->
     <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
     
-    <!-- Bootstrap Bundle (JavaScript only - CSS from Bootswatch theme) -->
+    <!-- Bootstrap Bundle (JavaScript + CSS from npm) -->
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     
     <!-- JSZip (required for Excel export) -->
@@ -86,9 +80,6 @@
     
     <!-- Site JS -->
     <script src="~/js/site.js" asp-append-version="true"></script>
-    
-    <!-- Bootswatch Theme Switcher - Load after Bootstrap -->
-    <script src="/_content/WebSpark.Bootswatch/js/bootswatch-theme-switcher.js" defer></script>
     
     @RenderSection("Scripts", required: false)
 </body>

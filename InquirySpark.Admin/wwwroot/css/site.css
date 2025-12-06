@@ -1,10 +1,1 @@
-﻿/* Custom CSS for dropdown menu items */
-.navbar-dark .navbar-nav .dropdown-menu .nav-link {
-    color: black; /* Set text color */
-    background-color: white; /* Set background color */
-}
-
-    .navbar-dark .navbar-nav .dropdown-menu .nav-link:hover {
-        color: white; /* Set text color on hover */
-        background-color: black; /* Set background color on hover (Bootstrap primary color) */
-    }
+/* Theme-aware: rely on Bootstrap variables; avoid hardcoded colors to allow light/dark switching */

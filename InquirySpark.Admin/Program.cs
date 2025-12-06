@@ -1,4 +1,4 @@
-﻿using ControlSpark.WebMvc.Areas.Identity.Data;
+using ControlSpark.WebMvc.Areas.Identity.Data;
 using InquirySpark.Repository.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,12 +27,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
 
-// ⚠️ CRITICAL: Register HttpClientUtility FIRST
-builder.Services.AddHttpClientUtility();
-
-// Then register Bootswatch theme switcher
-builder.Services.AddBootswatchThemeSwitcher();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(360);
@@ -51,9 +45,8 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
-// Static files serve RCL embedded resources automatically from _content/ path
+// Static files serve local assets from wwwroot
 app.UseStaticFiles();
-app.UseBootswatchAll();
 
 app.UseRouting();
 app.UseAuthentication();

@@ -22,6 +22,11 @@ const copyConfigs = {
         dest: path.join(libDir, 'bootstrap', 'js'),
         files: ['bootstrap.bundle.js', 'bootstrap.bundle.min.js', 'bootstrap.bundle.min.js.map']
     },
+    'bootstrap-css': {
+        source: path.join(__dirname, '..', 'node_modules', 'bootstrap', 'dist', 'css'),
+        dest: path.join(libDir, 'bootstrap', 'css'),
+        files: ['bootstrap.min.css', 'bootstrap.min.css.map']
+    },
     'datatables': [
         // Core DataTables
         {

@@ -5,10 +5,11 @@
   "private": true,
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "npm run copy:jquery && npm run copy:bootstrap && npm run copy:datatables && npm run copy:bootstrap-icons && npm run copy:validation",
+    "build": "npm run copy:jquery && npm run copy:bootstrap && npm run copy:bootstrap-css && npm run copy:datatables && npm run copy:bootstrap-icons && npm run copy:validation",
     "clean": "node -e \"const fs=require('fs');const path=require('path');const dir='wwwroot/lib';if(fs.existsSync(dir)){fs.rmSync(dir,{recursive:true,force:true});console.log('Cleaned wwwroot/lib');}\"",
     "copy:jquery": "node scripts/copy-assets.js jquery",
     "copy:bootstrap": "node scripts/copy-assets.js bootstrap",
+    "copy:bootstrap-css": "node scripts/copy-assets.js bootstrap-css",
     "copy:datatables": "node scripts/copy-assets.js datatables",
     "copy:bootstrap-icons": "node scripts/copy-assets.js bootstrap-icons",
     "copy:validation": "node scripts/copy-assets.js validation",

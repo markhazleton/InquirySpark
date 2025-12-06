@@ -1,4 +1,4 @@
-﻿{
+{
   "menuItems": [
     {
       "text": "Applications",
@@ -62,7 +62,7 @@
         },
         {
           "text": "Survey Status",
-          "url": "/Inquiry/Survey Status"
+          "url": "/Inquiry/SurveyStatus"
         },
         {
           "text": "Survey Review Status",
