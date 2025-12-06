@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Repository.Database;
+namespace InquirySpark.Repository.Database;
 
 /// <summary>
 /// Represents an application survey.

@@ -22,7 +22,7 @@ public class WebsiteModel
     /// <value>The domain ds.</value>
     [Required]
     [StringLength(250)]
-    public string Description { get; set; }
+    public required string Description { get; set; }
     /// <summary>
     /// Gets or sets the website identifier.
     /// </summary>
@@ -56,7 +56,7 @@ public class WebsiteModel
     /// <value>The domain nm.</value>
     [Required]
     [StringLength(50)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the gallery folder.
@@ -65,12 +65,12 @@ public class WebsiteModel
     [Required]
     [StringLength(20)]
     [Display(Name = "Site CompanyName")]
-    public string SiteName { get; set; }
+    public required string SiteName { get; set; }
     /// <summary>
     /// CompanyName of the Style
     /// </summary>
     [Display(Name = "Site Style")]
-    public string SiteStyle { get; set; }
+    public required string SiteStyle { get; set; }
 
     /// <summary>
     /// Gets or sets the website code.
@@ -79,11 +79,11 @@ public class WebsiteModel
     [Required]
     [StringLength(20)]
     [Display(Name = "Site Template")]
-    public string SiteTemplate { get; set; }
+    public required string SiteTemplate { get; set; }
     /// <summary>
     /// Link to API for this website
     /// </summary>
-    public string Url { get; set; }
+    public required string Url { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether [use bread crumb URL].
@@ -103,7 +103,7 @@ public class WebsiteModel
     /// <value>The domain title.</value>
     [Required]
     [StringLength(250)]
-    public string WebsiteTitle { get; set; }
+    public required string WebsiteTitle { get; set; }
 
     /// <summary>
     /// Gets or sets the domain URL.
@@ -111,7 +111,7 @@ public class WebsiteModel
     /// <value>The domain URL.</value>
     [Required]
     [StringLength(250)]
-    public string WebsiteUrl { get; set; }
+    public required string WebsiteUrl { get; set; }
 
 
     /// <summary>
@@ -127,7 +127,8 @@ public class WebsiteModel
         }
         public WebsiteEditModel(WebsiteModel? website)
         {
-            if (website == null) return;
+            if (website == null)
+                return;
             Message = website.Message;
             SiteStyle = website.SiteStyle;
             Id = website.Id;

@@ -121,7 +121,7 @@
                 @Html.DisplayFor(modelItem => item.ModifiedDt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Company.Address1)
+                @Html.DisplayFor(modelItem => item.Company!.Address1)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Role.RoleName)

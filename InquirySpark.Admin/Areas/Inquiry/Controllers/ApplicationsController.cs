@@ -1,4 +1,4 @@
-﻿using InquirySpark.Repository.Database;
+using InquirySpark.Repository.Database;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 

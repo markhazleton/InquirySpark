@@ -12,21 +12,8 @@
 
     <title>@ViewData["Title"] - InquirySpark Admin</title>
 
-    <!-- Bootstrap CSS (from npm) -->
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true" />
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" asp-append-version="true" />
-    
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap5.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/datatables/css/responsive.bootstrap5.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/datatables/css/buttons.bootstrap5.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/datatables/css/select.bootstrap5.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/datatables/css/searchPanes.bootstrap5.min.css" asp-append-version="true" />
-    
-    <!-- Site CSS -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- Bundled Site CSS (includes Bootstrap, Bootstrap Icons, DataTables) -->
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
 
     @RenderSection("HeadScripts", required: false)
 </head>
@@ -45,42 +32,12 @@
 
     @await Html.PartialAsync("/Views/Shared/_Footer.cshtml")
 
-    <!-- jQuery (required for DataTables) -->
-    <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
-    
-    <!-- Bootstrap Bundle (JavaScript + CSS from npm) -->
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-    
-    <!-- JSZip (required for Excel export) -->
-    <script src="~/lib/jszip/jszip.min.js" asp-append-version="true"></script>
-    
-    <!-- PDFMake (required for PDF export) -->
-    <script src="~/lib/pdfmake/pdfmake.min.js" asp-append-version="true"></script>
-    <script src="~/lib/pdfmake/vfs_fonts.js" asp-append-version="true"></script>
-    
-    <!-- DataTables Core -->
-    <script src="~/lib/datatables/js/dataTables.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/dataTables.bootstrap5.min.js" asp-append-version="true"></script>
-    
-    <!-- DataTables Extensions -->
-    <script src="~/lib/datatables/js/dataTables.responsive.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/responsive.bootstrap5.min.js" asp-append-version="true"></script>
-    
-    <script src="~/lib/datatables/js/dataTables.buttons.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/buttons.bootstrap5.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/buttons.html5.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/buttons.print.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/buttons.colVis.min.js" asp-append-version="true"></script>
-    
-    <script src="~/lib/datatables/js/dataTables.select.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/select.bootstrap5.min.js" asp-append-version="true"></script>
-    
-    <script src="~/lib/datatables/js/dataTables.searchPanes.min.js" asp-append-version="true"></script>
-    <script src="~/lib/datatables/js/searchPanes.bootstrap5.min.js" asp-append-version="true"></script>
-    
-    <!-- Site JS -->
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    
+    <!-- PDFMake Virtual File System (required for PDF fonts) -->
+    <script src="~/js/vfs_fonts.js" asp-append-version="true"></script>
+
+    <!-- Bundled Site JS (includes jQuery, Bootstrap, DataTables, and all dependencies) -->
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

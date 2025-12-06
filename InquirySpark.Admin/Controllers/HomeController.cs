@@ -1,5 +1,5 @@
-﻿using InquirySpark.Admin.Models;
 using System.Diagnostics;
+using InquirySpark.Admin.Models;
 
 namespace InquirySpark.Admin.Controllers
 {

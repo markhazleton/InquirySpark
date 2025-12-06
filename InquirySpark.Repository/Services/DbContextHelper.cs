@@ -1,7 +1,7 @@
-﻿using InquirySpark.Common.Models;
+using System.Data.Common;
+using InquirySpark.Common.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
 
 namespace InquirySpark.Repository.Services
 {

@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - My ASP.NET Application</title>
 
-    <link rel="stylesheet" href="~/Content/bootstrap.css" />
-    <link rel="stylesheet" href="~/Content/Site.css" />
-    <script type="text/javascript" src="~/Scripts/modernizr-2.6.2.js"></script>
+    <!-- Bundled Site CSS (includes Bootstrap, Bootstrap Icons, DataTables) -->
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -36,9 +35,12 @@
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
-    <script src="~/Scripts/respond.js"></script>
+    <!-- PDFMake Virtual File System (required for PDF fonts) -->
+    <script src="~/js/vfs_fonts.js" asp-append-version="true"></script>
+
+    <!-- Bundled Site JS (includes jQuery, Bootstrap, DataTables, and all dependencies) -->
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

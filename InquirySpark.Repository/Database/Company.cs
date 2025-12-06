@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Repository.Database;
+namespace InquirySpark.Repository.Database;
 /// <summary>
 /// Company entity.
 /// </summary>
@@ -16,7 +16,7 @@ public partial class Company
     /// Gets or sets the company name.
     /// </summary>
     [Display(Name = "Name")]
-    [Column(name: "CompanyNM",Order =1)]
+    [Column(name: "CompanyNM", Order = 1)]
     public string Name { get; set; } = null!;
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Repository.Database;
+namespace InquirySpark.Repository.Database;
 
 public partial class Survey
 {

@@ -1,5 +1,34 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+// Import all CSS dependencies
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
+import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
+import 'datatables.net-select-bs5/css/select.bootstrap5.min.css';
+import 'datatables.net-searchpanes-bs5/css/searchPanes.bootstrap5.min.css';
+import '../css/site.css';
+
+// Import JavaScript dependencies
+import $ from 'jquery';
+import 'bootstrap';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-buttons';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-responsive';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-select';
+import 'datatables.net-select-bs5';
+import 'datatables.net-searchpanes';
+import 'datatables.net-searchpanes-bs5';
+
+// Import DataTables button extensions
+import 'datatables.net-buttons/js/buttons.html5.js';
+import 'datatables.net-buttons/js/buttons.print.js';
+import 'datatables.net-buttons/js/buttons.colVis.js';
+
+// Make jQuery globally available
+window.$ = window.jQuery = $;
 
 // DataTables Configuration with Bootstrap 5 Best Practices
 $(document).ready(function () {
@@ -13,16 +42,16 @@ $(document).ready(function () {
     const defaultConfig = {
         // Responsive configuration
         responsive: true,
-        
+
         // Bootstrap 5 styling
         dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
              '<"row"<"col-sm-12"tr>>' +
              '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-        
+
         // Pagination options
         pageLength: 25,
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        
+
         // Language configuration
         language: {
             search: "_INPUT_",
@@ -38,20 +67,20 @@ $(document).ready(function () {
                 previous: "Previous"
             }
         },
-        
+
         // Performance optimization
         deferRender: true,
-        
+
         // Column visibility and ordering
         columnDefs: [
             { targets: 'no-sort', orderable: false },
             { targets: 'no-search', searchable: false }
         ],
-        
+
         // State saving
         stateSave: true,
         stateDuration: 60 * 60 * 24, // 24 hours
-        
+
         // Auto width
         autoWidth: false
     };
@@ -59,21 +88,21 @@ $(document).ready(function () {
     // Initialize DataTables on tables with .table class
     $('.table').each(function() {
         const $table = $(this);
-        
+
         // Skip if already initialized
         if ($.fn.DataTable.isDataTable($table)) {
             return;
         }
-        
+
         // Check if table has data-datatable="false" attribute
         if ($table.data('datatable') === false) {
             return;
         }
-        
+
         // Merge custom config from data attributes
         const customConfig = $table.data('datatables-config') || {};
         const config = $.extend(true, {}, defaultConfig, customConfig);
-        
+
         // Initialize DataTable
         try {
             $table.DataTable(config);
@@ -86,11 +115,11 @@ $(document).ready(function () {
     // Usage: Add class "datatable-export" to enable export buttons
     $('.datatable-export').each(function() {
         const $table = $(this);
-        
+
         if ($.fn.DataTable.isDataTable($table)) {
             return;
         }
-        
+
         const exportConfig = $.extend(true, {}, defaultConfig, {
             dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
                  '<"row"<"col-sm-12"B>>' +
@@ -124,7 +153,7 @@ $(document).ready(function () {
                 }
             ]
         });
-        
+
         try {
             $table.DataTable(exportConfig);
         } catch (error) {
@@ -142,7 +171,7 @@ window.DataTableUtils = {
             table.ajax.reload();
         }
     },
-    
+
     // Clear search and filters
     clearFilters: function(tableSelector) {
         const table = $(tableSelector).DataTable();
@@ -150,7 +179,7 @@ window.DataTableUtils = {
             table.search('').columns().search('').draw();
         }
     },
-    
+
     // Get selected rows
     getSelectedRows: function(tableSelector) {
         const table = $(tableSelector).DataTable();

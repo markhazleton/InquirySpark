@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:prod:*)",
+      "Bash(dir:*)",
+      "Bash(ls:*)",
+      "Bash(npm run clean:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet format:*)",
+      "Bash(Select-String -Pattern \"Warning\\(s\\)|Error\\(s\\)|Build succeeded|Build FAILED\" -Context 0,0)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

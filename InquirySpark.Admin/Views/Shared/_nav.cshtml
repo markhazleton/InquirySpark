@@ -11,7 +11,7 @@
         jsonFile = Environment.ContentRootPath + "\\Views\\Shared\\" + "navigation.json";
     }
 
-    JsonDocument menuItems = null;
+    JsonDocument? menuItems = null;
 
     @if (!string.IsNullOrEmpty(jsonFile) && File.Exists(jsonFile))
     {

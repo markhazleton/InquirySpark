@@ -88,7 +88,7 @@ public partial class InquirySparkContext : DbContext
     public virtual DbSet<UserAppProperty> UserAppProperties { get; set; }
 
     public virtual DbSet<UserMessage> UserMessages { get; set; }
-        
+
     public virtual DbSet<VwApplication> VwApplications { get; set; }
 
     public virtual DbSet<VwApplicationPermissison> VwApplicationPermissisons { get; set; }

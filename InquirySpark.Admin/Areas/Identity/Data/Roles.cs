@@ -1,4 +1,4 @@
-﻿namespace ControlSpark.WebMvc.Areas.Identity.Data;
+namespace ControlSpark.WebMvc.Areas.Identity.Data;
 
 public enum Roles
 {

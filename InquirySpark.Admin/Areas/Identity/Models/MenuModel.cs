@@ -27,14 +27,14 @@ public class MenuModel
     /// </summary>
     /// <value>The action.</value>
     [JsonPropertyName("action")]
-    public string Action { get; set; }
+    public required string Action { get; set; }
     /// <summary>
     /// Gets or sets the Api Url.
     /// </summary>
     /// <value>The URL.</value>
     [DisplayName("Api Url")]
     [JsonPropertyName("api_url")]
-    public string ApiUrl { get; set; }
+    public required string ApiUrl { get; set; }
     /// <summary>
     /// Gets or sets the Argument for the controller action.
     /// </summary>
@@ -47,7 +47,7 @@ public class MenuModel
     /// </summary>
     /// <value>The controller.</value>
     [JsonPropertyName("controller")]
-    public string Controller { get; set; }
+    public required string Controller { get; set; }
 
     /// <summary>
     /// Gets or sets the description.
@@ -58,7 +58,7 @@ public class MenuModel
     [StringLength(100, ErrorMessage = "Max length is 100.")]
     [Required]
     [DataType(DataType.MultilineText)]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether [display in navigation].
@@ -89,18 +89,18 @@ public class MenuModel
     /// Domain CompanyName
     /// </summary>
     [JsonPropertyName("domain_name")]
-    public string DomainName { get; set; }
+    public required string DomainName { get; set; }
     /// <summary>
     /// Domain Url for API
     /// </summary>
     [JsonPropertyName("domain_url")]
-    public string DomainUrl { get; set; }
+    public required string DomainUrl { get; set; }
     /// <summary>
     /// Gets or sets the icon.
     /// </summary>
     /// <value>The icon.</value>
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string Icon { get; set; }
 
     /// <summary>
     /// Gets or sets the identifier.
@@ -157,7 +157,7 @@ public class MenuModel
     /// </summary>
     /// <value>The parent controller.</value>
     [JsonPropertyName("parent")]
-    public string ParentController { get; set; }
+    public required string ParentController { get; set; }
 
     /// <summary>
     /// Gets or sets the parent identifier.
@@ -172,7 +172,7 @@ public class MenuModel
     /// </summary>
     /// <value>The parent title.</value>
     [JsonPropertyName("parent_title")]
-    public string ParentTitle { get; set; }
+    public required string ParentTitle { get; set; }
 
     /// <summary>
     /// Gets or sets the title.
@@ -182,7 +182,7 @@ public class MenuModel
     [DisplayName("Title")]
     [StringLength(100, ErrorMessage = "Max length is 100.")]
     [Required]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     /// <summary>
     /// Gets or sets the URL.
@@ -192,12 +192,12 @@ public class MenuModel
     [StringLength(100, ErrorMessage = "Max length is 100.")]
     [Required]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; set; }
 
     /// <summary>
     /// Gets or sets the virtual path.
     /// </summary>
     /// <value>The virtual path.</value>
     [JsonPropertyName("virtual_path")]
-    public string VirtualPath { get; set; }
+    public required string VirtualPath { get; set; }
 }

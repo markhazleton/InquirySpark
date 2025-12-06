@@ -1,4 +1,4 @@
-﻿using InquirySpark.Common.Models;
+using InquirySpark.Common.Models;
 using InquirySpark.Common.SDK;
 using InquirySpark.Common.SDK.Services;
 using InquirySpark.Repository.Database;
@@ -34,12 +34,12 @@ public class SurveyService(InquirySparkContext coSurveyContext, ILogger<SurveySe
                 .Include(i => i.ApplicationType)
                 .Include(i => i.Company)
                 .Include(i => i.SurveyResponses)
-                .Include(i=> i.ApplicationUserRoles).ThenInclude(i=>i.ApplicationUser)    
+                .Include(i => i.ApplicationUserRoles).ThenInclude(i => i.ApplicationUser)
                 .Include(i => i.ApplicationSurveys).ThenInclude(i => i.Survey)
-                                                   .ThenInclude(i => i.QuestionGroups)
-                                                   .ThenInclude(i => i.QuestionGroupMembers)
-                                                   .ThenInclude(i => i.Question)
-                                                   .ThenInclude(i => i.QuestionAnswers)
+                    .ThenInclude(i => i.QuestionGroups)
+                    .ThenInclude(i => i.QuestionGroupMembers)
+                    .ThenInclude(i => i.Question)
+                    .ThenInclude(i => i.QuestionAnswers)
                 .Select(s => SurveyServices_Mappers.Create(s))
                 .FirstOrDefaultAsync();
         });

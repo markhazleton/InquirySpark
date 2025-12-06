@@ -1,4 +1,4 @@
-﻿using ControlSpark.WebMvc.Areas.Identity.Data;
+using ControlSpark.WebMvc.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static InquirySpark.Admin.Areas.Identity.Models.WebsiteModel;

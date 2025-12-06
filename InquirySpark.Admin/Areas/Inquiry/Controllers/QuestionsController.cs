@@ -1,8 +1,8 @@
-﻿using InquirySpark.Repository.Database;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using InquirySpark.Repository.Database;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace InquirySpark.Admin.Areas.Inquiry.Controllers
 {

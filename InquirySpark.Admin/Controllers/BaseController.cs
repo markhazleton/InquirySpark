@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Admin.Controllers;
+namespace InquirySpark.Admin.Controllers;
 
 /// <summary>
 /// Provides a base controller with logging support for all admin controllers.

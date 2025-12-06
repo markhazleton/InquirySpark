@@ -69,7 +69,7 @@
                 @Html.DisplayFor(modelItem => item.ApplicationType.ApplicationTypeNm)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Company.Address1)
+                @Html.DisplayFor(modelItem => item.Company!.Address1)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ApplicationId">Edit</a> |

@@ -1,4 +1,4 @@
-﻿using InquirySpark.Common.SDK;
+using InquirySpark.Common.SDK;
 using InquirySpark.Repository.Database;
 
 namespace InquirySpark.Repository.Services;
@@ -42,7 +42,8 @@ public static class SurveyServices_Mappers
     public static List<QuestionGroupItem> Create(ICollection<QuestionGroup> questionGroups)
     {
         List<QuestionGroupItem> questionGroupList = [];
-        if (questionGroups == null) return questionGroupList;
+        if (questionGroups == null)
+            return questionGroupList;
 
         foreach (var item in questionGroups)
         {
@@ -86,7 +87,8 @@ public static class SurveyServices_Mappers
     public static List<QuestionGroupMemberItem> Create(ICollection<QuestionGroupMember> questionGroups)
     {
         List<QuestionGroupMemberItem> questionGroupList = [];
-        if (questionGroups == null) return questionGroupList;
+        if (questionGroups == null)
+            return questionGroupList;
 
         foreach (var questionGroup in questionGroups)
         {
@@ -126,7 +128,8 @@ public static class SurveyServices_Mappers
     /// <returns></returns>
     public static QuestionItem Create(Question? question)
     {
-        if (question == null) return new();
+        if (question == null)
+            return new();
         return new QuestionItem()
         {
             QuestionID = question.QuestionId,
@@ -152,7 +155,8 @@ public static class SurveyServices_Mappers
     public static List<QuestionAnswerItem> Create(ICollection<QuestionAnswer> questionAnswers)
     {
         List<QuestionAnswerItem> questionAnswerList = [];
-        if (questionAnswers == null) return questionAnswerList;
+        if (questionAnswers == null)
+            return questionAnswerList;
         return questionAnswers.Select(s => Create(s)).ToList();
     }
 
@@ -234,7 +238,8 @@ public static class SurveyServices_Mappers
     public static List<ApplicationSurveyItem> Create(ICollection<ApplicationSurvey>? applicationSurveys)
     {
         List<ApplicationSurveyItem> applicationSurveyItems = [];
-        if (applicationSurveys == null) return applicationSurveyItems;
+        if (applicationSurveys == null)
+            return applicationSurveyItems;
 
         foreach (var item in applicationSurveys)
         {
@@ -264,7 +269,8 @@ public static class SurveyServices_Mappers
     /// <returns></returns>
     public static SurveyItem Create(Survey survey)
     {
-        if (survey == null) return new();
+        if (survey == null)
+            return new();
         return new SurveyItem
         {
             SurveyID = survey.SurveyId,
@@ -285,7 +291,8 @@ public static class SurveyServices_Mappers
     public static List<SurveyStatusItem> Create(ICollection<SurveyStatus>? surveyStatuses)
     {
         List<SurveyStatusItem> surveyStatusItems = [];
-        if (surveyStatuses == null) return surveyStatusItems;
+        if (surveyStatuses == null)
+            return surveyStatusItems;
 
         foreach (var item in surveyStatuses)
         {
@@ -379,7 +386,8 @@ public static class SurveyServices_Mappers
     public static List<ApplicationItem> Create(ICollection<Application>? applications)
     {
         List<ApplicationItem> applicationItems = [];
-        if (applications == null) return applicationItems;
+        if (applications == null)
+            return applicationItems;
 
         foreach (var item in applications)
         {
@@ -397,7 +405,8 @@ public static class SurveyServices_Mappers
     {
         List<ApplicationUserItem> applicationUserItems = [];
 
-        if (applicationUsers == null) return applicationUserItems;
+        if (applicationUsers == null)
+            return applicationUserItems;
 
         foreach (var item in applicationUsers)
         {
@@ -489,17 +498,16 @@ public static class SurveyServices_Mappers
         return new QuestionItem()
         {
             QuestionID = s.QuestionId,
-            QuestionTypeID = s.QuestionTypeId??0,
-            CommentFL = s.CommentFl>0?true:false,
+            QuestionTypeID = s.QuestionTypeId ?? 0,
+            CommentFL = s.CommentFl > 0 ? true : false,
             QuestionDS = s.QuestionDs ?? string.Empty,
             QuestionValue = s.QuestionValue,
             ReviewRoleLevel = s.ReviewRoleLevel,
-            SurveyTypeID = s.SurveyTypeId??0,
-            UnitOfMeasureID = s.UnitOfMeasureId??0,
+            SurveyTypeID = s.SurveyTypeId ?? 0,
+            UnitOfMeasureID = s.UnitOfMeasureId ?? 0,
             FileData = s.FileData ?? [],
             ModifiedID = s.ModifiedId,
             Keywords = s.Keywords ?? string.Empty,
-           
         };
     }
 }
