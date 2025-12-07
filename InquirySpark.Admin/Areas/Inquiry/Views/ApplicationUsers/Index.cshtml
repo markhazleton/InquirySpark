@@ -1,137 +1,123 @@
-﻿@model IEnumerable<InquirySpark.Repository.Database.ApplicationUser>
+@model IEnumerable<InquirySpark.Repository.Database.ApplicationUser>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Application Users";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstNm)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastNm)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EMailAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CommentDs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountNm)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupervisorAccountNm)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastLoginDt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastLoginLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DisplayName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserKey)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserLogin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmailVerified)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VerifyCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="bi bi-people me-2"></i>
+            Application Users
+        </h5>
+        <a asp-action="Create" class="btn btn-light btn-sm">
+            <i class="bi bi-plus-circle me-1"></i>
+            Create New
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>
+                            <i class="bi bi-person me-1"></i>
+                            @Html.DisplayNameFor(model => model.DisplayName)
+                        </th>
+                        <th>
+                            <i class="bi bi-person-badge me-1"></i>
+                            @Html.DisplayNameFor(model => model.AccountNm)
+                        </th>
+                        <th>
+                            <i class="bi bi-envelope me-1"></i>
+                            @Html.DisplayNameFor(model => model.EMailAddress)
+                        </th>
+                        <th>
+                            <i class="bi bi-shield me-1"></i>
+                            @Html.DisplayNameFor(model => model.Role)
+                        </th>
+                        <th>
+                            <i class="bi bi-building me-1"></i>
+                            @Html.DisplayNameFor(model => model.Company)
+                        </th>
+                        <th class="text-center">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            @Html.DisplayNameFor(model => model.LastLoginDt)
+                        </th>
+                        <th class="text-center">
+                            <i class="bi bi-person me-1"></i>
+                            @Html.DisplayNameFor(model => model.ModifiedId)
+                        </th>
+                        <th class="text-center">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            @Html.DisplayNameFor(model => model.ModifiedDt)
+                        </th>
+                        <th class="text-center no-sort" style="width: 180px;">
+                            <i class="bi bi-gear me-1"></i>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstNm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastNm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EMailAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CommentDs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountNm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SupervisorAccountNm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLoginDt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLoginLocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DisplayName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserKey)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailVerified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VerifyCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedDt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company!.Address1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role.RoleName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ApplicationUserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ApplicationUserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ApplicationUserId">Delete</a>
-            </td>
-        </tr>
+                    <tr>
+                        <td>
+                            <strong>@Html.DisplayFor(modelItem => item.DisplayName)</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">@Html.DisplayFor(modelItem => item.AccountNm)</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EMailAddress)
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">@Html.DisplayFor(modelItem => item.Role.RoleName)</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Company!.Name)
+                        </td>
+                        <td class="text-center">
+                            <small class="text-muted">@Html.DisplayFor(modelItem => item.LastLoginDt)</small>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-secondary">@Html.DisplayFor(modelItem => item.ModifiedId)</span>
+                        </td>
+                        <td class="text-center">
+                            <small class="text-muted">@Html.DisplayFor(modelItem => item.ModifiedDt)</small>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a asp-action="Details" asp-route-id="@item.ApplicationUserId" 
+                                   class="btn btn-outline-info" 
+                                   title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.ApplicationUserId" 
+                                   class="btn btn-outline-primary" 
+                                   title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.ApplicationUserId" 
+                                   class="btn btn-outline-danger" 
+                                   title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
 }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <small>
+            <i class="bi bi-info-circle me-1"></i>
+            Total Records: <strong>@Model.Count()</strong>
+        </small>
+        <small>
+            <i class="bi bi-lightning-charge me-1"></i>
+            Powered by DataTables
+        </small>
+    </div>
+</div>
