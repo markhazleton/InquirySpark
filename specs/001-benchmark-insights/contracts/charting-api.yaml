@@ -1,0 +1,629 @@
+openapi: 3.1.0
+info:
+  title: InquirySpark Benchmark Insights API
+  version: 0.1.0
+  description: >-
+    REST contracts powering chart configuration, automated builds, asset library,
+    data exploration, and gauge dashboards. All responses are wrapped in
+    BaseResponse<T> or BaseResponseCollection<T> per InquirySpark conventions.
+servers:
+  - url: https://localhost:5001
+    description: Local WebApi host
+components:
+  schemas:
+    BaseResponse:
+      type: object
+      properties:
+        isSuccessful:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+        data:
+          nullable: true
+    ChartDefinitionInput:
+      type: object
+      required: [datasetId, name, visualPayload]
+      properties:
+        datasetId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        filterPayload:
+          type: object
+          description: JSON logic tree (AND/OR/groups)
+        visualPayload:
+          type: object
+          description: Chart.js configuration JSON
+        calculationPayload:
+          type: object
+          description: Optional definitions for derived metrics
+    ChartDefinition:
+      allOf:
+        - $ref: '#/components/schemas/ChartDefinitionInput'
+        - type: object
+          properties:
+            chartDefinitionId:
+              type: integer
+            versionNumber:
+              type: integer
+            autoApprovedFl:
+              type: boolean
+            createdDt:
+              type: string
+              format: date-time
+            modifiedDt:
+              type: string
+              format: date-time
+    ChartAsset:
+      type: object
+      properties:
+        chartAssetId:
+          type: integer
+        chartDefinitionId:
+          type: integer
+        chartVersionId:
+          type: integer
+        displayName:
+          type: string
+        generationDt:
+          type: string
+          format: date-time
+        approvalStatus:
+          type: string
+          enum: [Draft, Approved, Archived]
+        tags:
+          type: array
+          items:
+            type: string
+        cdnBaseUrl:
+          type: string
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              format:
+                type: string
+                enum: [Png, Svg, Pdf, Jpeg, Thumbnail, Zip]
+              resolutionHint:
+                type: string
+              blobPath:
+                type: string
+              fileSizeBytes:
+                type: integer
+    DeckProject:
+      type: object
+      properties:
+        deckProjectId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        theme:
+          type: string
+        status:
+          type: string
+          enum: [Draft, Published]
+        slides:
+          type: array
+          items:
+            type: object
+            properties:
+              deckSlideId:
+                type: integer
+              chartAssetId:
+                type: integer
+              sortOrder:
+                type: integer
+              slideTitle:
+                type: string
+    DashboardDefinition:
+      type: object
+      properties:
+        dashboardDefinitionId:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        defaultFilters:
+          type: object
+        layout:
+          type: object
+        tiles:
+          type: array
+          items:
+            type: object
+            properties:
+              gaugeTileId:
+                type: integer
+              metricNodeId:
+                type: integer
+              tileType:
+                type: string
+                enum: [Circular, Linear, Numeric]
+              thresholds:
+                type: object
+              drillTargetUrl:
+                type: string
+              size:
+                type: string
+                enum: [Small, Medium, Large]
+    DataPage:
+      type: object
+      properties:
+        totalRows:
+          type: integer
+        filteredRows:
+          type: integer
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              dataType:
+                type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items: {}
+        summary:
+          type: object
+paths:
+  /api/chart-definitions:
+    get:
+      summary: List chart definitions
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: tag
+          schema:
+            type: string
+        - in: query
+          name: datasetId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Wrapped collection
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChartDefinition'
+    post:
+      summary: Create or save chart definition (auto-approves on validation)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChartDefinitionInput'
+      responses:
+        '200':
+          description: Saved definition
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ChartDefinition'
+  /api/chart-definitions/{id}:
+    get:
+      summary: Retrieve a single chart definition with history
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Definition detail
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ChartDefinition'
+    put:
+      summary: Update definition (new version automatically recorded)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChartDefinitionInput'
+      responses:
+        '200':
+          description: Updated definition + version metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/chart-definitions/{id}/versions/{version}/rollback:
+    post:
+      summary: Create a new draft version from history
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Rollback success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/chart-builds:
+    post:
+      summary: Trigger Build All Charts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                triggerType:
+                  type: string
+                  enum: [Manual, Schedule, Webhook]
+                definitionIds:
+                  type: array
+                  items:
+                    type: integer
+                scheduleCron:
+                  type: string
+              required: [triggerType]
+      responses:
+        '202':
+          description: Batch job accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          chartBuildJobId:
+                            type: integer
+  /api/chart-builds/{jobId}:
+    get:
+      summary: Inspect job status + per-task results
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/chart-assets:
+    get:
+      summary: Query chart asset library (uses Cognitive Search index)
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+        - in: query
+          name: tags
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: approvalStatus
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [name, newest, oldest, usage]
+      responses:
+        '200':
+          description: Asset results with facets
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChartAsset'
+  /api/chart-assets/{id}:
+    get:
+      summary: Asset detail (files, history, usage)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail payload
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ChartAsset'
+  /api/chart-assets/{id}/add-to-deck:
+    post:
+      summary: Add asset to deck project
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deckProjectId:
+                  type: integer
+                slideTitle:
+                  type: string
+      responses:
+        '200':
+          description: Slide entry result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/decks:
+    get:
+      summary: List deck projects by owner or status
+      responses:
+        '200':
+          description: Deck collection
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DeckProject'
+    post:
+      summary: Create/update deck project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeckProject'
+      responses:
+        '200':
+          description: Saved deck
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/decks/{id}/export:
+    post:
+      summary: Export deck to PPTX/Google Slides/PDF/ZIP
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                format:
+                  type: string
+                  enum: [Pptx, GoogleSlides, Pdf, Zip]
+                templateId:
+                  type: string
+      responses:
+        '202':
+          description: Export job enqueued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/dashboards/{id}:
+    get:
+      summary: Retrieve dashboard definition with tiles + cached scores
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: filters
+          schema:
+            type: string
+            description: Encoded filter payload
+      responses:
+        '200':
+          description: Dashboard payload
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/DashboardDefinition'
+  /api/dashboards/{id}/refresh:
+    post:
+      summary: Force recalculation of dashboard gauges
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filters:
+                  type: object
+      responses:
+        '202':
+          description: Refresh scheduled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/charts/{id}/data:
+    get:
+      summary: Fetch paged dataset rows for the data explorer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 100
+        - in: query
+          name: filters
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Data page
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/DataPage'
+  /api/exports:
+    post:
+      summary: Submit on-demand export job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chartDefinitionId:
+                  type: integer
+                format:
+                  type: string
+                  enum: [Xlsx, Pdf, Csv, Tsv]
+                filters:
+                  type: object
+                columnSettings:
+                  type: object
+      responses:
+        '202':
+          description: Export job accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/search/charts:
+    get:
+      summary: Autocomplete + saved search retrieval
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+        - in: query
+          name: scope
+          schema:
+            type: string
+            enum: [Assets, Definitions, Decks]
+      responses:
+        '200':
+          description: Search suggestions + hits
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
