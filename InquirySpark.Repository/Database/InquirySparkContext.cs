@@ -1,6 +1,9 @@
 using System.Linq;
 using InquirySpark.Common.Models;
 using InquirySpark.Repository.Configuration;
+using InquirySpark.Repository.Database.Entities;
+using InquirySpark.Repository.Database.Entities.Charting;
+using InquirySpark.Repository.Database.Entities.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -120,6 +123,22 @@ public partial class InquirySparkContext : DbContext
     public virtual DbSet<VwValidateImportUser> VwValidateImportUsers { get; set; }
 
     public virtual DbSet<WebPortal> WebPortals { get; set; }
+
+    public virtual DbSet<ChartDefinitionEntity> ChartDefinitions { get; set; }
+    public virtual DbSet<ChartVersionEntity> ChartVersions { get; set; }
+    public virtual DbSet<ChartBuildJobEntity> ChartBuildJobs { get; set; }
+    public virtual DbSet<ChartBuildTaskEntity> ChartBuildTasks { get; set; }
+    public virtual DbSet<ChartAssetEntity> ChartAssets { get; set; }
+    public virtual DbSet<ChartAssetFileEntity> ChartAssetFiles { get; set; }
+    public virtual DbSet<DataExportRequestEntity> DataExportRequests { get; set; }
+    public virtual DbSet<DeckProjectEntity> DeckProjects { get; set; }
+    public virtual DbSet<DeckSlideEntity> DeckSlides { get; set; }
+    public virtual DbSet<DashboardDefinitionEntity> DashboardDefinitions { get; set; }
+    public virtual DbSet<GaugeTileEntity> GaugeTiles { get; set; }
+    public virtual DbSet<MetricGroupEntity> MetricGroups { get; set; }
+    public virtual DbSet<MetricScoreSnapshotEntity> MetricScoreSnapshots { get; set; }
+    public virtual DbSet<AuditLogEntity> AuditLogs { get; set; }
+    public virtual DbSet<UserPreferenceEntity> UserPreferences { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1624,6 +1643,7 @@ public partial class InquirySparkContext : DbContext
         modelBuilder.Entity<VwSurveyResponseContext>(entity =>
         {
             entity
+
                 .HasNoKey()
                 .ToView("vwSurveyResponseContext");
 
@@ -1921,7 +1941,7 @@ public partial class InquirySparkContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToView("vwValidateImportUser");
+                .ToView("vw_ValidateImportUser");
 
             entity.Property(e => e.AccountNm)
                 .HasMaxLength(50)
@@ -1975,27 +1995,164 @@ public partial class InquirySparkContext : DbContext
             entity.ToTable("WebPortal");
 
             entity.Property(e => e.WebPortalId).HasColumnName("WebPortalID");
-            entity.Property(e => e.ActiveFl)
-                .IsRequired()
-                .HasDefaultValueSql("((1))")
-                .HasColumnName("ActiveFL");
+            // TODO: Missing properties - fix WebPortal entity to include CompanyId, WebPortalLoginUrl, Company
+            // entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.ModifiedDt)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("ModifiedDT");
-            entity.Property(e => e.ModifiedId)
-                .HasDefaultValueSql("((1))")
-                .HasColumnName("ModifiedID");
-            entity.Property(e => e.WebPortalDs).HasColumnName("WebPortalDS");
+            entity.Property(e => e.ModifiedId).HasColumnName("ModifiedID");
+            // entity.Property(e => e.WebPortalLoginUrl)
+            //     .HasMaxLength(255)
+            //     .HasColumnName("WebPortalLoginURL");
             entity.Property(e => e.WebPortalNm)
                 .HasMaxLength(50)
                 .HasColumnName("WebPortalNM");
             entity.Property(e => e.WebPortalUrl)
-                .HasMaxLength(250)
+                .HasMaxLength(255)
                 .HasColumnName("WebPortalURL");
-            entity.Property(e => e.WebServiceUrl)
-                .HasMaxLength(250)
-                .HasColumnName("WebServiceURL");
+
+            // entity.HasOne(d => d.Company).WithMany(p => p.WebPortals)
+            //     .HasForeignKey(d => d.CompanyId)
+            //     .OnDelete(DeleteBehavior.ClientSetNull)
+            //     .HasConstraintName("FK_WebPortal_Company");
+        });
+
+        modelBuilder.Entity<AuditLogEntity>(entity =>
+        {
+            entity.ToTable("AuditLog");
+            entity.HasKey(e => e.AuditLogId);
+            entity.Property(e => e.EntityType).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.EntityId).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.Action).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.CreatedDt).HasDefaultValueSql("getdate()");
+            entity.HasIndex(e => e.ActorId);
+            entity.HasIndex(e => e.EntityType);
+            entity.HasIndex(e => e.CreatedDt);
+        });
+
+        modelBuilder.Entity<UserPreferenceEntity>(entity =>
+        {
+            entity.ToTable("UserPreference");
+            entity.HasKey(e => e.UserPreferenceId);
+            entity.HasIndex(e => new { e.UserId, e.PreferenceKey }).IsUnique();
+            entity.Property(e => e.PreferenceKey).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.PreferenceValue).IsRequired();
+            entity.Property(e => e.ModifiedDt).HasDefaultValueSql("getdate()");
+            entity.Property(e => e.RowVersion).IsRowVersion();
+        });
+
+        modelBuilder.Entity<ChartDefinitionEntity>(entity =>
+        {
+            entity.ToTable("ChartDefinition");
+            entity.HasKey(e => e.ChartDefinitionId);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.ModifiedDt).HasDefaultValueSql("getdate()");
+        });
+
+        modelBuilder.Entity<ChartVersionEntity>(entity =>
+        {
+            entity.ToTable("ChartVersion");
+            entity.HasKey(e => e.ChartVersionId);
+            entity.HasOne(d => d.ChartDefinition)
+                .WithMany(p => p.Versions)
+                .HasForeignKey(d => d.ChartDefinitionId);
+        });
+
+        modelBuilder.Entity<ChartBuildJobEntity>(entity =>
+        {
+            entity.ToTable("ChartBuildJob");
+            entity.HasKey(e => e.ChartBuildJobId);
+            entity.Property(e => e.TriggerType).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.RequestedDt).HasDefaultValueSql("getdate()");
+        });
+
+        modelBuilder.Entity<ChartBuildTaskEntity>(entity =>
+        {
+            entity.ToTable("ChartBuildTask");
+            entity.HasKey(e => e.ChartBuildTaskId);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
+            entity.HasOne(d => d.ChartBuildJob).WithMany(p => p.BuildTasks).HasForeignKey(d => d.ChartBuildJobId);
+            entity.HasOne(d => d.ChartDefinition).WithMany(p => p.BuildTasks).HasForeignKey(d => d.ChartDefinitionId);
+            entity.HasOne(d => d.ChartVersion).WithMany(p => p.BuildTasks).HasForeignKey(d => d.ChartVersionId);
+        });
+
+        modelBuilder.Entity<ChartAssetEntity>(entity =>
+        {
+            entity.ToTable("ChartAsset");
+            entity.HasKey(e => e.ChartAssetId);
+            entity.Property(e => e.DisplayName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.ApprovalStatus).IsRequired().HasMaxLength(50);
+            entity.HasOne(d => d.ChartDefinition).WithMany(p => p.Assets).HasForeignKey(d => d.ChartDefinitionId);
+            entity.HasOne(d => d.ChartVersion).WithMany(p => p.Assets).HasForeignKey(d => d.ChartVersionId);
+        });
+
+        modelBuilder.Entity<ChartAssetFileEntity>(entity =>
+        {
+            entity.ToTable("ChartAssetFile");
+            entity.HasKey(e => e.ChartAssetFileId);
+            entity.Property(e => e.Format).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.BlobPath).IsRequired();
+            entity.HasOne(d => d.ChartAsset).WithMany(p => p.Files).HasForeignKey(d => d.ChartAssetId);
+        });
+
+        modelBuilder.Entity<DataExportRequestEntity>(entity =>
+        {
+            entity.ToTable("DataExportRequest");
+            entity.HasKey(e => e.DataExportRequestId);
+            entity.Property(e => e.Format).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
+            entity.HasOne(d => d.ChartDefinition).WithMany(p => p.ExportRequests).HasForeignKey(d => d.ChartDefinitionId);
+        });
+
+        modelBuilder.Entity<DeckProjectEntity>(entity =>
+        {
+            entity.ToTable("DeckProject");
+            entity.HasKey(e => e.DeckProjectId);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<DeckSlideEntity>(entity =>
+        {
+            entity.ToTable("DeckSlide");
+            entity.HasKey(e => e.DeckSlideId);
+            entity.HasOne(d => d.DeckProject).WithMany(p => p.Slides).HasForeignKey(d => d.DeckProjectId);
+            entity.HasOne(d => d.ChartAsset).WithMany(p => p.DeckSlides).HasForeignKey(d => d.ChartAssetId);
+        });
+
+        modelBuilder.Entity<DashboardDefinitionEntity>(entity =>
+        {
+            entity.ToTable("DashboardDefinition");
+            entity.HasKey(e => e.DashboardDefinitionId);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.Slug).IsRequired().HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<GaugeTileEntity>(entity =>
+        {
+            entity.ToTable("GaugeTile");
+            entity.HasKey(e => e.GaugeTileId);
+            entity.Property(e => e.TileType).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Size).IsRequired().HasMaxLength(50);
+            entity.HasOne(d => d.DashboardDefinition).WithMany(p => p.GaugeTiles).HasForeignKey(d => d.DashboardDefinitionId);
+        });
+
+        modelBuilder.Entity<MetricGroupEntity>(entity =>
+        {
+            entity.ToTable("MetricGroup");
+            entity.HasKey(e => e.MetricGroupId);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.CalculationType).IsRequired().HasMaxLength(50);
+            entity.HasOne(d => d.ParentMetricGroup).WithMany(p => p.ChildMetricGroups).HasForeignKey(d => d.ParentMetricGroupId);
+        });
+
+        modelBuilder.Entity<MetricScoreSnapshotEntity>(entity =>
+        {
+            entity.ToTable("MetricScoreSnapshot");
+            entity.HasKey(e => e.MetricScoreSnapshotId);
+            entity.Property(e => e.FilterHash).IsRequired().HasMaxLength(255);
+            entity.HasOne(d => d.MetricGroup).WithMany(p => p.MetricScoreSnapshots).HasForeignKey(d => d.MetricGroupId);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -10,7 +10,7 @@ Each decision resolves a previously open item from the Technical Context or outl
 - **Alternatives considered:** Direct EF usage inside controllers (rejected—violates constitution and complicates reuse); bespoke DTO-only service layer (rejected—breaks existing helper infrastructure).
 
 ## Decision 2: Hangfire + Azure Service Bus for Batch Generation
-- **Decision:** Use Hangfire Server hosted inside `InquirySpark.WebApi` (or dedicated worker) with SQL Server storage for job metadata and Azure Service Bus queues for fan-out of per-chart rendering tasks.
+- **Decision:** Use Hangfire Server hosted inside `InquirySpark.WebApi` (or dedicated worker) with SQLite storage for job metadata and Azure Service Bus queues for fan-out of per-chart rendering tasks.
 - **Rationale:** Hangfire provides retries, dashboards, delayed/scheduled execution, and integrates cleanly with ASP.NET Core DI. Azure Service Bus topics let us scale out worker instances for heavy rendering without blocking the main web host.
 - **Alternatives considered:** Quartz.NET with SQL triggers (rejected—less tooling around retries/monitoring); Azure Functions Timer jobs (rejected—would require new deployment stack and complicate on-prem installs).
 
@@ -21,8 +21,8 @@ Each decision resolves a previously open item from the Technical Context or outl
 
 ## Decision 4: Azure Cognitive Search for Library Discovery
 - **Decision:** Push chart metadata (name, tags, description, creator, approval status, usage stats) to an Azure Cognitive Search index `chart-assets-index`, enabling boolean filters, fuzzy search, highlight snippets, and aggregations for facets.
-- **Rationale:** Spec demands AND/OR filters, saved searches, and sub-second response times over 100K assets—features that exceed what SQL Server full-text or LIKE queries can reliably supply.
-- **Alternatives considered:** SQL Server full-text search (rejected—limited fuzziness and facet support); Elasticsearch self-hosted (rejected—higher ops burden than managed Azure service for this stack).
+- **Rationale:** Spec demands AND/OR filters, saved searches, and sub-second response times over 100K assets—features that exceed what SQLite full-text search or LIKE queries can reliably supply.
+- **Alternatives considered:** SQLite full-text search (rejected—limited fuzziness and facet support); Elasticsearch self-hosted (rejected—higher ops burden than managed Azure service for this stack).
 
 ## Decision 5: Chart.js 4 + Reusable Config Serializers
 - **Decision:** Use Chart.js 4 (already compatible with Bootstrap/Bootswatch theming) for live previews and server-side rendering via `chartjs-node-canvas` hosted in a .NET worker through NodeServices. Store visual configurations as JSON matching Chart.js schema, enabling preview + batch rendering parity.

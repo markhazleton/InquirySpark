@@ -1,0 +1,98 @@
+@model InquirySpark.Admin.Contracts.Requests.ChartDefinitionRequest
+@{
+    ViewData["Title"] = "Create Chart Definition";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0"><i class="bi bi-plus-circle"></i> Create Chart Definition</h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Name" class="form-label">
+                        <i class="bi bi-file-text"></i> Chart Name <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter chart name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="DatasetId" class="form-label">
+                        <i class="bi bi-database"></i> Dataset <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="DatasetId" class="form-control" type="number" min="1" placeholder="Dataset ID" />
+                    <span asp-validation-for="DatasetId" class="text-danger"></span>
+                    <small class="form-text text-muted">Select the dataset this chart will use</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">
+                    <i class="bi bi-text-paragraph"></i> Description
+                </label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the purpose of this chart"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Tags" class="form-label">
+                    <i class="bi bi-tags"></i> Tags
+                </label>
+                <input asp-for="Tags" class="form-control" placeholder="tag1, tag2, tag3" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+                <small class="form-text text-muted">Comma-separated tags for categorization</small>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FilterPayload" class="form-label">
+                    <i class="bi bi-funnel"></i> Filter Configuration (JSON)
+                </label>
+                <textarea asp-for="FilterPayload" class="form-control font-monospace" rows="5" placeholder='{"filters": []}'></textarea>
+                <span asp-validation-for="FilterPayload" class="text-danger"></span>
+                <small class="form-text text-muted">JSON configuration for AND/OR filter tree</small>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="VisualPayload" class="form-label">
+                    <i class="bi bi-palette"></i> Visual Configuration (JSON)
+                </label>
+                <textarea asp-for="VisualPayload" class="form-control font-monospace" rows="8" placeholder='{"type": "bar", "options": {}}'></textarea>
+                <span asp-validation-for="VisualPayload" class="text-danger"></span>
+                <small class="form-text text-muted">Chart.js configuration schema</small>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CalculationPayload" class="form-label">
+                    <i class="bi bi-calculator"></i> Calculation Logic (JSON)
+                </label>
+                <textarea asp-for="CalculationPayload" class="form-control font-monospace" rows="5" placeholder='{"expressions": []}'></textarea>
+                <span asp-validation-for="CalculationPayload" class="text-danger"></span>
+                <small class="form-text text-muted">Custom calculations and aggregations</small>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="AutoApprovedFl" class="form-check-input" type="checkbox" />
+                <label asp-for="AutoApprovedFl" class="form-check-label">
+                    <i class="bi bi-check-circle"></i> Auto-approve this chart definition
+                </label>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Create Chart Definition
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

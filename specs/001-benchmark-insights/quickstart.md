@@ -6,7 +6,7 @@
 - .NET SDK 10.0 preview (includes C# 13)
 - Node.js 20.x + npm 10.x (Admin webpack build)
 - Azure CLI (for blob container + Cognitive Search provisioning)
-- SQL Server 2022 local instance (for `InquirySparkContext` + Hangfire storage)
+- SQLite database (for `InquirySparkContext` + Hangfire storage)
 - Optional: Azure Storage Explorer for inspecting chart assets
 
 ## 2. Environment Setup
@@ -27,7 +27,7 @@
    cp InquirySpark.WebApi/appsettings.Development.json InquirySpark.WebApi/appsettings.Local.json
    cp InquirySpark.Admin/appsettings.Development.json InquirySpark.Admin/appsettings.Local.json
    ```
-   - Set `ConnectionStrings:InquirySparkContext` to your SQL Server.
+   - Set `ConnectionStrings:InquirySparkConnection` to your SQLite database path.
    - Add `Storage:Charts:ConnectionString` + `ContainerName` for Azure Blob Storage.
    - Add `Search:ServiceName`, `Search:ApiKey` for Azure Cognitive Search.
    - Configure `Hangfire:DashboardAuth` secrets as needed.

@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace InquirySpark.Admin.Controllers;
 
 /// <summary>
 /// Provides a base controller with logging support for all admin controllers.
 /// </summary>
+[Authorize]
 public abstract class BaseController : Controller
 {
     /// <summary>

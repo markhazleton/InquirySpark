@@ -8,15 +8,17 @@ ios/ or android/
 
 ## Summary
 
-InquirySpark needs a reusable insights platform that lets analysts configure chart definitions once, regenerate assets in bulk, browse/search approved visuals, inspect the underlying data, and present gauge dashboards with drill-down paths. We will extend the existing .NET 10 stack by adding charting/domain services inside `InquirySpark.Repository`, REST endpoints in `InquirySpark.WebApi`, and new MVC experiences plus JavaScript bundles in `InquirySpark.Admin`. Batch rendering relies on Hangfire + Azure Service Bus, storage targets Azure Blob + CDN, and discovery runs through Azure Cognitive Search so that asset queries remain sub-second at 100K+ charts.
+InquirySpark needs a reusable insights platform that lets analysts configure chart definitions once, regenerate assets in bulk, browse/search approved visuals, inspect the underlying data, and present gauge dashboards with drill-down paths. We will extend the existing .NET 10 stack by adding charting/domain services inside `InquirySpark.Repository`, REST API endpoints in `InquirySpark.Admin` (Controllers/Api folder), and new MVC experiences plus JavaScript bundles in `InquirySpark.Admin`. Batch rendering relies on Hangfire + Azure Service Bus, storage targets Azure Blob + CDN, and discovery runs through Azure Cognitive Search so that asset queries remain sub-second at 100K+ charts.
+
+**Note**: The InquirySpark.Admin application serves dual purposes: MVC UI for administrative tasks and RESTful API endpoints for programmatic access.
 
 ## Technical Context
 
-**Language/Version**: C# 13 on .NET 10 (WebApi + Admin + Repository)  
+**Language/Version**: C# 13 on .NET 10 (Admin + Repository + Web)  
 **Primary Dependencies**: ASP.NET Core MVC/WebApi, EF Core 10, Hangfire 1.8, Azure Service Bus, Azure Blob Storage SDK, Azure Cognitive Search SDK, Chart.js 4 + chartjs-node-canvas, DataTables 2.3.5, JSZip/PDFMake for exports  
-**Storage**: SQL Server 2022 (`InquirySparkContext`) for OLTP + Hangfire metadata, Azure Blob Storage for rendered assets/exports, Azure Cognitive Search index for chart discovery, Azure Service Bus queues/topics for batch fan-out  
+**Storage**: SQLite (`InquirySparkContext`) for OLTP + Hangfire metadata, Azure Blob Storage for rendered assets/exports, Azure Cognitive Search index for chart discovery, Azure Service Bus queues/topics for batch fan-out  
 **Testing**: `dotnet test` suite (xUnit-based Common/Repository projects) plus new integration tests that exercise chart builder APIs and Hangfire job pipelines; UI smoke checks via existing Admin automation harness  
-**Target Platform**: Multi-app web solution (InquirySpark.WebApi, InquirySpark.Admin, InquirySpark.Web) running on Windows/Linux hosts or Azure App Service; Hangfire workers run alongside WebApi  
+**Target Platform**: Web applications (InquirySpark.Admin with dual MVC/API hosting, InquirySpark.Web) running on Windows/Linux hosts or Azure App Service; Hangfire workers run within Admin application  
 **Project Type**: Multi-tier enterprise web (API + MVC admin + background workers)  
 **Performance Goals**: Per spec—Chart builder loads <2s, preview rerenders <1s, filter ops <500 ms up to 100K rows, batch throughput >=20 charts/min, dashboards render 50 gauges <3s, drill-down <1s  
 **Constraints**: Response wrapper contracts via `BaseResponse<T>`, DI-only services, EF queries through `InquirySparkContext` + pre-existing views, Admin UI must follow Bootstrap/DataTables template with no inline styles/CDN assets, documentation confined to `docs/copilot/session-YYYY-MM-DD`, assets stored off-box with encryption, policy-based authorization must guard every new API, and telemetry must prove success metrics
@@ -67,21 +69,20 @@ InquirySpark.Repository/
 └── Jobs/
     └── ChartRenderOrchestrator.cs
 
-InquirySpark.WebApi/
-├── Controllers/
+InquirySpark.Admin/
+├── Controllers/Api/
 │   ├── ChartDefinitionsController.cs
 │   ├── ChartBuildsController.cs
 │   ├── ChartAssetsController.cs
 │   ├── DecksController.cs
 │   ├── DashboardsController.cs
-│   └── DataExplorerController.cs
+│   ├── DataExplorerController.cs
+│   └── UserPreferencesController.cs
 ├── BackgroundWorkers/
 │   ├── HangfireStartup.cs
 │   └── ServiceBusListeners.cs
-└── Contracts/Requests/
-    └── ChartDefinitionRequest.cs
-
-InquirySpark.Admin/
+├── Contracts/Requests/
+│   └── ChartDefinitionRequest.cs
 ├── Areas/Inquiry/Controllers/
 │   ├── ChartBuilderController.cs
 │   ├── ChartAssetsController.cs

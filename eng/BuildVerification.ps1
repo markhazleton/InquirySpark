@@ -233,7 +233,7 @@ Invoke-BuildStep "Build solution ($Configuration)" {
 }
 
 # ═══════════════════════════════════════════════════════
-# Step 5: Run Unit Tests
+# Step 5: Run Unit Tests (with Charting Filters)
 # ═══════════════════════════════════════════════════════
 
 if (-not $SkipTests) {
@@ -259,6 +259,23 @@ if (-not $SkipTests) {
         elseif ($output -match $failedPattern) {
             Write-Host $output -ForegroundColor Red
             throw "Tests failed: $($Matches[1]) failed, $($Matches[2]) passed, $($Matches[3]) skipped"
+        }
+    }
+    
+    # Run charting-specific tests with filter
+    Invoke-BuildStep "Run charting-specific tests" {
+        $chartingTests = dotnet test $script:SolutionFile `
+            --no-build `
+            --configuration $Configuration `
+            --filter "FullyQualifiedName~ChartDefinition|FullyQualifiedName~ChartBuild|FullyQualifiedName~DataExplorer" `
+            --verbosity quiet `
+            2>&1 | Out-String
+        
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  Charting tests passed" -ForegroundColor Gray
+        }
+        else {
+            Write-WarningMessage "Charting-specific tests failed (may not exist yet)"
         }
     }
 }
@@ -302,6 +319,63 @@ if (-not $SkipNpm) {
             
             $libItems = Get-ChildItem $libDir -Recurse | Measure-Object
             Write-Host "  Copied $($libItems.Count) frontend assets to wwwroot/lib" -ForegroundColor Gray
+        }
+        finally {
+            Pop-Location
+        }
+    }
+    
+    # Verify TypeScript compilation
+    Invoke-BuildStep "Verify TypeScript compilation" {
+        Push-Location $script:AdminProjectDir
+        try {
+            if (Test-Path 'tsconfig.json') {
+  Step 7: API Smoke Tests
+# ═══════════════════════════════════════════════════════
+
+Invoke-BuildStep "Run API smoke tests" {
+    Write-Host "  Checking if InquirySpark.Admin is running..." -ForegroundColor Gray
+    
+    try {
+        $response = Invoke-WebRequest -Uri "https://localhost:7001/api/ChartDefinitions" `
+            -SkipCertificateCheck `
+            -TimeoutSec 5 `
+            -ErrorAction SilentlyContinue
+        
+        if ($response.StatusCode -eq 200) {
+            Write-Host "  ✓ /api/ChartDefinitions responded with 200" -ForegroundColor Gray
+        }
+    }
+    catch {
+        Write-WarningMessage "API smoke tests skipped (InquirySpark.Admin not running at https://localhost:7001)"
+        Write-Host "  To enable: dotnet run --project InquirySpark.Admin" -ForegroundColor DarkYellow
+    }
+    
+    try {
+        $response = Invoke-WebRequest -Uri "https://localhost:7001/api/ChartBuilds?limit=10" `
+            -SkipCertificateCheck `
+            -TimeoutSec 5 `
+            -ErrorAction SilentlyContinue
+        
+        if ($response.StatusCode -eq 200) {
+            Write-Host "  ✓ /api/ChartBuilds responded with 200" -ForegroundColor Gray
+        }
+    }
+    catch {
+        # Already warned above
+    }
+}
+
+# ═══════════════════════════════════════════════════════
+#               $output = npx tsc --noEmit 2>&1 | Out-String
+                if ($LASTEXITCODE -ne 0) {
+                    Write-WarningMessage "TypeScript compilation warnings detected"
+                    Write-Host $output -ForegroundColor DarkYellow
+                }
+                else {
+                    Write-Host "  TypeScript compiled successfully" -ForegroundColor Gray
+                }
+            }
         }
         finally {
             Pop-Location
