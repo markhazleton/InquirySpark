@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Common.Models;
+namespace InquirySpark.Common.Models;
 
 /// <summary>
 /// Build Version

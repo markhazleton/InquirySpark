@@ -18,7 +18,7 @@ public class ChartVersionEntity
     public int? RollbackSourceVersionNumber { get; set; }
 
     [ForeignKey("ChartDefinitionId")]
-    public ChartDefinitionEntity ChartDefinition { get; set; }
+    public ChartDefinitionEntity ChartDefinition { get; set; } = null!;
     public ICollection<ChartBuildTaskEntity> BuildTasks { get; set; } = new List<ChartBuildTaskEntity>();
     public ICollection<ChartAssetEntity> Assets { get; set; } = new List<ChartAssetEntity>();
 }

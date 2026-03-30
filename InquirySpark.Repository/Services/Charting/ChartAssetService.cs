@@ -94,7 +94,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
             _context.ChartAssets.Add(asset);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Created chart asset {AssetId} for definition {DefinitionId}", 
+            _logger.LogInformation("Created chart asset {AssetId} for definition {DefinitionId}",
                 asset.ChartAssetId, asset.ChartDefinitionId);
 
             // Reload with navigation properties
@@ -150,10 +150,10 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
     /// Searches chart assets with filters and pagination
     /// </summary>
     public async Task<BaseResponseCollection<ChartAssetDto>> SearchAssetsAsync(
-        string? searchText, 
-        string? tags, 
-        string? approvalStatus, 
-        int pageSize = 50, 
+        string? searchText,
+        string? tags,
+        string? approvalStatus,
+        int pageSize = 50,
         int pageIndex = 0)
     {
         return await DbContextHelper.ExecuteCollectionAsync<ChartAssetDto>(async () =>
@@ -167,8 +167,8 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 var search = searchText.ToLower();
-                query = query.Where(a => 
-                    a.DisplayName.ToLower().Contains(search) || 
+                query = query.Where(a =>
+                    a.DisplayName.ToLower().Contains(search) ||
                     (a.Description != null && a.Description.ToLower().Contains(search)));
             }
 
@@ -178,8 +178,8 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
                 var tagList = tags.Split(',', StringSplitOptions.RemoveEmptyEntries)
                     .Select(t => t.Trim().ToLower())
                     .ToList();
-                
-                query = query.Where(a => a.Tags != null && 
+
+                query = query.Where(a => a.Tags != null &&
                     tagList.Any(tag => a.Tags.ToLower().Contains(tag)));
             }
 
@@ -196,7 +196,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
                 .Take(pageSize)
                 .ToListAsync();
 
-            _logger.LogInformation("Asset search returned {Count} results (page {PageIndex}, size {PageSize})", 
+            _logger.LogInformation("Asset search returned {Count} results (page {PageIndex}, size {PageSize})",
                 assets.Count, pageIndex, pageSize);
 
             return assets.Select(MapAssetToDto).ToList();
@@ -225,14 +225,14 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
             if (approvalStatus == "Approved" && approvedById.HasValue)
             {
                 var comment = $"Approved by user {approvedById} on {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}";
-                asset.CommentsJson = string.IsNullOrEmpty(asset.CommentsJson) 
-                    ? $"[{comment}]" 
+                asset.CommentsJson = string.IsNullOrEmpty(asset.CommentsJson)
+                    ? $"[{comment}]"
                     : asset.CommentsJson.TrimEnd(']') + $",{comment}]";
             }
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Asset {AssetId} status changed: {OldStatus} → {NewStatus}", 
+            _logger.LogInformation("Asset {AssetId} status changed: {OldStatus} → {NewStatus}",
                 chartAssetId, oldStatus, approvalStatus);
 
             return true;
@@ -292,7 +292,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
             _context.ChartAssetFiles.Add(file);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Added {Format} file to asset {AssetId} (Path: {BlobPath})", 
+            _logger.LogInformation("Added {Format} file to asset {AssetId} (Path: {BlobPath})",
                 fileDto.Format, chartAssetId, fileDto.BlobPath);
 
             return true;

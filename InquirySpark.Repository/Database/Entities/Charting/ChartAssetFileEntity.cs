@@ -11,16 +11,16 @@ public class ChartAssetFileEntity
     public int ChartAssetId { get; set; }
     [Required]
     [StringLength(50)]
-    public string Format { get; set; }
+    public string Format { get; set; } = string.Empty;
     [StringLength(50)]
     public string? ResolutionHint { get; set; }
     [Required]
-    public string BlobPath { get; set; }
+    public string BlobPath { get; set; } = string.Empty;
     public long FileSizeBytes { get; set; }
     [StringLength(255)]
     public string? Checksum { get; set; }
     public DateTime? ExpiresDt { get; set; }
 
     [ForeignKey("ChartAssetId")]
-    public ChartAssetEntity ChartAsset { get; set; }
+    public ChartAssetEntity ChartAsset { get; set; } = null!;
 }

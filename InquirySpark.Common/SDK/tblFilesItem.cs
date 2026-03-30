@@ -1,4 +1,4 @@
-﻿
+
 namespace InquirySpark.Common.SDK;
 
 public class tblFilesItem

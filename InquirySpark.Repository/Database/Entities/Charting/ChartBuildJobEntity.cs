@@ -10,12 +10,12 @@ public class ChartBuildJobEntity
     public int ChartBuildJobId { get; set; }
     [Required]
     [StringLength(50)]
-    public string TriggerType { get; set; }
+    public string TriggerType { get; set; } = string.Empty;
     public int RequestedById { get; set; }
     public DateTime RequestedDt { get; set; }
     [Required]
     [StringLength(50)]
-    public string Status { get; set; }
+    public string Status { get; set; } = string.Empty;
     public DateTime? StartedDt { get; set; }
     public DateTime? CompletedDt { get; set; }
     public int SuccessCount { get; set; }

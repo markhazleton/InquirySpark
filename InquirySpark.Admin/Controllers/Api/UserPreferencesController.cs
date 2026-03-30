@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using InquirySpark.Repository.Services.UserPreferences;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,10 @@ public class UserPreferencesController(IUserPreferenceService service, ILogger<U
     public async Task<IActionResult> Get(int userId, string key)
     {
         var value = await _service.GetPreferenceAsync(userId, key);
-        
+
         if (value == null)
             return NotFound();
-        
+
         return Ok(new { Key = key, Value = value });
     }
 
@@ -28,9 +29,9 @@ public class UserPreferencesController(IUserPreferenceService service, ILogger<U
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         await _service.SavePreferenceAsync(request.UserId, request.Key, request.Value);
-        
+
         return Ok();
     }
 
@@ -45,6 +46,10 @@ public class UserPreferencesController(IUserPreferenceService service, ILogger<U
 public class UserPreferenceRequest
 {
     public int UserId { get; set; }
-    public string Key { get; set; }
-    public string Value { get; set; }
+
+    [Required]
+    public string Key { get; set; } = string.Empty;
+
+    [Required]
+    public string Value { get; set; } = string.Empty;
 }

@@ -1,4 +1,4 @@
-﻿
+
 namespace InquirySpark.Common.SDK.SurveyResponse;
 
 public interface ISurveyResponseDropdown

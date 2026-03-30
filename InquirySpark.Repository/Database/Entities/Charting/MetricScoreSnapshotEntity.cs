@@ -12,7 +12,7 @@ public class MetricScoreSnapshotEntity
     public DateTime SnapshotDt { get; set; }
     [Required]
     [StringLength(255)]
-    public string FilterHash { get; set; }
+    public string FilterHash { get; set; } = string.Empty;
     [Column(TypeName = "decimal(18, 4)")]
     public decimal ScoreValue { get; set; }
     [Column(TypeName = "decimal(18, 4)")]
@@ -23,5 +23,5 @@ public class MetricScoreSnapshotEntity
     public int DataVersionId { get; set; }
 
     [ForeignKey("MetricGroupId")]
-    public MetricGroupEntity MetricGroup { get; set; }
+    public MetricGroupEntity MetricGroup { get; set; } = null!;
 }

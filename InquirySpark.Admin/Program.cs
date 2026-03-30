@@ -1,15 +1,15 @@
 using ControlSpark.WebMvc.Areas.Identity.Data;
-using InquirySpark.Repository.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using InquirySpark.Admin.Data;
+using InquirySpark.Repository.Database;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
 
 // Configure logging with scopes for charting operations
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole(options =>
+builder.Logging.AddSimpleConsole(options =>
 {
     options.IncludeScopes = true;
 });

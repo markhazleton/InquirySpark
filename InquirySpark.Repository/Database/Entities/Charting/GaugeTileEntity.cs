@@ -12,12 +12,12 @@ public class GaugeTileEntity
     public int MetricNodeId { get; set; }
     [Required]
     [StringLength(50)]
-    public string TileType { get; set; }
+    public string TileType { get; set; } = string.Empty;
     public string? ThresholdsJson { get; set; }
     public string? DrillTargetUrl { get; set; }
     [Required]
     [StringLength(50)]
-    public string Size { get; set; }
+    public string Size { get; set; } = string.Empty;
     [StringLength(255)]
     public string? ColorPalette { get; set; }
     [StringLength(255)]
@@ -25,5 +25,5 @@ public class GaugeTileEntity
     public DateTime? LastRenderedDt { get; set; }
 
     [ForeignKey("DashboardDefinitionId")]
-    public DashboardDefinitionEntity DashboardDefinition { get; set; }
+    public DashboardDefinitionEntity DashboardDefinition { get; set; } = null!;
 }

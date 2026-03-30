@@ -14,15 +14,15 @@ public class ChartBuildTaskEntity
     public int Priority { get; set; }
     [Required]
     [StringLength(50)]
-    public string Status { get; set; }
+    public string Status { get; set; } = string.Empty;
     public DateTime? StartedDt { get; set; }
     public DateTime? CompletedDt { get; set; }
     public string? ErrorPayload { get; set; }
 
     [ForeignKey("ChartBuildJobId")]
-    public ChartBuildJobEntity ChartBuildJob { get; set; }
+    public ChartBuildJobEntity ChartBuildJob { get; set; } = null!;
     [ForeignKey("ChartDefinitionId")]
-    public ChartDefinitionEntity ChartDefinition { get; set; }
+    public ChartDefinitionEntity ChartDefinition { get; set; } = null!;
     [ForeignKey("ChartVersionId")]
-    public ChartVersionEntity ChartVersion { get; set; }
+    public ChartVersionEntity ChartVersion { get; set; } = null!;
 }

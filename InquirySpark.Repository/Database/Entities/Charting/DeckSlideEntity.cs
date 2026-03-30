@@ -17,7 +17,7 @@ public class DeckSlideEntity
     public string? ExportOptionsJson { get; set; }
 
     [ForeignKey("DeckProjectId")]
-    public DeckProjectEntity DeckProject { get; set; }
+    public DeckProjectEntity DeckProject { get; set; } = null!;
     [ForeignKey("ChartAssetId")]
-    public ChartAssetEntity ChartAsset { get; set; }
+    public ChartAssetEntity ChartAsset { get; set; } = null!;
 }

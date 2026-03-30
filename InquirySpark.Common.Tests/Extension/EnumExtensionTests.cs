@@ -1,5 +1,5 @@
-﻿using InquirySpark.Common.Extension;
 using System.ComponentModel.DataAnnotations;
+using InquirySpark.Common.Extension;
 
 namespace InquirySpark.Common.Tests.Extension;
 

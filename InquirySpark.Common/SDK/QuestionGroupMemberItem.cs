@@ -1,4 +1,6 @@
-﻿
+
+#nullable enable
+
 namespace InquirySpark.Common.SDK;
 
 /// <summary>
@@ -29,19 +31,19 @@ public class QuestionGroupMemberItem
     /// <summary>
     /// 
     /// </summary>
-    public string QuestionGroupNM { get; set; }
+    public string QuestionGroupNM { get; set; } = string.Empty;
     /// <summary>
     /// 
     /// </summary>
-    public string QuestionNM { get; set; }
+    public string QuestionNM { get; set; } = string.Empty;
     /// <summary>
     /// 
     /// </summary>
-    public string QuestionShortNM { get; set; }
+    public string QuestionShortNM { get; set; } = string.Empty;
     /// <summary>
     /// 
     /// </summary>
-    public string QuestionGroupShortNM { get; set; }
+    public string QuestionGroupShortNM { get; set; } = string.Empty;
     /// <summary>
     /// 
     /// </summary>

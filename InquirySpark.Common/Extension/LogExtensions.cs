@@ -1,8 +1,9 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
+#nullable enable
 namespace InquirySpark.Common.Extension;
 
 

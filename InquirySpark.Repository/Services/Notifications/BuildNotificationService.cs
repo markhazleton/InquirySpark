@@ -43,16 +43,16 @@ public class BuildNotificationService(ILogger<BuildNotificationService> logger) 
     /// Sends notification when a build job completes successfully or with partial failures
     /// </summary>
     public async Task<BaseResponse<bool>> SendJobCompletedNotificationAsync(
-        int jobId, 
-        int successCount, 
-        int failureCount, 
+        int jobId,
+        int successCount,
+        int failureCount,
         TimeSpan duration)
     {
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
             var status = failureCount == 0 ? "SUCCESS" : "COMPLETED WITH FAILURES";
-            var chartsPerMinute = duration.TotalMinutes > 0 
-                ? Math.Round((successCount + failureCount) / duration.TotalMinutes, 2) 
+            var chartsPerMinute = duration.TotalMinutes > 0
+                ? Math.Round((successCount + failureCount) / duration.TotalMinutes, 2)
                 : 0;
 
             _logger.LogInformation(
@@ -96,8 +96,8 @@ public class BuildNotificationService(ILogger<BuildNotificationService> logger) 
     /// Used for monitoring and troubleshooting
     /// </summary>
     public async Task<BaseResponse<bool>> SendTaskFailureAlertAsync(
-        int taskId, 
-        int chartDefinitionId, 
+        int taskId,
+        int chartDefinitionId,
         string errorMessage)
     {
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
@@ -137,23 +137,23 @@ public static class BuildNotificationExtensions
         if (status == "Running" && startedDt.HasValue)
         {
             await notificationService.SendJobStartedNotificationAsync(
-                jobId, 
-                requestedById, 
+                jobId,
+                requestedById,
                 successCount + failureCount);
         }
         else if (status == "Completed" && startedDt.HasValue && completedDt.HasValue)
         {
             var duration = completedDt.Value - startedDt.Value;
             await notificationService.SendJobCompletedNotificationAsync(
-                jobId, 
-                successCount, 
-                failureCount, 
+                jobId,
+                successCount,
+                failureCount,
                 duration);
         }
         else if (status == "Failed")
         {
             await notificationService.SendJobFailedNotificationAsync(
-                jobId, 
+                jobId,
                 "Job failed - check logs for details");
         }
     }

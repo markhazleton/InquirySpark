@@ -11,13 +11,13 @@ public class AuditLogEntity
     public int ActorId { get; set; }
     [Required]
     [StringLength(255)]
-    public string EntityType { get; set; }
+    public string EntityType { get; set; } = string.Empty;
     [Required]
     [StringLength(255)]
-    public string EntityId { get; set; }
+    public string EntityId { get; set; } = string.Empty;
     [Required]
     [StringLength(50)]
-    public string Action { get; set; }
+    public string Action { get; set; } = string.Empty;
     public string? Changes { get; set; }
     public DateTime CreatedDt { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using InquirySpark.Common.SDK.SurveyResponse;
+using InquirySpark.Common.SDK.SurveyResponse;
 
 namespace InquirySpark.Common.SDK;
 

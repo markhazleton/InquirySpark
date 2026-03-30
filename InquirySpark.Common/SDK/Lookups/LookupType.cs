@@ -1,4 +1,4 @@
-﻿
+
 namespace InquirySpark.Common.SDK.Lookups;
 
 public enum LookupType

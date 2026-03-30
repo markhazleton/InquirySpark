@@ -15,14 +15,14 @@ public class DataExportRequestEntity
     public string? ColumnSettingsJson { get; set; }
     [Required]
     [StringLength(50)]
-    public string Format { get; set; }
+    public string Format { get; set; } = string.Empty;
     public int RowCount { get; set; }
     [Required]
     [StringLength(50)]
-    public string Status { get; set; }
+    public string Status { get; set; } = string.Empty;
     public DateTime? CompletionDt { get; set; }
     public string? BlobPath { get; set; }
 
     [ForeignKey("ChartDefinitionId")]
-    public ChartDefinitionEntity ChartDefinition { get; set; }
+    public ChartDefinitionEntity ChartDefinition { get; set; } = null!;
 }

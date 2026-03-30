@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
 namespace InquirySpark.Common.Extension;
 
@@ -6,7 +6,7 @@ namespace InquirySpark.Common.Extension;
 /// Special Dictionary for Use with Restful / AJAX Calls
 /// </summary>
 /// <typeparam name="TKey">The type of the t key.</typeparam>
-/// <typeparam name="TValue">The type of the t value.</typeparam>
+/// <typeparam name="TValue">The type of the value.</typeparam>
 public sealed class StrongDictionary<TKey, TValue>
 {
     /// <summary>
@@ -24,7 +24,7 @@ public sealed class StrongDictionary<TKey, TValue>
     /// </summary>
 
     /// <summary>
-    /// Gets or sets the <see cref="TValue"/> with the specified key.
+    /// Gets or sets the <typeparamref name="TValue"/> with the specified key.
     /// </summary>
     /// <param name="key">The key.</param>
     /// <returns>TValue.</returns>

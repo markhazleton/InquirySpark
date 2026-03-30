@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+#nullable enable
+
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
@@ -19,7 +21,8 @@ public static class EnumExtension
         where TEnum : struct, Enum
     {
         FieldInfo? info = @enum.GetType()?.GetField(@enum.ToString());
-        if (info == null) return string.Empty;
+        if (info == null)
+            return string.Empty;
         var attributes = info.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
         return attributes.Length > 0 ? ((DescriptionAttribute)attributes[0]).Description : @enum.ToString();

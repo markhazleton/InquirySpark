@@ -4,7 +4,7 @@ public class ChartDefinitionDto
 {
     public int ChartDefinitionId { get; set; }
     public int DatasetId { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string? Tags { get; set; }
     public string? FilterPayload { get; set; }

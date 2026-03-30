@@ -11,7 +11,7 @@ public class ChartDefinitionEntity
     public int DatasetId { get; set; }
     [Required]
     [StringLength(255)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string? Tags { get; set; }
     public string? FilterPayload { get; set; }

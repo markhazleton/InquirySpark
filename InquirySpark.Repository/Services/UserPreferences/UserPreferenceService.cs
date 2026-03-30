@@ -7,7 +7,7 @@ namespace InquirySpark.Repository.Services.UserPreferences;
 
 public interface IUserPreferenceService
 {
-    Task<string> GetPreferenceAsync(int userId, string key);
+    Task<string?> GetPreferenceAsync(int userId, string key);
     Task SavePreferenceAsync(int userId, string key, string value);
     Task DeletePreferenceAsync(int userId, string key);
 }
@@ -17,7 +17,7 @@ public class UserPreferenceService(InquirySparkContext context, ILogger<UserPref
     private readonly InquirySparkContext _context = context;
     private readonly ILogger<UserPreferenceService> _logger = logger;
 
-    public async Task<string> GetPreferenceAsync(int userId, string key)
+    public async Task<string?> GetPreferenceAsync(int userId, string key)
     {
         try
         {

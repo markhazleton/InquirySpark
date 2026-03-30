@@ -1,7 +1,7 @@
 using ControlSpark.WebMvc.Areas.Identity.Data;
+using InquirySpark.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using InquirySpark.Admin.Models;
 
 namespace InquirySpark.Admin.Controllers;
 
@@ -38,7 +38,7 @@ public class RoleManagementController(
     {
         ViewBag.UserId = userId;
         var user = await _userManager.FindByIdAsync(userId);
-        
+
         if (user == null)
         {
             ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
@@ -68,7 +68,7 @@ public class RoleManagementController(
     public async Task<IActionResult> Manage(List<ManageUserRolesViewModel> model, string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        
+
         if (user == null)
         {
             return View("NotFound");
@@ -76,23 +76,23 @@ public class RoleManagementController(
 
         var roles = await _userManager.GetRolesAsync(user);
         var result = await _userManager.RemoveFromRolesAsync(user, roles);
-        
+
         if (!result.Succeeded)
         {
             ModelState.AddModelError("", "Cannot remove user existing roles");
             return View(model);
         }
 
-        result = await _userManager.AddToRolesAsync(user, 
+        result = await _userManager.AddToRolesAsync(user,
             model.Where(x => x.Selected).Select(y => y.RoleName));
-        
+
         if (!result.Succeeded)
         {
             ModelState.AddModelError("", "Cannot add selected roles to user");
             return View(model);
         }
 
-        _logger.LogInformation("Roles updated for user {UserName} by {CurrentUser}", 
+        _logger.LogInformation("Roles updated for user {UserName} by {CurrentUser}",
             user.UserName, User.Identity?.Name);
 
         return RedirectToAction("Index");

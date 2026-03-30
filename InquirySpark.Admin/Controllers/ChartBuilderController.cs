@@ -1,7 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using InquirySpark.Admin.Contracts.Requests;
 using InquirySpark.Repository.Services.Charting;
-using InquirySpark.Repository.Services.UserPreferences;
 using InquirySpark.Repository.Services.Security;
+using InquirySpark.Repository.Services.UserPreferences;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,7 @@ public class ChartBuilderController(
     public async Task<IActionResult> Index()
     {
         var result = await _chartDefinitionService.GetDatasetCatalogAsync();
-        
+
         if (!result.IsSuccessful)
         {
             _logger.LogError("Failed to load chart definitions: {Errors}", string.Join(", ", result.Errors));
@@ -41,21 +42,21 @@ public class ChartBuilderController(
     public async Task<IActionResult> Create()
     {
         var userId = GetUserId();
-        
+
         // Load user's draft preferences if available
         var draftJson = await _userPreferenceService.GetPreferenceAsync(userId, "chartbuilder.draft");
         if (!string.IsNullOrEmpty(draftJson))
         {
             ViewBag.DraftPreferences = draftJson;
         }
-        
+
         // Load user's layout preferences
         var layoutJson = await _userPreferenceService.GetPreferenceAsync(userId, "chartbuilder.layout");
         if (!string.IsNullOrEmpty(layoutJson))
         {
             ViewBag.LayoutPreferences = layoutJson;
         }
-        
+
         return View(new ChartDefinitionRequest());
     }
 
@@ -97,8 +98,15 @@ public class ChartBuilderController(
             return View(request);
         }
 
+        if (result.Data == null)
+        {
+            _logger.LogError("Chart definition create returned no data for {Name}", request.Name);
+            ModelState.AddModelError(string.Empty, "Chart definition was not returned after save.");
+            return View(request);
+        }
+
         await _auditLogService.LogActionAsync(userId, "ChartDefinition", result.Data.ChartDefinitionId.ToString(), "Create", $"Created chart '{request.Name}'");
-        
+
         // Clear draft preferences after successful save
         await _userPreferenceService.DeletePreferenceAsync(userId, "chartbuilder.draft");
 
@@ -150,9 +158,9 @@ public class ChartBuilderController(
             CalculationPayload = result.Data.CalculationPayload,
             AutoApprovedFl = result.Data.AutoApprovedFl
         };
-        
+
         var userId = GetUserId();
-        
+
         // Load user's layout preferences
         var layoutJson = await _userPreferenceService.GetPreferenceAsync(userId, "chartbuilder.layout");
         if (!string.IsNullOrEmpty(layoutJson))
@@ -238,12 +246,12 @@ public class ChartBuilderController(
     public async Task<IActionResult> Rollback(int id, int versionNumber)
     {
         var userId = GetUserId();
-        
+
         var result = await _chartDefinitionService.RollbackToVersionAsync(id, versionNumber, userId);
 
         if (!result.IsSuccessful)
         {
-            _logger.LogError("Failed to rollback chart {Id} to version {Version}: {Errors}", 
+            _logger.LogError("Failed to rollback chart {Id} to version {Version}: {Errors}",
                 id, versionNumber, string.Join(", ", result.Errors));
             TempData["ErrorMessage"] = $"Failed to rollback to version {versionNumber}.";
         }
@@ -292,7 +300,7 @@ public class ChartBuilderController(
         TempData["SuccessMessage"] = "Chart definition deleted successfully.";
         return RedirectToAction(nameof(Index));
     }
-    
+
     /// <summary>
     /// API endpoint to save user preferences from JavaScript
     /// </summary>
@@ -303,7 +311,7 @@ public class ChartBuilderController(
         await _userPreferenceService.SavePreferenceAsync(userId, request.Key, request.Value);
         return Json(new { success = true });
     }
-    
+
     private int GetUserId()
     {
         // Get user ID from claims, default to 1 for anonymous/demo
@@ -319,6 +327,9 @@ public class ChartBuilderController(
 
 public class SavePreferenceRequest
 {
-    public string Key { get; set; }
-    public string Value { get; set; }
+    [Required]
+    public string Key { get; set; } = string.Empty;
+
+    [Required]
+    public string Value { get; set; } = string.Empty;
 }

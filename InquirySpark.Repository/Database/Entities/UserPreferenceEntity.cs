@@ -11,10 +11,10 @@ public class UserPreferenceEntity
     public int UserId { get; set; }
     [Required]
     [StringLength(255)]
-    public string PreferenceKey { get; set; }
+    public string PreferenceKey { get; set; } = string.Empty;
     [Required]
-    public string PreferenceValue { get; set; }
+    public string PreferenceValue { get; set; } = string.Empty;
     public DateTime ModifiedDt { get; set; }
     [Timestamp]
-    public byte[] RowVersion { get; set; }
+    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 }

@@ -265,7 +265,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
             if (status == "Running" && task.StartedDt == null)
             {
                 task.StartedDt = DateTime.UtcNow;
-                
+
                 // Update job status to Running if first task
                 if (task.ChartBuildJob.Status == "Pending")
                 {
@@ -303,7 +303,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
 
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Task {TaskId} status updated: {OldStatus} → {NewStatus}", 
+            _logger.LogInformation("Task {TaskId} status updated: {OldStatus} → {NewStatus}",
                 taskId, oldStatus, status);
 
             return true;
@@ -380,7 +380,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
 
             await _context.SaveChangesAsync();
 
-            _logger.LogWarning("Build job {JobId} cancelled ({TaskCount} tasks affected)", 
+            _logger.LogWarning("Build job {JobId} cancelled ({TaskCount} tasks affected)",
                 jobId, activeTasks.Count);
 
             return true;
@@ -393,7 +393,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
         return await DbContextHelper.ExecuteAsync<BuildThroughputStatsDto>(async () =>
         {
             var cutoff = DateTime.UtcNow.AddHours(-24);
-            
+
             var jobs = await _context.ChartBuildJobs
                 .Where(j => j.RequestedDt >= cutoff)
                 .ToListAsync();

@@ -10,11 +10,11 @@ public class DashboardDefinitionEntity
     public int DashboardDefinitionId { get; set; }
     [Required]
     [StringLength(255)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     [Required]
     [StringLength(255)]
-    public string Slug { get; set; }
+    public string Slug { get; set; } = string.Empty;
     public string? DefaultFiltersJson { get; set; }
     public string? LayoutJson { get; set; }
     public int OwnerId { get; set; }

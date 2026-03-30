@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Common.SDK;
+namespace InquirySpark.Common.SDK;
 
 [Serializable()]
 public class SurveyResponseSequenceItem

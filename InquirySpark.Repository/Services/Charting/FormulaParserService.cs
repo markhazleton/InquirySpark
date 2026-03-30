@@ -1,7 +1,7 @@
+using System.Text.RegularExpressions;
 using InquirySpark.Common.Models;
 using Microsoft.Extensions.Logging;
 using NCalc;
-using System.Text.RegularExpressions;
 
 namespace InquirySpark.Repository.Services.Charting;
 
@@ -20,7 +20,7 @@ public class FormulaValidationResult
     public List<string> Warnings { get; set; } = new();
     public List<string> DetectedColumns { get; set; } = new();
     public List<string> DetectedFunctions { get; set; } = new();
-    public string NormalizedFormula { get; set; }
+    public string NormalizedFormula { get; set; } = string.Empty;
 }
 
 public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormulaParserService
@@ -129,8 +129,8 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
             {
                 // Replace column references with dummy values for syntax checking
                 var testFormula = Regex.Replace(formula, columnPattern, "1");
-                var expression = new Expression(testFormula, EvaluateOptions.IgnoreCase);
-                
+                var expression = new Expression(testFormula, ExpressionOptions.IgnoreCaseAtBuiltInFunctions);
+
                 // Check for syntax errors
                 if (expression.HasErrors())
                 {
@@ -160,7 +160,7 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
     {
         try
         {
-            var expression = new Expression(formula, EvaluateOptions.IgnoreCase);
+            var expression = new Expression(formula, ExpressionOptions.IgnoreCaseAtBuiltInFunctions);
 
             // Add parameters
             if (parameters != null)

@@ -1,3 +1,5 @@
+using System.Data;
+using System.Text;
 using InquirySpark.Common.Models;
 using InquirySpark.Repository.Configuration;
 using InquirySpark.Repository.Database;
@@ -5,8 +7,6 @@ using InquirySpark.Repository.Services.Security;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Data;
-using System.Text;
 
 namespace InquirySpark.Repository.Services.DataExplorer;
 
@@ -40,12 +40,12 @@ public class DataExplorerResultDto
     public int TotalRows { get; set; }
     public int FilteredRows { get; set; }
     public List<string> Columns { get; set; } = new();
-    
+
     /// <summary>
     /// Indicates this data is read-only and cannot be modified (T065)
     /// </summary>
     public bool IsReadOnly { get; set; } = true;
-    
+
     /// <summary>
     /// Watermark message for export files (T065)
     /// </summary>
@@ -99,7 +99,7 @@ public class DataExplorerService(
     /// Retrieves paged, filtered, and sorted data for a chart definition's dataset
     /// </summary>
     public async Task<BaseResponse<DataExplorerResultDto>> GetChartDataAsync(
-        int chartDefinitionId, 
+        int chartDefinitionId,
         DataExplorerQueryDto query)
     {
         return await DbContextHelper.ExecuteAsync<DataExplorerResultDto>(async () =>
@@ -125,7 +125,7 @@ public class DataExplorerService(
             var sql = BuildExplorerQuery(chartDef, query, out var parameters);
             var countSql = BuildCountQuery(chartDef, query, out var countParameters);
 
-            _logger.LogInformation("Executing data explorer query for chart {ChartId}: {Query}", 
+            _logger.LogInformation("Executing data explorer query for chart {ChartId}: {Query}",
                 chartDefinitionId, sql);
 
             // Execute count query
@@ -133,7 +133,7 @@ public class DataExplorerService(
             {
                 countCmd.CommandText = countSql;
                 AddParameters(countCmd, countParameters);
-                
+
                 var countResult = await countCmd.ExecuteScalarAsync();
                 result.FilteredRows = Convert.ToInt32(countResult);
             }
@@ -145,7 +145,7 @@ public class DataExplorerService(
                 AddParameters(cmd, parameters);
 
                 using var reader = await cmd.ExecuteReaderAsync();
-                
+
                 // Get column names
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
@@ -166,7 +166,7 @@ public class DataExplorerService(
 
             result.TotalRows = result.FilteredRows; // Simplified - would need separate query for total
 
-            _logger.LogInformation("Data explorer returned {RowCount} rows for chart {ChartId}", 
+            _logger.LogInformation("Data explorer returned {RowCount} rows for chart {ChartId}",
                 result.Rows.Count, chartDefinitionId);
 
             return result;

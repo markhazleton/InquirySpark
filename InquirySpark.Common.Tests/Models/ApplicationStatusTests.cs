@@ -1,5 +1,5 @@
-﻿using InquirySpark.Common.Models;
 using System.Reflection;
+using InquirySpark.Common.Models;
 
 namespace InquirySpark.Common.Tests.Models;
 

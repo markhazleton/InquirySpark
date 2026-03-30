@@ -1,4 +1,4 @@
-﻿namespace InquirySpark.Common.Extension;
+namespace InquirySpark.Common.Extension;
 
 /// <summary>
 /// Extensions to <see cref="DateTime" />

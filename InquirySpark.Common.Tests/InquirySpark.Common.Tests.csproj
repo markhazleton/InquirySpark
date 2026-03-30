@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <UserSecretsId>937d93b6-519b-4032-926e-16847a0697ea</UserSecretsId>
+    <NoWarn>$(NoWarn);EF1001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -10,12 +10,12 @@ public class DeckProjectEntity
     public int DeckProjectId { get; set; }
     [Required]
     [StringLength(255)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public int OwnerId { get; set; }
     [Required]
     [StringLength(50)]
-    public string Status { get; set; }
+    public string Status { get; set; } = string.Empty;
     [StringLength(255)]
     public string? Theme { get; set; }
     public DateTime CreatedDt { get; set; }

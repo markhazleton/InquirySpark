@@ -1,4 +1,4 @@
-﻿using InquirySpark.Common.Models;
+using InquirySpark.Common.Models;
 
 namespace InquirySpark.Common.SDK.Services;
 

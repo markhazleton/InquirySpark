@@ -1,8 +1,8 @@
 using InquirySpark.Common.Models;
+using InquirySpark.Repository.Configuration;
 using InquirySpark.Repository.Database;
 using InquirySpark.Repository.Database.Entities.Charting;
 using InquirySpark.Repository.Models.Charting;
-using InquirySpark.Repository.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -83,16 +83,16 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
     {
         return await DbContextHelper.ExecuteAsync<ChartDefinitionDto>(async () =>
         {
-            ChartDefinitionEntity entity;
-            
+            ChartDefinitionEntity? entity;
+
             if (definition.ChartDefinitionId > 0)
             {
                 entity = await _context.ChartDefinitions
                     .FirstOrDefaultAsync(c => c.ChartDefinitionId == definition.ChartDefinitionId);
-                
+
                 if (entity == null)
                     throw new InvalidOperationException($"Chart definition {definition.ChartDefinitionId} not found");
-                
+
                 // Create snapshot before updating
                 var snapshotVersion = new ChartVersionEntity
                 {
@@ -112,7 +112,7 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
                     DiffSummary = $"Version {entity.VersionNumber} snapshot"
                 };
                 _context.ChartVersions.Add(snapshotVersion);
-                
+
                 entity.VersionNumber++;
             }
             else
@@ -154,7 +154,7 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
         {
             var entity = await _context.ChartDefinitions
                 .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId);
-            
+
             if (entity == null)
                 return false;
 
@@ -223,13 +223,13 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
         {
             var definition = await _context.ChartDefinitions
                 .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId);
-            
+
             if (definition == null)
                 throw new InvalidOperationException($"Chart definition {chartDefinitionId} not found");
 
             var targetVersion = await _context.ChartVersions
                 .FirstOrDefaultAsync(v => v.ChartDefinitionId == chartDefinitionId && v.VersionNumber == versionNumber);
-            
+
             if (targetVersion == null)
                 throw new InvalidOperationException($"Version {versionNumber} not found for chart {chartDefinitionId}");
 
@@ -255,7 +255,7 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
 
             // Restore from target version
             var snapshotData = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(targetVersion.SnapshotPayload!);
-            
+
             definition.DatasetId = snapshotData.GetProperty("DatasetId").GetInt32();
             definition.Name = snapshotData.GetProperty("Name").GetString()!;
             definition.Description = snapshotData.TryGetProperty("Description", out var desc) ? desc.GetString() : null;
@@ -316,7 +316,7 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
         return await DbContextHelper.ExecuteAsync<ChartVersionComparisonDto>(async () =>
         {
             var versions = await _context.ChartVersions
-                .Where(v => v.ChartDefinitionId == chartDefinitionId && 
+                .Where(v => v.ChartDefinitionId == chartDefinitionId &&
                            (v.VersionNumber == fromVersion || v.VersionNumber == toVersion))
                 .ToListAsync();
 

@@ -1,4 +1,6 @@
-﻿namespace InquirySpark.Common.Models
+#nullable enable
+
+namespace InquirySpark.Common.Models
 {
 
     /// <summary>
@@ -11,7 +13,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseResponse{T}"/> class.
         /// </summary>
-        /// <param name="message">The message.</param>
         protected BaseResponse()
         {
             IsSuccessful = false;

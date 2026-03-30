@@ -118,7 +118,7 @@ public class ChartValidationService(
         {
             var validationResult = await ValidateDefinitionAsync(chartDefinitionId);
 
-            if (!validationResult.IsSuccessful || !validationResult.Data.IsValid)
+            if (!validationResult.IsSuccessful || validationResult.Data == null || !validationResult.Data.IsValid)
             {
                 _logger.LogWarning("Chart {ChartId} failed validation, cannot auto-approve", chartDefinitionId);
                 return false;
@@ -137,7 +137,7 @@ public class ChartValidationService(
                 await _context.SaveChangesAsync();
 
                 // Log audit entry
-                await _auditLog.LogActionAsync(userId, "ChartDefinition", chartDefinitionId.ToString(), 
+                await _auditLog.LogActionAsync(userId, "ChartDefinition", chartDefinitionId.ToString(),
                     "AutoApprove", "Chart passed validation and was auto-approved");
 
                 validationResult.Data.AutoApproved = true;
@@ -253,15 +253,25 @@ public class ChartValidationService(
                         {
                             var validationResult = _formulaParser.ValidateFormula(formula, chartType, availableColumns);
 
-                            if (!validationResult.IsSuccessful || !validationResult.Data.IsValid)
+                            var formulaResult = validationResult.Data;
+
+                            if (!validationResult.IsSuccessful || formulaResult == null || !formulaResult.IsValid)
                             {
-                                report.Errors.AddRange(validationResult.Data.Errors.Select(e => $"Formula error in '{calc["name"]}': {e}"));
+                                if (formulaResult != null)
+                                {
+                                    report.Errors.AddRange(formulaResult.Errors.Select(e => $"Formula error in '{calc["name"]}': {e}"));
+                                }
+                                else
+                                {
+                                    report.Errors.AddRange(validationResult.Errors.Select(e => $"Formula error in '{calc["name"]}': {e}"));
+                                }
+
                                 allSafe = false;
                             }
 
-                            if (validationResult.Data.Warnings.Any())
+                            if (formulaResult?.Warnings.Any() == true)
                             {
-                                report.Warnings.AddRange(validationResult.Data.Warnings.Select(w => $"Formula warning in '{calc["name"]}': {w}"));
+                                report.Warnings.AddRange(formulaResult.Warnings.Select(w => $"Formula warning in '{calc["name"]}': {w}"));
                             }
                         }
                     }

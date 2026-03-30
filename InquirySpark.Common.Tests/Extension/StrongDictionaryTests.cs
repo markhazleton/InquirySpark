@@ -1,4 +1,4 @@
-﻿using InquirySpark.Common.Extension;
+using InquirySpark.Common.Extension;
 
 namespace InquirySpark.Common.Tests.Extension;
 

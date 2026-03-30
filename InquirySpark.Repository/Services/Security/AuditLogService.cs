@@ -6,7 +6,7 @@ namespace InquirySpark.Repository.Services.Security;
 
 public interface IAuditLogService
 {
-    Task LogActionAsync(int actorId, string entityType, string entityId, string action, string changes = null);
+    Task LogActionAsync(int actorId, string entityType, string entityId, string action, string? changes = null);
 }
 
 public class AuditLogService(InquirySparkContext context, ILogger<AuditLogService> logger) : IAuditLogService
@@ -14,7 +14,7 @@ public class AuditLogService(InquirySparkContext context, ILogger<AuditLogServic
     private readonly InquirySparkContext _context = context;
     private readonly ILogger<AuditLogService> _logger = logger;
 
-    public async Task LogActionAsync(int actorId, string entityType, string entityId, string action, string changes = null)
+    public async Task LogActionAsync(int actorId, string entityType, string entityId, string action, string? changes = null)
     {
         try
         {
