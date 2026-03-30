@@ -12,10 +12,10 @@ All services use constructor injection with primary constructors. Registrations 
 `InquirySparkContext` is the single source of truth. Prefer existing views (e.g., `VwApplication`, `VwSurveyResponseDetail`) over ad-hoc joins, and honor database naming conventions (`{Entity}Id`, `{Name}Fl`, `{Name}Dt`, etc.).
 
 ### IV. Admin UI Standardization
-All InquirySpark.Admin CRUD pages follow the Bootstrap 5 + DataTables card template defined in `docs/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md`: card header/actions, `.table` with auto-initialized DataTables, `.no-sort` action columns, Bootswatch-managed CSS, and Bootstrap Icons for affordances.
+All InquirySpark.Admin CRUD pages follow the Bootstrap 5 + DataTables card template defined in `.github/copilot-instructions.md` (Admin UI Conventions section): card header/actions, `.table` with auto-initialized DataTables, `.no-sort` action columns, Bootswatch-managed CSS, and Bootstrap Icons for affordances.
 
 ### V. Documentation & Knowledge Flow
-Only the root `README.md` may live outside `/docs`. All Copilot-authored references, guides, or templates must reside under `/docs/copilot/session-YYYY-MM-DD/`. XML documentation comments are required for all public APIs across Common, Repository, and WebApi projects.
+Only the root `README.md` may live outside `/.documentation`. Session documentation is placed in `/.documentation/copilot/` and archived to `/.archive/` when no longer active. The legacy `docs/` directory has been retired. XML documentation comments are required for all public APIs across Common, Repository, and WebApi projects.
 
 ## Engineering Constraints & Standards
 
