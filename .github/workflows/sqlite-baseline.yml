@@ -82,14 +82,22 @@ jobs:
       working-directory: InquirySpark.Admin
       run: npm run build
       
-    - name: Verify frontend assets copied
+    - name: Verify frontend bundle outputs
       shell: bash
       run: |
-        if [ ! -d "InquirySpark.Admin/wwwroot/lib" ]; then
-          echo "❌ Frontend assets not copied to wwwroot/lib"
+        if [ ! -f "InquirySpark.Admin/wwwroot/js/site.min.js" ]; then
+          echo "❌ Missing built JavaScript bundle: wwwroot/js/site.min.js"
           exit 1
         fi
-        echo "✅ Frontend assets verified in wwwroot/lib"
+        if [ ! -f "InquirySpark.Admin/wwwroot/css/site.min.css" ]; then
+          echo "❌ Missing built stylesheet bundle: wwwroot/css/site.min.css"
+          exit 1
+        fi
+        if [ ! -d "InquirySpark.Admin/wwwroot/fonts" ]; then
+          echo "❌ Missing copied font assets: wwwroot/fonts"
+          exit 1
+        fi
+        echo "✅ Frontend bundles verified in wwwroot/js, wwwroot/css, and wwwroot/fonts"
 
   sqlite-data-integrity:
     name: SQLite Data Integrity Check
