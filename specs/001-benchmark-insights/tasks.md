@@ -100,8 +100,8 @@
 - [X] T034 [P] [US3] Create InquirySpark.Admin/Controllers/Api/ExportsController.cs exposing POST /api/exports and GET /api/exports/{id} for download URLs bound to DataExportService.
 - [X] T035 [US3] Add Hangfire export worker InquirySpark.Repository/Jobs/DataExportJob.cs to render XLSX/PDF/CSV outputs, zip them when needed, and push assets to Azure Blob Storage.
 - [X] T036 [US3] Add InquirySpark.Admin/Areas/Inquiry/Controllers/DataExplorerController.cs with Razor views (Views/DataExplorer/Index.cshtml, _FilterBuilder.cshtml, _ExportModal.cshtml) hooking into new APIs.
-- [ ] T037 [P] [US3] Implement InquirySpark.Admin/wwwroot/src/js/data-explorer/grid.ts to wire DataTables server-side mode, virtual scrolling, saved filter sets, and export triggers.
-- [ ] T038 [US3] Extend InquirySpark.Admin/wwwroot/js/site.js to register `.datatable-export` options for the data explorer grid (custom page lengths, summary banner) and reuse JSZip/PDFMake bundles.
+- [X] T037 [P] [US3] Implement InquirySpark.Admin/wwwroot/src/js/data-explorer/grid.ts to wire DataTables server-side mode, virtual scrolling, saved filter sets, and export triggers.
+- [X] T038 [US3] Extend InquirySpark.Admin/wwwroot/js/site.js to register `.datatable-export` options for the data explorer grid (custom page lengths, summary banner) and reuse JSZip/PDFMake bundles.
 - [X] T065 [US3] Enforce read-only scopes in DataExplorerService/DataExplorerController by rejecting mutation verbs, watermarking exports, and emitting audit entries for denied actions.
 - [X] T066 [US3] Persist data explorer preferences (column layouts, saved filter sets, page lengths) via UserPreferenceService and hydrate them in the Admin UI on load.
 

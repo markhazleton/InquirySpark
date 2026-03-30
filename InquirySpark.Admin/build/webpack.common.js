@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     site: path.resolve(__dirname, '../src/js/site.js'),
     chartBuilder: path.resolve(__dirname, '../src/js/chartBuilder.ts'),
-    chartGallery: path.resolve(__dirname, '../src/js/chartGallery.ts')
+    chartGallery: path.resolve(__dirname, '../src/js/chartGallery.ts'),
+    dataExplorer: path.resolve(__dirname, '../src/js/data-explorer/grid.ts')
   },
   output: {
     path: path.resolve(__dirname, '../wwwroot'),

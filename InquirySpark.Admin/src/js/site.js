@@ -160,6 +160,192 @@ $(document).ready(function () {
             console.error('Error initializing DataTable with export:', error);
         }
     });
+
+    // Data Explorer DataTables Configuration
+    // Usage: Add class "datatable-export-data-explorer" for data explorer grids
+    // Includes custom page lengths, summary banner support, and JSZip/PDFMake bundles
+    $('.datatable-export-data-explorer').each(function() {
+        const $table = $(this);
+
+        if ($.fn.DataTable.isDataTable($table)) {
+            return;
+        }
+
+        const dataExplorerConfig = $.extend(true, {}, defaultConfig, {
+            // Custom DOM layout with summary banner placeholder
+            dom: '<"row"<"col-sm-12 col-md-4"l><"col-sm-12 col-md-4 text-center"<"summary-banner">><"col-sm-12 col-md-4"f>>' +
+                 '<"row"<"col-sm-12"B>>' +
+                 '<"row"<"col-sm-12"tr>>' +
+                 '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+
+            // Extended page length options for large datasets
+            pageLength: 100,
+            lengthMenu: [[25, 50, 100, 250, 500], [25, 50, 100, 250, 500]],
+
+            // Server-side processing (configured in grid.ts)
+            processing: true,
+            serverSide: true,
+
+            // Disable state saving (handled by UserPreferenceService)
+            stateSave: false,
+
+            // Export buttons with enhanced options
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'btn btn-sm btn-secondary',
+                    text: '<i class="bi bi-clipboard"></i> Copy',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'csv',
+                    className: 'btn btn-sm btn-secondary',
+                    text: '<i class="bi bi-filetype-csv"></i> CSV',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all',
+                            search: 'applied'
+                        }
+                    },
+                    title: function() {
+                        const chartName = $table.data('chart-name') || 'data-export';
+                        const timestamp = new Date().toISOString().slice(0, 10);
+                        return `${chartName}-${timestamp}`;
+                    }
+                },
+                {
+                    extend: 'excel',
+                    className: 'btn btn-sm btn-secondary',
+                    text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all',
+                            search: 'applied'
+                        }
+                    },
+                    title: function() {
+                        const chartName = $table.data('chart-name') || 'data-export';
+                        const timestamp = new Date().toISOString().slice(0, 10);
+                        return `${chartName}-${timestamp}`;
+                    },
+                    customize: function(xlsx) {
+                        // Add custom styling to Excel export
+                        const sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        
+                        // Add metadata header
+                        $('row:first c', sheet).each(function() {
+                            $(this).attr('s', '2'); // Bold style
+                        });
+
+                        // Add watermark/metadata row
+                        const exportDate = new Date().toLocaleString();
+                        const filters = $table.data('current-filters');
+                        const filterText = filters ? `Filters: ${JSON.stringify(filters)}` : 'No filters applied';
+                        
+                        const metadataRow = `<row>
+                            <c t="inlineStr"><is><t>Exported: ${exportDate}</t></is></c>
+                            <c t="inlineStr"><is><t>${filterText}</t></is></c>
+                        </row>`;
+                        
+                        $('sheetData', sheet).prepend(metadataRow);
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn btn-sm btn-secondary',
+                    text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current' // PDF limited to current page for performance
+                        }
+                    },
+                    title: function() {
+                        const chartName = $table.data('chart-name') || 'data-export';
+                        const timestamp = new Date().toISOString().slice(0, 10);
+                        return `${chartName}-${timestamp}`;
+                    },
+                    customize: function(doc) {
+                        // Add export metadata to PDF footer
+                        doc.content.splice(0, 0, {
+                            text: [
+                                { text: 'InquirySpark Data Explorer Export\n', fontSize: 16, bold: true },
+                                { text: `Exported: ${new Date().toLocaleString()}\n`, fontSize: 10 },
+                                { text: 'Read-Only Data View - Do Not Modify Source Data\n\n', fontSize: 8, italics: true, color: '#999' }
+                            ],
+                            alignment: 'center',
+                            margin: [0, 0, 0, 12]
+                        });
+
+                        // Watermark for read-only reminder
+                        doc.watermark = { 
+                            text: 'READ ONLY', 
+                            color: 'red', 
+                            opacity: 0.1, 
+                            fontSize: 40 
+                        };
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'btn btn-sm btn-secondary',
+                    text: '<i class="bi bi-printer"></i> Print',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    },
+                    customize: function(win) {
+                        // Add custom print styles
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                '<div style="text-align:center;margin-bottom:20px;">' +
+                                '<h3>InquirySpark Data Explorer</h3>' +
+                                '<p>Exported: ' + new Date().toLocaleString() + '</p>' +
+                                '<p style="color:#999;font-style:italic;">Read-Only Data View</p>' +
+                                '</div>'
+                            );
+                        
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+            // Custom language for data explorer context
+            language: {
+                processing: '<i class="bi bi-hourglass-split"></i> Loading data...',
+                search: '_INPUT_',
+                searchPlaceholder: 'Search rows...',
+                lengthMenu: 'Show _MENU_ rows',
+                info: 'Showing _START_ to _END_ of _TOTAL_ rows',
+                infoEmpty: 'No data available',
+                infoFiltered: '(filtered from _MAX_ total rows)',
+                loadingRecords: 'Loading...',
+                zeroRecords: 'No matching records found',
+                emptyTable: 'No data available',
+                paginate: {
+                    first: '<i class="bi bi-chevron-bar-left"></i>',
+                    previous: '<i class="bi bi-chevron-left"></i>',
+                    next: '<i class="bi bi-chevron-right"></i>',
+                    last: '<i class="bi bi-chevron-bar-right"></i>'
+                }
+            }
+        });
+
+        // Note: DataExplorerGrid class in grid.ts handles actual initialization
+        // This config is available for fallback or simpler tables
+        try {
+            $table.DataTable(dataExplorerConfig);
+        } catch (error) {
+            console.error('Error initializing Data Explorer DataTable:', error);
+        }
+    });
 });
 
 // Global DataTables utility functions
