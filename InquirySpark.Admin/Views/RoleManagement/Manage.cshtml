@@ -1,0 +1,81 @@
+@model List<ManageUserRolesViewModel>
+@{
+    ViewData["Title"] = "Manage User Roles";
+    var userId = ViewBag.UserId as string;
+    var userName = ViewBag.UserName as string;
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0"><i class="bi bi-shield-lock"></i> Manage Roles for @userName</h2>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Manage" asp-route-userId="@userId">
+            <div class="mb-3">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Select the roles you want to assign to this user. 
+                    Changes will take effect immediately after saving.
+                </div>
+            </div>
+
+            <div class="row">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input type="hidden" asp-for="@Model[i].RoleId" />
+                                    <input type="hidden" asp-for="@Model[i].RoleName" />
+                                    <input asp-for="@Model[i].Selected" 
+                                           class="form-check-input" 
+                                           type="checkbox" 
+                                           id="role_@i" />
+                                    <label class="form-check-label fw-bold" for="role_@i">
+                                        <i class="bi bi-shield-check text-primary"></i> @Model[i].RoleName
+                                    </label>
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    @switch (Model[i].RoleName)
+                                    {
+                                        case "Administrator":
+                                            <span>Full system access and management</span>
+                                            break;
+                                        case "Analyst":
+                                            <span>Create and manage charts and reports</span>
+                                            break;
+                                        case "Operator":
+                                            <span>Execute batch operations and workflows</span>
+                                            break;
+                                        case "Consultant":
+                                            <span>View and export reports</span>
+                                            break;
+                                        case "Executive":
+                                            <span>View executive dashboards</span>
+                                            break;
+                                        default:
+                                            <span>Standard user access</span>
+                                            break;
+                                    }
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

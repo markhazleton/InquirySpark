@@ -1,6 +1,20 @@
 {
   "menuItems": [
     {
+      "text": "Chart Builder",
+      "url": "/ChartBuilder"
+    },
+    {
+      "text": "Administration",
+      "url": "/RoleManagement",
+      "children": [
+        {
+          "text": "User Roles",
+          "url": "/RoleManagement"
+        }
+      ]
+    },
+    {
       "text": "Applications",
       "url": "/Inquiry/Applications",
       "children": [

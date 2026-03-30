@@ -5,7 +5,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    site: path.resolve(__dirname, '../src/js/site.js')
+    site: path.resolve(__dirname, '../src/js/site.js'),
+    chartBuilder: path.resolve(__dirname, '../src/js/chartBuilder.ts'),
+    chartGallery: path.resolve(__dirname, '../src/js/chartGallery.ts'),
+    dataExplorer: path.resolve(__dirname, '../src/js/data-explorer/grid.ts')
   },
   output: {
     path: path.resolve(__dirname, '../wwwroot'),
@@ -17,6 +20,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.css$/,
         use: [
@@ -68,7 +76,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.json'],
+    extensions: ['.tsx', '.ts', '.js', '.json'],
     alias: {
       'pdfmake': path.resolve(__dirname, '../node_modules/pdfmake/build/pdfmake.min.js')
     }
