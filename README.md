@@ -51,7 +51,7 @@ Immutable SQLite databases are stored in `data/sqlite/`:
 - **ControlSparkUser.db**: ASP.NET Core Identity users/roles
 - **InquirySpark.db**: Survey/inquiry domain data
 
-Connection strings in appsettings.json use `Mode=ReadOnly` to prevent schema/data mutations. See [docs/copilot/session-2025-12-04/sqlite-data-assets.md](docs/copilot/session-2025-12-04/sqlite-data-assets.md) for checksums and distribution policy.
+Connection strings in appsettings.json use `Mode=ReadOnly` to prevent schema/data mutations. See [sqlite-data-assets.md](.archive/docs/copilot/session-2025-12-04/sqlite-data-assets.md) for checksums and distribution policy.
 
 ## Architecture
 - **Persistence**: EF Core 10 with Microsoft.Data.Sqlite provider
@@ -60,10 +60,10 @@ Connection strings in appsettings.json use `Mode=ReadOnly` to prevent schema/dat
 - **Dependency Injection**: Primary constructors, service registration in Program.cs
 
 ## Documentation
-- [Bootstrap 5 Table Template](docs/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md)
-- [NPM Build Process](docs/copilot/session-2025-12-04/NPM-BUILD.md)
-- [CDN-Free Implementation](docs/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
-- [DataTables Reference](docs/copilot/session-2025-12-04/DATATABLES-REFERENCE.md)
+- [Bootstrap 5 Table Template](.archive/docs/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md)
+- [NPM Build Process](.archive/docs/copilot/session-2025-12-04/NPM-BUILD.md)
+- [CDN-Free Implementation](.archive/docs/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
+- [DataTables Reference](.archive/docs/copilot/session-2025-12-04/DATATABLES-REFERENCE.md)
 
 ## Troubleshooting
 - **Missing .db file errors**: Verify `data/sqlite/*.db` assets exist and connection strings point to correct relative paths

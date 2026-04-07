@@ -71,8 +71,7 @@ dotnet build InquirySpark.sln --configuration Release
 
 **Build Failure Resolution:**
 - If build errors occur, run: `.\eng\BuildVerification.ps1`
-- See [sqlite-build-checklist.md](../../docs/copilot/session-2025-12-04/sqlite-build-checklist.md) for troubleshooting
-
+- See [sqlite-build-checklist.md](../../.documentation/copilot/session-2026-04-07/sqlite-build-checklist.md) for troubleshooting
 ---
 
 ## 4. Verify SQLite Configuration
@@ -144,8 +143,7 @@ dotnet test InquirySpark.sln --configuration Release --verbosity normal
 **Test Failure Resolution:**
 - Review test output for specific failures
 - Check database files are present and readable
-- See [sqlite-build-checklist.md](../../docs/copilot/session-2025-12-04/sqlite-build-checklist.md)
-
+- See [sqlite-build-checklist.md](../../.documentation/copilot/session-2026-04-07/sqlite-build-checklist.md)
 ---
 
 ## 6. Run Application & Health Check
@@ -269,9 +267,9 @@ For pre-commit validation, use the automated verification script:
 ### Core Documentation
 
 - **[README.md](../../README.md)** - Repository overview and getting started guide
-- **[sqlite-build-checklist.md](../../docs/copilot/session-2025-12-04/sqlite-build-checklist.md)** - Comprehensive build verification checklist
-- **[sqlite-operational-readiness.md](../../docs/copilot/session-2025-12-04/sqlite-operational-readiness.md)** - Deployment and monitoring guide
-- **[sqlite-data-assets.md](../../docs/copilot/session-2025-12-04/sqlite-data-assets.md)** - Database file inventory with checksums
+- **[sqlite-build-checklist.md](../../.documentation/copilot/session-2026-04-07/sqlite-build-checklist.md)** - Comprehensive build verification checklist
+- **[sqlite-operational-readiness.md](../../.archive/docs/copilot/session-2025-12-04/sqlite-operational-readiness.md)** - Deployment and monitoring guide
+- **[sqlite-data-assets.md](../../.archive/docs/copilot/session-2025-12-04/sqlite-data-assets.md)** - Database file inventory with checksums
 
 ### Key Topics
 
@@ -291,7 +289,7 @@ For pre-commit validation, use the automated verification script:
 - **Database locked errors:** Normal with SQLite, typically self-resolving
 - **Connection string errors:** Verify paths in `appsettings.json`
 - **Missing database files:** Run `git checkout HEAD -- data/sqlite/*.db`
-- **Build failures:** See [sqlite-build-checklist.md](../../docs/copilot/session-2025-12-04/sqlite-build-checklist.md)
+- **Build failures:** See [sqlite-build-checklist.md](../../.documentation/copilot/session-2026-04-07/sqlite-build-checklist.md)
 
 ---
 
@@ -382,7 +380,7 @@ After completing this quickstart:
    - Familiarize with health check expectations
 
 2. **Review Operational Readiness:**
-   - Read [sqlite-operational-readiness.md](../../docs/copilot/session-2025-12-04/sqlite-operational-readiness.md)
+   - Read [sqlite-operational-readiness.md](../../.archive/docs/copilot/session-2025-12-04/sqlite-operational-readiness.md)
    - Understand deployment procedures
    - Learn rollback and troubleshooting steps
 
@@ -395,4 +393,4 @@ After completing this quickstart:
 
 **Last Updated:** 2024-12-04  
 **Feature Status:** Baseline complete, SQLite-only migration finalized  
-**Support:** See [sqlite-build-checklist.md](../../docs/copilot/session-2025-12-04/sqlite-build-checklist.md) for troubleshooting
+**Support:** See [sqlite-build-checklist.md](../../.documentation/copilot/session-2026-04-07/sqlite-build-checklist.md) for troubleshooting
