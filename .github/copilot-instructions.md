@@ -1,5 +1,7 @@
 # InquirySpark AI Coding Agent Instructions
 
+> **Governance**: This file is a practical reference for AI coding agents. The authoritative source of engineering principles, rules, and validation criteria is the **project constitution** at [`.documentation/memory/constitution.md`](../.documentation/memory/constitution.md). When in doubt, consult the constitution. Any conflict between this file and the constitution is resolved in favor of the constitution.
+
 ## Project Overview
 InquirySpark is a .NET 10 survey/inquiry management system with three main applications:
 - **InquirySpark.WebApi** - RESTful API with Swagger documentation
@@ -73,9 +75,10 @@ builder.Services.AddTransient<ISurveyService, SurveyService>();
 - Audit fields: `ModifiedDt`, `ModifiedId` (present on most tables)
 
 ### Connection Strings
-- **WebApi/Repository**: `InquirySparkContext` (SQL Server)
-- **Admin**: `InquirySparkConnection` (SQLite for demo) + `ControlSparkUserContextConnection` (Identity)
-- **Web**: `DefaultConnection` (SQL Server with Identity)
+- **All projects**: SQLite exclusively (SQL Server removed — see `specs/001-remove-sql-server`)
+- **Admin**: `InquirySparkConnection` (SQLite, read-only) + `ControlSparkUserContextConnection` (Identity SQLite)
+- Format: `Data Source=<path>;Mode=ReadOnly`
+- SQLite `.db` assets are immutable — `Database.Migrate()` is disabled
 
 ## Admin UI Conventions (InquirySpark.Admin)
 
@@ -136,7 +139,7 @@ builder.Services.AddTransient<ISurveyService, SurveyService>();
 - DataTables auto-initializes on `.table` class (configured in site.js)
 - Add `class="no-sort"` to action columns
 - Card layout with header/body/footer structure
-- See [BOOTSTRAP5-TABLE-TEMPLATE.md](InquirySpark.Admin/BOOTSTRAP5-TABLE-TEMPLATE.md) for complete template
+- See [BOOTSTRAP5-TABLE-TEMPLATE.md](../.documentation/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md) for complete template
 
 ### NPM Build System (100% CDN-Free)
 Frontend dependencies are managed via npm, NOT LibMan or CDN:
@@ -176,7 +179,7 @@ Dynamic theme switching via WebSpark.Bootswatch package:
 - CSS served from embedded resources (no CDN)
 - JavaScript from local npm package
 - Theme persists in cookies
-- See [CDN-FREE-IMPLEMENTATION.md](InquirySpark.Admin/CDN-FREE-IMPLEMENTATION.md)
+- See [CDN-FREE-IMPLEMENTATION.md](../.documentation/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
 
 ## Global Usings
 
@@ -283,24 +286,27 @@ public async Task<BaseResponse<SurveyItem>> GetSurveyBySurveyId(int surveyId)
 
 ## Documentation File Organization
 
-**CRITICAL: All Copilot-generated .md files MUST follow this structure:**
+**CRITICAL: Governed by [`.documentation/memory/constitution.md`](../.documentation/memory/constitution.md) — Constitution § V.**
 
-- **Root README.md ONLY**: The only .md file allowed outside `/docs` is `README.md` in the project root
-- **All other documentation**: MUST be placed in `/docs/copilot/session-{date}/` folders
-  - Format: `/docs/copilot/session-YYYY-MM-DD/` (e.g., `/docs/copilot/session-2025-12-04/`)
+- **`README.md` only**: The only `.md` file permitted outside `/.documentation/` (besides `.github/copilot-instructions.md`)
+- **All other documentation**: MUST be placed in `/.documentation/copilot/session-{date}/` folders
+  - Format: `/.documentation/copilot/session-YYYY-MM-DD/` (e.g., `/.documentation/copilot/session-2026-04-07/`)
   - Session folders group related documentation by date
-  - No .md files in project folders (InquirySpark.Admin, InquirySpark.Repository, etc.)
+  - No `.md` files in project folders (InquirySpark.Admin, InquirySpark.Repository, etc.)
+  - The legacy `docs/` directory is **retired** — do not create files there
 
 **Examples:**
-- ✅ `/docs/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md`
-- ✅ `/docs/copilot/session-2025-12-04/API-DESIGN.md`
+- ✅ `/.documentation/copilot/session-2026-04-07/FEATURE-NOTES.md`
+- ✅ `/.documentation/specs/002-new-feature/plan.md`
 - ✅ `/README.md`
+- ❌ `docs/copilot/session-2025-12-04/anything.md`
 - ❌ `InquirySpark.Admin/BOOTSTRAP5-MODERNIZATION.md`
 - ❌ `InquirySpark.Repository/MIGRATION-GUIDE.md`
 
 ## References
-- [Bootstrap 5 Table Template](docs/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md)
-- [Bootstrap 5 Modernization](docs/copilot/session-2025-12-04/BOOTSTRAP5-MODERNIZATION.md)
-- [NPM Build Process](docs/copilot/session-2025-12-04/NPM-BUILD.md)
-- [CDN-Free Implementation](docs/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
-- [DataTables Reference](docs/copilot/session-2025-12-04/DATATABLES-REFERENCE.md)
+- [Project Constitution](../.documentation/memory/constitution.md) — primary governance, rules & validation
+- [Bootstrap 5 Table Template](../.documentation/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md)
+- [Bootstrap 5 Modernization](../.documentation/copilot/session-2025-12-04/BOOTSTRAP5-MODERNIZATION.md)
+- [NPM Build Process](../.documentation/copilot/session-2025-12-04/NPM-BUILD.md)
+- [CDN-Free Implementation](../.documentation/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
+- [DataTables Reference](../.documentation/copilot/session-2025-12-04/DATATABLES-REFERENCE.md)
