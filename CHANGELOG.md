@@ -9,6 +9,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### In Progress
 - **001-remove-sql-server (US2/US3)**: Build engineer baseline (TreatWarningsAsErrors, CI workflow, BuildVerification.ps1) and quality lead validation (health endpoints, integration tests) are still open.
 
+## [2026-04-07] Archive Run
+
+### Archive run (no files moved — all candidates current)
+- `harvest-2026-04-07.md` — kept; current harvest report from today's session
+- **Created** `.documentation/Guide.md` — new living orientation document for `.documentation/`
+- **Created** `.archive/README.md` — inventory of all archived batches
+
+### Key decisions preserved
+- `.archive/` is write-only from operational standpoint; `.devspark/scripts/` and `.documentation/scripts/` are never archived
+- Constitution at `.documentation/memory/constitution.md` is never an archive candidate
+
+## [2026-04-07] - DevSpark Framework Migration
+
+### Changed
+- Replaced speckit agent/prompt framework with **DevSpark** across all tooling entry points.
+- Renamed all `.github/agents/speckit.*.agent.md` → `.github/agents/devspark.*.agent.md` (21 agent files).
+- Renamed all `.github/prompts/speckit.*.prompt.md` → `.github/prompts/devspark.*.prompt.md` (21 prompt files).
+- Added `.devspark/` directory containing stock default commands, memory constitution, PowerShell scripts, and Mustache templates.
+- Removed `.documentation/SPECKIT_VERSION` file (replaced by `.devspark/` versioning).
+- Updated `.gitignore` and `.vscode/settings.json` for devspark paths.
+- Updated `InquirySpark.Admin`, `InquirySpark.Common`, `InquirySpark.Common.Tests`, and `InquirySpark.Repository` project files.
+- Added `devspark.personalize` agent (new capability not present in speckit).
+
 ## [2026-03-29] - Benchmark Insights & Reporting Platform
 
 Feature spec: `.documentation/specs/001-benchmark-insights/`  
