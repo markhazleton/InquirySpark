@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# DevSpark — personal overrides (never commit)
+.documentation/*/commands/
