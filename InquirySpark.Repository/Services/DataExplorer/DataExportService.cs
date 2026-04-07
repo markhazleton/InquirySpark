@@ -61,12 +61,7 @@ public class DataExportService(
         {
             // Validate chart definition exists
             var chartDef = await _context.ChartDefinitions
-                .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId);
-
-            if (chartDef == null)
-            {
-                throw new KeyNotFoundException($"Chart definition {chartDefinitionId} not found");
-            }
+                .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId) ?? throw new KeyNotFoundException($"Chart definition {chartDefinitionId} not found");
 
             // Enforce row cap
             var rowLimit = Math.Min(options.MaxRows, MaxRowCap);
@@ -109,12 +104,7 @@ public class DataExportService(
         {
             var request = await _context.DataExportRequests
                 .Include(e => e.ChartDefinition)
-                .FirstOrDefaultAsync(e => e.DataExportRequestId == exportRequestId);
-
-            if (request == null)
-            {
-                throw new KeyNotFoundException($"Export request {exportRequestId} not found");
-            }
+                .FirstOrDefaultAsync(e => e.DataExportRequestId == exportRequestId) ?? throw new KeyNotFoundException($"Export request {exportRequestId} not found");
 
             return MapToDto(request);
         });
@@ -149,12 +139,7 @@ public class DataExportService(
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
             var request = await _context.DataExportRequests
-                .FirstOrDefaultAsync(e => e.DataExportRequestId == exportRequestId);
-
-            if (request == null)
-            {
-                throw new KeyNotFoundException($"Export request {exportRequestId} not found");
-            }
+                .FirstOrDefaultAsync(e => e.DataExportRequestId == exportRequestId) ?? throw new KeyNotFoundException($"Export request {exportRequestId} not found");
 
             var oldStatus = request.Status;
             request.Status = status;

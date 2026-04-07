@@ -181,12 +181,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
             var job = await _context.ChartBuildJobs
                 .Include(j => j.BuildTasks)
                     .ThenInclude(t => t.ChartDefinition)
-                .FirstOrDefaultAsync(j => j.ChartBuildJobId == jobId);
-
-            if (job == null)
-            {
-                throw new InvalidOperationException($"Build job {jobId} not found");
-            }
+                .FirstOrDefaultAsync(j => j.ChartBuildJobId == jobId) ?? throw new InvalidOperationException($"Build job {jobId} not found");
 
             return new ChartBuildJobDto
             {
@@ -251,12 +246,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
         {
             var task = await _context.ChartBuildTasks
                 .Include(t => t.ChartBuildJob)
-                .FirstOrDefaultAsync(t => t.ChartBuildTaskId == taskId);
-
-            if (task == null)
-            {
-                throw new InvalidOperationException($"Build task {taskId} not found");
-            }
+                .FirstOrDefaultAsync(t => t.ChartBuildTaskId == taskId) ?? throw new InvalidOperationException($"Build task {taskId} not found");
 
             var oldStatus = task.Status;
             task.Status = status;
@@ -352,11 +342,7 @@ public class ChartBuildService(InquirySparkContext context, ILogger<ChartBuildSe
     {
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
-            var job = await _context.ChartBuildJobs.FindAsync(jobId);
-            if (job == null)
-            {
-                throw new InvalidOperationException($"Build job {jobId} not found");
-            }
+            var job = await _context.ChartBuildJobs.FindAsync(jobId) ?? throw new InvalidOperationException($"Build job {jobId} not found");
 
             if (job.Status != "Pending" && job.Status != "Running")
             {

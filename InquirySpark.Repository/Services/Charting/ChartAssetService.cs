@@ -117,12 +117,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
             var asset = await _context.ChartAssets
                 .Include(a => a.ChartDefinition)
                 .Include(a => a.Files)
-                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId);
-
-            if (asset == null)
-            {
-                throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
-            }
+                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId) ?? throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
 
             return MapAssetToDto(asset);
         });
@@ -211,12 +206,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
             var asset = await _context.ChartAssets
-                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId);
-
-            if (asset == null)
-            {
-                throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
-            }
+                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId) ?? throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
 
             var oldStatus = asset.ApprovalStatus;
             asset.ApprovalStatus = approvalStatus;
@@ -247,12 +237,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
             var asset = await _context.ChartAssets
-                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId);
-
-            if (asset == null)
-            {
-                throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
-            }
+                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId) ?? throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
 
             asset.UsageCount++;
             asset.LastAccessedDt = DateTime.UtcNow;
@@ -271,12 +256,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
             var asset = await _context.ChartAssets
-                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId);
-
-            if (asset == null)
-            {
-                throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
-            }
+                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId) ?? throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
 
             var file = new ChartAssetFileEntity
             {
@@ -307,12 +287,7 @@ public class ChartAssetService(InquirySparkContext context, ILogger<ChartAssetSe
         return await DbContextHelper.ExecuteAsync<bool>(async () =>
         {
             var asset = await _context.ChartAssets
-                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId);
-
-            if (asset == null)
-            {
-                throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
-            }
+                .FirstOrDefaultAsync(a => a.ChartAssetId == chartAssetId) ?? throw new KeyNotFoundException($"Chart asset {chartAssetId} not found");
 
             asset.ApprovalStatus = "Archived";
             await _context.SaveChangesAsync();

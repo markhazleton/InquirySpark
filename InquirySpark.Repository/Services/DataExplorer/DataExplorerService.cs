@@ -106,12 +106,7 @@ public class DataExplorerService(
         {
             // Get the chart definition to determine the dataset
             var chartDef = await _context.ChartDefinitions
-                .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId);
-
-            if (chartDef == null)
-            {
-                throw new KeyNotFoundException($"Chart definition {chartDefinitionId} not found");
-            }
+                .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId) ?? throw new KeyNotFoundException($"Chart definition {chartDefinitionId} not found");
 
             // For demo purposes, we'll query from existing tables
             // In production, this would query the actual dataset tables/views

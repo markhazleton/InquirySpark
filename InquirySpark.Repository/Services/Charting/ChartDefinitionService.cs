@@ -88,10 +88,7 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
             if (definition.ChartDefinitionId > 0)
             {
                 entity = await _context.ChartDefinitions
-                    .FirstOrDefaultAsync(c => c.ChartDefinitionId == definition.ChartDefinitionId);
-
-                if (entity == null)
-                    throw new InvalidOperationException($"Chart definition {definition.ChartDefinitionId} not found");
+                    .FirstOrDefaultAsync(c => c.ChartDefinitionId == definition.ChartDefinitionId) ?? throw new InvalidOperationException($"Chart definition {definition.ChartDefinitionId} not found");
 
                 // Create snapshot before updating
                 var snapshotVersion = new ChartVersionEntity
@@ -222,16 +219,10 @@ public class ChartDefinitionService(InquirySparkContext context, ILogger<ChartDe
         return await DbContextHelper.ExecuteAsync<ChartDefinitionDto>(async () =>
         {
             var definition = await _context.ChartDefinitions
-                .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId);
-
-            if (definition == null)
-                throw new InvalidOperationException($"Chart definition {chartDefinitionId} not found");
+                .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId) ?? throw new InvalidOperationException($"Chart definition {chartDefinitionId} not found");
 
             var targetVersion = await _context.ChartVersions
-                .FirstOrDefaultAsync(v => v.ChartDefinitionId == chartDefinitionId && v.VersionNumber == versionNumber);
-
-            if (targetVersion == null)
-                throw new InvalidOperationException($"Version {versionNumber} not found for chart {chartDefinitionId}");
+                .FirstOrDefaultAsync(v => v.ChartDefinitionId == chartDefinitionId && v.VersionNumber == versionNumber) ?? throw new InvalidOperationException($"Version {versionNumber} not found for chart {chartDefinitionId}");
 
             // Create snapshot of current state before rollback
             var currentSnapshot = new ChartVersionEntity
