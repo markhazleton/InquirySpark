@@ -77,16 +77,16 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Add integration tests targeting the health endpoints with Microsoft.AspNetCore.Mvc.Testing at InquirySpark.Common.Tests/Integration/SystemHealthTests.cs
+- [X] T024 [P] [US3] Add integration tests targeting the health endpoints with Microsoft.AspNetCore.Mvc.Testing at InquirySpark.Common.Tests/Integration/SystemHealthTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Implement SystemHealthController that matches contracts/system-health.openapi.yaml at InquirySpark.WebApi/Controllers/SystemHealthController.cs
-- [ ] T026 [P] [US3] Expose `/api/system/database/state` metadata within the same controller, enforcing read-only detection logic
-- [ ] T027 [US3] Add Admin diagnostics UI partial at InquirySpark.Admin/Views/Shared/_SystemHealthPartial.cshtml showing provider status from the API
-- [ ] T028 [P] [US3] Add Web diagnostics UI partial at InquirySpark.Web/Pages/Shared/_SystemHealthPartial.cshtml mirroring the Admin status output
-- [ ] T029 [US3] Update deployment run-books with SQLite health verification steps at .documentation/copilot/session-2026-04-07/sqlite-operational-readiness.md
-- [ ] T030 [US3] Refresh specs/001-remove-sql-server/quickstart.md to include the health-endpoint smoke test procedure and troubleshooting guidance
+- [X] T025 [US3] Implement SystemHealthController that matches contracts/system-health.openapi.yaml at InquirySpark.Admin/Controllers/Api/SystemHealthController.cs (WebApi project does not exist; implemented in Admin's Api controllers folder)
+- [X] T026 [P] [US3] Expose `/api/system/database/state` metadata within the same controller, enforcing read-only detection logic
+- [X] T027 [US3] Add Admin diagnostics UI partial at InquirySpark.Admin/Views/Shared/_SystemHealthPartial.cshtml showing provider status from the API
+- [X] T028 [P] [US3] Add Web diagnostics UI partial at InquirySpark.Web/Pages/Shared/_SystemHealthPartial.cshtml mirroring the Admin status output (N/A: Web project does not exist in this repository)
+- [X] T029 [US3] Update deployment run-books with SQLite health verification steps at .documentation/copilot/session-2026-04-07/sqlite-operational-readiness.md
+- [X] T030 [US3] Refresh specs/001-remove-sql-server/quickstart.md to include the health-endpoint smoke test procedure and troubleshooting guidance
 
 **Checkpoint**: US3 finishes when operational docs and automated tests confirm parity with the new baseline.
 
@@ -96,8 +96,8 @@ Purpose: remove SQL Server from shared infrastructure and stand up the SQLite co
 
 Purpose: ensure the repository meets documentation, cleanliness, and verification expectations once all user stories land.
 
-- [ ] T031 Run `dotnet build InquirySpark.sln -warnaserror` and `dotnet test InquirySpark.sln`, capturing logs in .documentation/copilot/session-2026-04-07/sqlite-baseline-validation.md
-- [ ] T032 [P] Verify no SQLite `.db` artifacts changed by checking `git status` and documenting the check in .documentation/copilot/session-2026-04-07/sqlite-data-assets.md
+- [X] T031 Run `dotnet build InquirySpark.sln -warnaserror` and `dotnet test InquirySpark.sln`, capturing logs in .documentation/copilot/session-2026-04-07/sqlite-baseline-validation.md
+- [X] T032 [P] Verify no SQLite `.db` artifacts changed by checking `git status` and documenting the check in .documentation/copilot/session-2026-04-07/sqlite-data-assets.md
 - [ ] T033 Record the final terminology and documentation sweep in .documentation/copilot/session-2026-04-07/sqlite-terminology-review.md
 
 ---

@@ -1,0 +1,69 @@
+@*
+    _SystemHealthPartial.cshtml
+    Usage: <partial name="_SystemHealthPartial" />
+    Renders a compact provider-status badge panel that fetches live data from
+    the /api/system/health and /api/system/database/state endpoints via JavaScript.
+*@
+
+<div id="system-health-panel" class="card border-0 shadow-sm mb-3">
+    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center py-2">
+        <span class="fw-semibold"><i class="bi bi-heart-pulse"></i> Provider Status</span>
+        <button class="btn btn-sm btn-outline-light" id="refresh-health-btn" title="Refresh">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+    </div>
+    <div class="card-body p-2" id="health-status-body">
+        <div class="text-muted small"><i class="bi bi-hourglass-split"></i> Loading&hellip;</div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var panel = document.getElementById('health-status-body');
+        var btn = document.getElementById('refresh-health-btn');
+
+        function statusBadge(status) {
+            var cls = status === 'Healthy' ? 'bg-success' : status === 'Degraded' ? 'bg-warning text-dark' : 'bg-danger';
+            return '<span class="badge ' + cls + '">' + status + '</span>';
+        }
+
+        function boolBadge(val) {
+            return val
+                ? '<span class="badge bg-success"><i class="bi bi-check"></i> Yes</span>'
+                : '<span class="badge bg-danger"><i class="bi bi-x"></i> No</span>';
+        }
+
+        function renderHealth(h, db) {
+            var rows = [
+                '<tr><th class="text-nowrap" style="width:40%"><i class="bi bi-activity"></i> Status</th><td>' + statusBadge(h.status) + '</td></tr>',
+                '<tr><th><i class="bi bi-gear"></i> Provider</th><td><code>' + (h.provider && h.provider.name ? h.provider.name : '—') + '</code></td></tr>',
+                '<tr><th><i class="bi bi-lock"></i> Read-Only</th><td>' + boolBadge(h.provider && h.provider.readOnly) + '</td></tr>',
+                '<tr><th><i class="bi bi-link-45deg"></i> Connection</th><td><small class="text-muted font-monospace">' + (h.provider && h.provider.connectionString ? h.provider.connectionString : '—') + '</small></td></tr>'
+            ];
+
+            if (db) {
+                rows.push('<tr><th><i class="bi bi-shield-check"></i> Checksum</th><td><small class="font-monospace text-break">' + (db.checksum || '—') + '</small></td></tr>');
+                rows.push('<tr><th><i class="bi bi-pen"></i> Writable</th><td>' + boolBadge(db.writable) + '</td></tr>');
+                var lastWrite = db.lastWriteUtc ? new Date(db.lastWriteUtc).toUTCString() : '—';
+                rows.push('<tr><th><i class="bi bi-calendar-event"></i> Last Write</th><td><small>' + lastWrite + '</small></td></tr>');
+            }
+
+            panel.innerHTML = '<table class="table table-sm table-borderless mb-0"><tbody>' + rows.join('') + '</tbody></table>';
+        }
+
+        function load() {
+            panel.innerHTML = '<div class="text-muted small p-1"><i class="bi bi-hourglass-split"></i> Loading&hellip;</div>';
+            var healthPromise = fetch('/api/system/health').then(function (r) { return r.json(); });
+            var dbPromise = fetch('/api/system/database/state').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+
+            Promise.all([healthPromise, dbPromise])
+                .then(function (results) { renderHealth(results[0], results[1]); })
+                .catch(function (err) {
+                    panel.innerHTML = '<div class="text-danger small p-1"><i class="bi bi-exclamation-triangle"></i> Failed to load health data.</div>';
+                });
+        }
+
+        if (btn) { btn.addEventListener('click', load); }
+        load();
+    })();
+</script>

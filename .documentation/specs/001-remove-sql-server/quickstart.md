@@ -219,6 +219,77 @@ The System Health page displays:
 - ✅ No database write errors (read-only enforcement working)
 - ✅ No exceptions in console logs
 
+### D. Health Endpoint Smoke Tests (REST API)
+
+After the application is running, call the REST health endpoints directly using PowerShell or curl:
+
+#### `/api/system/health`
+
+```powershell
+Invoke-RestMethod -Uri "https://localhost:7001/api/system/health" -SkipCertificateCheck
+```
+
+**Expected response:**
+```json
+{
+  "status": "Healthy",
+  "provider": {
+    "name": "Sqlite",
+    "connectionString": "Data Source=.../InquirySpark.db;Mode=ReadOnly",
+    "readOnly": true
+  },
+  "buildVersion": "10.xxxx.xxxx.xxxx",
+  "diagnostics": ["Database connection succeeded."]
+}
+```
+
+**Validation:** `status` must be `"Healthy"`, `provider.readOnly` must be `true`.
+
+#### `/api/system/database/state`
+
+```powershell
+Invoke-RestMethod -Uri "https://localhost:7001/api/system/database/state" -SkipCertificateCheck
+```
+
+**Expected response:**
+```json
+{
+  "filePath": "C:\\...\\data\\sqlite\\InquirySpark.db",
+  "lastWriteUtc": "2025-12-04T00:00:00Z",
+  "checksum": "<sha256-hex>",
+  "writable": false
+}
+```
+
+**Validation:** `writable` MUST be `false`. HTTP 409 means `Mode=ReadOnly` is missing from the connection string.
+
+#### Automated Validation Script
+
+```powershell
+$base = "https://localhost:7001"
+
+# Health check
+$health = Invoke-RestMethod "$base/api/system/health" -SkipCertificateCheck
+if ($health.status -ne "Healthy") { throw "FAIL: status=$($health.status)" }
+if (-not $health.provider.readOnly) { throw "FAIL: provider is not read-only" }
+Write-Host "PASS: /api/system/health" -ForegroundColor Green
+
+# Database state
+$db = Invoke-RestMethod "$base/api/system/database/state" -SkipCertificateCheck
+if ($db.writable) { throw "FAIL: database is writable — immutability violated" }
+if ([string]::IsNullOrEmpty($db.checksum)) { throw "FAIL: checksum is missing" }
+Write-Host "PASS: /api/system/database/state" -ForegroundColor Green
+```
+
+**Troubleshooting Health Endpoints:**
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| HTTP 503 on `/api/system/health` | SQLite file missing | Re-copy `data/sqlite/InquirySpark.db` |
+| HTTP 409 on `/api/system/database/state` | `Mode=ReadOnly` missing | Update `appsettings.json` |
+| `readOnly: false` in response | Connection string misconfiguration | Add `Mode=ReadOnly` to connection string |
+| `status: "Unhealthy"` | Cannot connect to SQLite | Check file exists and is not locked |
+
 ---
 
 ## 7. Local Build Verification Script
