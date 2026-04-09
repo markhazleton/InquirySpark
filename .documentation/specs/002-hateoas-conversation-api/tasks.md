@@ -23,19 +23,19 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 **Purpose**: Schema changes, entity updates, DTO models, and project configuration needed before any service logic.
 
-- [ ] T001 Add `ConversationId` (Guid) property to `SurveyResponse` entity in `InquirySpark.Repository/Database/SurveyResponse.cs`
-- [ ] T002 Add `PasswordHash` (string?, nullable) property to `ApplicationUser` entity in `InquirySpark.Repository/Database/ApplicationUser.cs`
-- [ ] T003 Add unique index on `SurveyResponse.ConversationId` and column config in `InquirySparkContext.OnModelCreating` in `InquirySpark.Repository/Database/InquirySparkContext.cs`
-- [ ] T004 Create EF Core migration for `ConversationId` and `PasswordHash` columns in `InquirySpark.Repository/Migrations/` (run `dotnet ef migrations add AddConversationApi`)
-- [ ] T005 Create offline script `eng/setup-conversation-db.ps1` to duplicate `InquirySpark.db` into an ephemeral `conversation-dev.db` and apply migrations
-- [ ] T006 Update local development (`appsettings.Development.json`) to target `conversation-dev.db` with `Mode=ReadWriteCreate` while leaving `InquirySpark.db` `ReadOnly`
-- [ ] T007 [P] Create `ConversationEnvelope` DTO in `InquirySpark.Common/Models/ConversationEnvelope.cs`
-- [ ] T008 [P] Create `ConversationAction` DTO in `InquirySpark.Common/Models/ConversationAction.cs`
-- [ ] T009 [P] Create `ConversationQuestion` DTO in `InquirySpark.Common/Models/ConversationQuestion.cs`
-- [ ] T010 [P] Create `ConversationAnswerOption` DTO in `InquirySpark.Common/Models/ConversationAnswerOption.cs`
-- [ ] T011 [P] Create `ConversationSurveyOption` DTO in `InquirySpark.Common/Models/ConversationSurveyOption.cs`
-- [ ] T012 [P] Create `ConversationStartRequest` DTO in `InquirySpark.Common/Models/ConversationStartRequest.cs`
-- [ ] T013 [P] Create `ConversationNextRequest` DTO in `InquirySpark.Common/Models/ConversationNextRequest.cs`
+- [X] T001 Add `ConversationId` (Guid) property to `SurveyResponse` entity in `InquirySpark.Repository/Database/SurveyResponse.cs`
+- [X] T002 Add `PasswordHash` (string?, nullable) property to `ApplicationUser` entity in `InquirySpark.Repository/Database/ApplicationUser.cs`
+- [X] T003 Add unique index on `SurveyResponse.ConversationId` and column config in `InquirySparkContext.OnModelCreating` in `InquirySpark.Repository/Database/InquirySparkContext.cs`
+- [X] T004 Create EF Core migration for `ConversationId` and `PasswordHash` columns in `InquirySpark.Repository/Migrations/` (run `dotnet ef migrations add AddConversationApi`)
+- [X] T005 Create offline script `eng/setup-conversation-db.ps1` to duplicate `InquirySpark.db` into an ephemeral `conversation-dev.db` and apply migrations
+- [X] T006 Update local development (`appsettings.Development.json`) to target `conversation-dev.db` with `Mode=ReadWriteCreate` while leaving `InquirySpark.db` `ReadOnly`
+- [X] T007 [P] Create `ConversationEnvelope` DTO in `InquirySpark.Common/Models/ConversationEnvelope.cs`
+- [X] T008 [P] Create `ConversationAction` DTO in `InquirySpark.Common/Models/ConversationAction.cs`
+- [X] T009 [P] Create `ConversationQuestion` DTO in `InquirySpark.Common/Models/ConversationQuestion.cs`
+- [X] T010 [P] Create `ConversationAnswerOption` DTO in `InquirySpark.Common/Models/ConversationAnswerOption.cs`
+- [X] T011 [P] Create `ConversationSurveyOption` DTO in `InquirySpark.Common/Models/ConversationSurveyOption.cs`
+- [X] T012 [P] Create `ConversationStartRequest` DTO in `InquirySpark.Common/Models/ConversationStartRequest.cs`
+- [X] T013 [P] Create `ConversationNextRequest` DTO in `InquirySpark.Common/Models/ConversationNextRequest.cs`
 
 **Checkpoint**: All entity changes, migrations, DTOs, and config are in place. No service or controller logic yet.
 
@@ -47,17 +47,17 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T014 Create `IConversationService` interface with `StartConversationAsync` and `NextStepAsync` method signatures in `InquirySpark.Repository/Services/IConversationService.cs`
-- [ ] T015 Create `ConversationService` class skeleton (primary constructor with `InquirySparkContext`, `ILogger<ConversationService>`) implementing `IConversationService` in `InquirySpark.Repository/Services/ConversationService.cs` — methods throw `NotImplementedException` initially
-- [ ] T016 Create `ConversationService_Mappers` static mapper class with `ToConversationQuestion`, `ToConversationAnswerOption`, `ToConversationSurveyOption`, and `ToConversationEnvelope` methods in `InquirySpark.Repository/Services/ConversationService_Mappers.cs`
-- [ ] T017 Create `ConversationController` with `[ApiController]`, `[AllowAnonymous]`, `[Route("api/v1/conversation")]`, snake_case JSON config, and `POST /start` + `POST /next/{conversationId}/{questionId}` action stubs in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
-- [ ] T018 Register `IConversationService` / `ConversationService` as `AddScoped` in `InquirySpark.Admin/Program.cs`
-- [ ] T018.1 Add Swagger setup (install `Swashbuckle.AspNetCore` if missing). Register `AddSwaggerGen()` in `InquirySpark.Admin/Program.cs`.
-- [ ] T018.2 Configure minimal OpenAPI documentation endpoints `app.UseSwagger()` and `app.UseSwaggerUI()` in `InquirySpark.Admin/Program.cs`.
-- [ ] T019 Implement private `AuthenticateUserAsync` helper method in `ConversationService` — lookup `ApplicationUser` by `AccountNm`, verify password using `PasswordHasher<ApplicationUser>`, perform lazy hash migration from plaintext `Password` to `PasswordHash` in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T020 Implement private `GetOrderedQuestionsAsync` helper method in `ConversationService` — load survey with `QuestionGroups.OrderBy(GroupOrder).SelectMany(QuestionGroupMembers.OrderBy(DisplayOrder))` returning ordered `List<(QuestionGroupMember, Question)>` in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T021 Implement private `BuildEnvelope` helper method in `ConversationService` — construct `ConversationEnvelope` with HATEOAS `next_url`/`prev_url` links, `action_type`, and `conversation_ended` flag in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T022 Verify build passes with `dotnet build InquirySpark.sln` — fix any compilation errors from Phase 1–2
+- [X] T014 Create `IConversationService` interface with `StartConversationAsync` and `NextStepAsync` method signatures in `InquirySpark.Repository/Services/IConversationService.cs`
+- [X] T015 Create `ConversationService` class skeleton (primary constructor with `InquirySparkContext`, `ILogger<ConversationService>`) implementing `IConversationService` in `InquirySpark.Repository/Services/ConversationService.cs` — methods throw `NotImplementedException` initially
+- [X] T016 Create `ConversationService_Mappers` static mapper class with `ToConversationQuestion`, `ToConversationAnswerOption`, `ToConversationSurveyOption`, and `ToConversationEnvelope` methods in `InquirySpark.Repository/Services/ConversationService_Mappers.cs`
+- [X] T017 Create `ConversationController` with `[ApiController]`, `[AllowAnonymous]`, `[Route("api/v1/conversation")]`, snake_case JSON config, and `POST /start` + `POST /next/{conversationId}/{questionId}` action stubs in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
+- [X] T018 Register `IConversationService` / `ConversationService` as `AddScoped` in `InquirySpark.Admin/Program.cs`
+- [X] T018.1 Add Swagger setup (install `Swashbuckle.AspNetCore` if missing). Register `AddSwaggerGen()` in `InquirySpark.Admin/Program.cs`.
+- [X] T018.2 Configure minimal OpenAPI documentation endpoints `app.UseSwagger()` and `app.UseSwaggerUI()` in `InquirySpark.Admin/Program.cs`.
+- [X] T019 Implement private `AuthenticateUserAsync` helper method in `ConversationService` — lookup `ApplicationUser` by `AccountNm`, verify password using `PasswordHasher<ApplicationUser>`, perform lazy hash migration from plaintext `Password` to `PasswordHash` in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T020 Implement private `GetOrderedQuestionsAsync` helper method in `ConversationService` — load survey with `QuestionGroups.OrderBy(GroupOrder).SelectMany(QuestionGroupMembers.OrderBy(DisplayOrder))` returning ordered `List<(QuestionGroupMember, Question)>` in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T021 Implement private `BuildEnvelope` helper method in `ConversationService` — construct `ConversationEnvelope` with HATEOAS `next_url`/`prev_url` links, `action_type`, and `conversation_ended` flag in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T022 Verify build passes with `dotnet build InquirySpark.sln` — fix any compilation errors from Phase 1–2
 
 **Checkpoint**: Foundation ready — controller responds to requests (returns stubs), DI wired, helpers ready. User story implementation can now begin.
 
@@ -71,16 +71,16 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 ### Implementation for User Story 1
 
-- [ ] T023 [US1] Inspect `LuSurveyResponseStatus` seed data in `data/sqlite/InquirySpark.db` to determine the `StatusId` values for "in-progress" and "completed" statuses; define named constants as an Enum (`SurveyResponseStatus`) in `InquirySpark.Common/Models/SurveyResponseStatus.cs` (e.g., `InProgress = 1`, `Completed = ?`).
-- [ ] T024 [US1] Implement `StartConversationAsync` — new conversation path (no `conversation_id`): validate `application_id` exists, validate `survey_id` linked to application via `ApplicationSurvey`, validate survey active (`EndDt` null or in future, `StartDt` null or in past) and has questions, create `SurveyResponse` with `ConversationId = Guid.NewGuid()`, `DataSource = "ConversationAPI"`, `StatusId` set to in-progress constant, return first question envelope — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T025 [US1] Implement `NextStepAsync` — answer submission path: locate `SurveyResponse` by `ConversationId`, validate `questionId` is current step, upsert `SurveyResponseAnswer` (set `QuestionAnswerId` or `AnswerComment`), determine next question, return next question envelope or `conversation_ended: true` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T026 [US1] Implement `NextStepAsync` — completion path: when last question answered, update `SurveyResponse.StatusId` to completed constant, include `Survey.CompletionMessage` in envelope, set `conversation_ended: true`, `next_url: null` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T027 [US1] Implement `NextStepAsync` — read mode (FR-006): when request body is null/empty, return current question without modifying state — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T028 [US1] Wire `ConversationController.Start` action — call `_service.StartConversationAsync`, and return via `ApiResponseHelper.ExecuteAsync` to map HTTP status codes automatically — in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
-- [ ] T028.1 Add `[ProducesResponseType]` and `[SwaggerOperation]` to strictly define Swagger outputs for the `/start` endpoint.
-- [ ] T029 [US1] Wire `ConversationController.Next` action — call `_service.NextStepAsync`, and return via `ApiResponseHelper.ExecuteAsync` to map HTTP status codes automatically — in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
-- [ ] T029.1 Add `[ProducesResponseType]` and `[SwaggerOperation]` to strictly define Swagger outputs for the `/next` endpoint.
-- [ ] T030 [US1] Verify build passes with `dotnet build InquirySpark.sln`
+- [X] T023 [US1] Inspect `LuSurveyResponseStatus` seed data in `data/sqlite/InquirySpark.db` to determine the `StatusId` values for "in-progress" and "completed" statuses; define named constants as an Enum (`SurveyResponseStatus`) in `InquirySpark.Common/Models/SurveyResponseStatus.cs` (e.g., `InProgress = 1`, `Completed = ?`).
+- [X] T024 [US1] Implement `StartConversationAsync` — new conversation path (no `conversation_id`): validate `application_id` exists, validate `survey_id` linked to application via `ApplicationSurvey`, validate survey active (`EndDt` null or in future, `StartDt` null or in past) and has questions, create `SurveyResponse` with `ConversationId = Guid.NewGuid()`, `DataSource = "ConversationAPI"`, `StatusId` set to in-progress constant, return first question envelope — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T025 [US1] Implement `NextStepAsync` — answer submission path: locate `SurveyResponse` by `ConversationId`, validate `questionId` is current step, upsert `SurveyResponseAnswer` (set `QuestionAnswerId` or `AnswerComment`), determine next question, return next question envelope or `conversation_ended: true` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T026 [US1] Implement `NextStepAsync` — completion path: when last question answered, update `SurveyResponse.StatusId` to completed constant, include `Survey.CompletionMessage` in envelope, set `conversation_ended: true`, `next_url: null` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T027 [US1] Implement `NextStepAsync` — read mode (FR-006): when request body is null/empty, return current question without modifying state — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T028 [US1] Wire `ConversationController.Start` action — call `_service.StartConversationAsync`, and return via `ApiResponseHelper.ExecuteAsync` to map HTTP status codes automatically — in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
+- [X] T028.1 Add `[ProducesResponseType]` and `[SwaggerOperation]` to strictly define Swagger outputs for the `/start` endpoint.
+- [X] T029 [US1] Wire `ConversationController.Next` action — call `_service.NextStepAsync`, and return via `ApiResponseHelper.ExecuteAsync` to map HTTP status codes automatically — in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
+- [X] T029.1 Add `[ProducesResponseType]` and `[SwaggerOperation]` to strictly define Swagger outputs for the `/next` endpoint.
+- [X] T030 [US1] Verify build passes with `dotnet build InquirySpark.sln`
 
 **Checkpoint**: Full end-to-end survey conversation works. User authenticates, starts survey, walks through all questions, and sees completion message. This is the MVP.
 
@@ -94,9 +94,9 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 ### Implementation for User Story 2
 
-- [ ] T031 [US2] Implement `StartConversationAsync` — survey list path: when `SurveyId` is null, query `ApplicationSurvey` filtered by `ApplicationId`, join `Survey`, map to `ConversationSurveyOption` list, return envelope with `action_type: "survey_selection"` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T032 [US2] Handle edge case: unknown `survey_id` returns `404 Not Found` with descriptive error — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T033 [US2] Verify build passes with `dotnet build InquirySpark.sln`
+- [X] T031 [US2] Implement `StartConversationAsync` — survey list path: when `SurveyId` is null, query `ApplicationSurvey` filtered by `ApplicationId`, join `Survey`, map to `ConversationSurveyOption` list, return envelope with `action_type: "survey_selection"` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T032 [US2] Handle edge case: unknown `survey_id` returns `404 Not Found` with descriptive error — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T033 [US2] Verify build passes with `dotnet build InquirySpark.sln`
 
 **Checkpoint**: Users can discover available surveys before starting one. Survey list is filtered by `application_id`.
 
@@ -110,11 +110,11 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Add credential validation to `StartConversationAsync` — return `401 Unauthorized` for: unknown `AccountNm`, wrong password, blank `PasswordHash` AND blank `Password` in database — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T035 [US3] Ensure `401` response uses generic error message (`"Invalid credentials."`) that does not reveal whether the account exists — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T036 [US3] Add `application_id` validation — return `400 Bad Request` when `ApplicationId` is 0 or does not exist in `Application` table — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T037 [US3] Ensure `ApiResponseHelper` correctly maps `BaseResponse` error states to proper HTTP status codes in controller: distinguish between 400, 401, 404 based on error metadata — in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
-- [ ] T038 [US3] Verify build passes with `dotnet build InquirySpark.sln`
+- [X] T034 [US3] Add credential validation to `StartConversationAsync` — return `401 Unauthorized` for: unknown `AccountNm`, wrong password, blank `PasswordHash` AND blank `Password` in database — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T035 [US3] Ensure `401` response uses generic error message (`"Invalid credentials."`) that does not reveal whether the account exists — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T036 [US3] Add `application_id` validation — return `400 Bad Request` when `ApplicationId` is 0 or does not exist in `Application` table — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T037 [US3] Ensure `ApiResponseHelper` correctly maps `BaseResponse` error states to proper HTTP status codes in controller: distinguish between 400, 401, 404 based on error metadata — in `InquirySpark.Admin/Controllers/Api/ConversationController.cs`
+- [X] T038 [US3] Verify build passes with `dotnet build InquirySpark.sln`
 
 **Checkpoint**: Security boundary is solid. All invalid credential scenarios return the correct error without leaking information.
 
@@ -128,11 +128,11 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 ### Implementation for User Story 4
 
-- [ ] T039 [US4] Implement `StartConversationAsync` — resume path: when `ConversationId` is provided (no `action` or `action: "resume"`), locate `SurveyResponse`, verify belongs to authenticated user (return `400` if not), find first unanswered question, return it in envelope — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T040 [US4] Implement `StartConversationAsync` — restart path: when `ConversationId` + `action: "restart"`, locate `SurveyResponse`, verify ownership, delete all `SurveyResponseAnswer` rows for that `SurveyResponseId`, reset `StatusId` to in-progress constant, return question 1 — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T041 [US4] Implement idempotent answer upsert in `NextStepAsync` — if answering a question that already has an answer, overwrite it and delete all subsequent answers per step-back rule (spec edge case: only 1 step forward or back) — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T042 [US4] Handle edge case: `conversation_id` not found returns `404`; `conversation_id` belongs to different user returns `400` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T043 [US4] Verify build passes with `dotnet build InquirySpark.sln`
+- [X] T039 [US4] Implement `StartConversationAsync` — resume path: when `ConversationId` is provided (no `action` or `action: "resume"`), locate `SurveyResponse`, verify belongs to authenticated user (return `400` if not), find first unanswered question, return it in envelope — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T040 [US4] Implement `StartConversationAsync` — restart path: when `ConversationId` + `action: "restart"`, locate `SurveyResponse`, verify ownership, delete all `SurveyResponseAnswer` rows for that `SurveyResponseId`, reset `StatusId` to in-progress constant, return question 1 — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T041 [US4] Implement idempotent answer upsert in `NextStepAsync` — if answering a question that already has an answer, overwrite it and delete all subsequent answers per step-back rule (spec edge case: only 1 step forward or back) — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T042 [US4] Handle edge case: `conversation_id` not found returns `404`; `conversation_id` belongs to different user returns `400` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T043 [US4] Verify build passes with `dotnet build InquirySpark.sln`
 
 **Checkpoint**: All 4 user stories are independently functional. Resume and restart work correctly without data corruption.
 
@@ -142,12 +142,12 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 
 **Purpose**: Edge case hardening, XML documentation, build verification, and integration test scaffold.
 
-- [ ] T044 [P] Add XML doc comments to all public classes and methods in `IConversationService`, `ConversationService`, `ConversationController`, and all DTO models — across `InquirySpark.Repository/Services/` and `InquirySpark.Common/Models/`
-- [ ] T045 [P] Handle edge case: survey with zero questions returns `400 Bad Request` from `StartConversationAsync` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T046 [P] Handle edge case: expired survey (`EndDt` in the past) or not-yet-started survey (`StartDt` in the future) returns `400 Bad Request` from `StartConversationAsync` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T047 [P] Handle edge case: free-text question accepts `user_input` and stores in `AnswerComment`; option-only question rejects `user_input` without `question_answer_id` — in `InquirySpark.Repository/Services/ConversationService.cs`
-- [ ] T048 Create integration test scaffold `ConversationApiTests.cs` with at least one end-to-end test that calls `/start` → `/next` through all questions → verifies `conversation_ended` in `InquirySpark.Common.Tests/Integration/ConversationApiTests.cs`
-- [ ] T049 Run full build verification: `dotnet build InquirySpark.sln -warnaserror` and `dotnet test` — fix any warnings or failures
+- [X] T044 [P] Add XML doc comments to all public classes and methods in `IConversationService`, `ConversationService`, `ConversationController`, and all DTO models — across `InquirySpark.Repository/Services/` and `InquirySpark.Common/Models/`
+- [X] T045 [P] Handle edge case: survey with zero questions returns `400 Bad Request` from `StartConversationAsync` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T046 [P] Handle edge case: expired survey (`EndDt` in the past) or not-yet-started survey (`StartDt` in the future) returns `400 Bad Request` from `StartConversationAsync` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T047 [P] Handle edge case: free-text question accepts `user_input` and stores in `AnswerComment`; option-only question rejects `user_input` without `question_answer_id` — in `InquirySpark.Repository/Services/ConversationService.cs`
+- [X] T048 Create integration test scaffold `ConversationApiTests.cs` with at least one end-to-end test that calls `/start` → `/next` through all questions → verifies `conversation_ended` in `InquirySpark.Common.Tests/Integration/ConversationApiTests.cs`
+- [X] T049 Run full build verification: `dotnet build InquirySpark.sln -warnaserror` and `dotnet test` — fix any warnings or failures
 - [ ] T050 Run quickstart.md walkthrough validation — manually verify the curl examples from `quickstart.md` against a running instance
 
 ---

@@ -60,6 +60,13 @@ public partial class SurveyResponse
     public DateTime ModifiedDt { get; set; }
 
     /// <summary>
+    /// Gets or sets the unique conversation identifier for the HATEOAS Conversation API.
+    /// Null for survey responses created outside the Conversation API.
+    /// </summary>
+    [DisplayName("Conversation ID")]
+    public Guid? ConversationId { get; set; }
+
+    /// <summary>
     /// Gets or sets the application associated with the survey response.
     /// </summary>
     [DisplayName("Application")]

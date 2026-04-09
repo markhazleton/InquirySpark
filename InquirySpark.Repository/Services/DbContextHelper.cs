@@ -14,6 +14,11 @@ namespace InquirySpark.Repository.Services
                 var result = await dbOperation();
                 return new BaseResponse<T>(result);
             }
+            catch (ConversationApiException ex)
+            {
+                // Preserve HTTP status code as a prefixed error so ApiResponseHelper can map it
+                return new BaseResponse<T>([$"{ex.StatusCode}: {ex.Message}"]);
+            }
             catch (SqliteException ex)
             {
                 return new BaseResponse<T>(BuildSqliteErrors(ex));
@@ -38,6 +43,10 @@ namespace InquirySpark.Repository.Services
             {
                 var result = await dbOperation();
                 return new BaseResponseCollection<T>(result);
+            }
+            catch (ConversationApiException ex)
+            {
+                return new BaseResponseCollection<T>([$"{ex.StatusCode}: {ex.Message}"]);
             }
             catch (SqliteException ex)
             {
