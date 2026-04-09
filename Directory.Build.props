@@ -15,9 +15,9 @@
     <Nullable>enable</Nullable>
     
     <!-- Code quality enforcement -->
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>$(NoWarn);CS1591</NoWarn> <!-- Suppress XML doc warnings for Phase 4 -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn> <!-- XML doc warnings suppressed; public API docs enforced selectively -->
     <AnalysisLevel>latest</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     

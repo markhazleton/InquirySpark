@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Release context gathering script
 # Supports archiving development artifacts and generating release documentation
 
@@ -10,6 +10,11 @@ param(
 )
 
 . (Join-Path $PSScriptRoot 'common.ps1')
+
+# Multi-app support (T086)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 # Parse arguments
 $versionArg = ""

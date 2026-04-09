@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 <#!
 .SYNOPSIS
 Update agent context files with information from plan.md (PowerShell version)
@@ -34,6 +34,11 @@ $ErrorActionPreference = 'Stop'
 # Import common helpers
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $ScriptDir 'common.ps1')
+
+# Multi-app support (T095d)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 # Acquire environment paths
 $envData = Get-FeaturePathsEnv

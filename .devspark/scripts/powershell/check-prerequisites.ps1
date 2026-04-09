@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 
 # Consolidated prerequisite checking script (PowerShell)
 #
@@ -55,6 +55,11 @@ EXAMPLES:
 
 # Source common functions
 . "$PSScriptRoot/common.ps1"
+
+# Multi-app support (T095f)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 # Get feature paths and validate branch
 $paths = Get-FeaturePathsEnv

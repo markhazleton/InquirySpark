@@ -37,8 +37,8 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore InquirySpark.sln
       
-    - name: Build solution (warnings allowed)
-      run: dotnet build InquirySpark.sln --no-restore --configuration Release
+    - name: Build solution (warnings as errors)
+      run: dotnet build InquirySpark.sln --no-restore --configuration Release -warnaserror
       
     - name: Run tests
       run: dotnet test InquirySpark.sln --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx"

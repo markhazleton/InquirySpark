@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Constitution evolution context gathering script
 # Analyzes PR reviews and audits to propose constitution amendments
 
@@ -9,6 +9,11 @@ param(
 )
 
 . (Join-Path $PSScriptRoot 'common.ps1')
+
+# Multi-app support (T092)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 # Parse arguments
 $action = "analyze"

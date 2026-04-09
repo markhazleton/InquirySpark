@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 #requires -Version 7.0
 # Extract PR context for review
 #
@@ -26,6 +26,11 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+# Multi-app support (T042, T067)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 #==============================================================================
 # Configuration

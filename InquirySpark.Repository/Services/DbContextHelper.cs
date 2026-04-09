@@ -68,7 +68,7 @@ namespace InquirySpark.Repository.Services
             switch (exception.SqliteErrorCode)
             {
                 case SqliteReadOnly:
-                    errors.Add("The database is mounted read-only. Ensure the asset from docs/copilot/session-2025-12-04/sqlite-data-assets.md is copied locally and Mode=ReadOnly is intentional.");
+                    errors.Add("The database is mounted read-only. Ensure the asset from .documentation/copilot/session-2026-04-07/sqlite-build-checklist.md is copied locally and Mode=ReadOnly is intentional.");
                     break;
                 case SqliteCantOpen:
                     errors.Add("Unable to open the SQLite file. Verify the path in appsettings matches data/sqlite and that the file exists.");

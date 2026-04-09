@@ -193,13 +193,14 @@ Invoke-BuildStep "Restore NuGet packages" {
 }
 
 # ═══════════════════════════════════════════════════════
-# Step 4: Build Solution (Allow Warnings, Fail on Errors)
+# Step 4: Build Solution (Warnings as Errors)
 # ═══════════════════════════════════════════════════════
 
 Invoke-BuildStep "Build solution ($Configuration)" {
     $output = dotnet build $script:SolutionFile `
         --no-restore `
         --configuration $Configuration `
+        -warnaserror `
         2>&1 | Out-String
     
     $buildSuccess = $LASTEXITCODE -eq 0
@@ -217,18 +218,9 @@ Invoke-BuildStep "Build solution ($Configuration)" {
     Write-Host "  Warnings: $warnings" -ForegroundColor $(if ($warnings -gt 0) { 'DarkYellow' } else { 'Gray' })
     Write-Host "  Errors: $errors" -ForegroundColor $(if ($errors -gt 0) { 'Red' } else { 'Gray' })
     
-    if ($errors -gt 0) {
-        Write-Host $output -ForegroundColor Red
-        throw "Build failed with $errors error(s)"
-    }
-    
     if (-not $buildSuccess) {
         Write-Host $output -ForegroundColor Red
-        throw "Build failed with exit code $LASTEXITCODE"
-    }
-    
-    if ($warnings -gt 0) {
-        Write-Host "  Note: Warnings are allowed during SQLite baseline phase" -ForegroundColor DarkYellow
+        throw "Build failed with $errors error(s) and $warnings warning(s) — all warnings are treated as errors"
     }
 }
 

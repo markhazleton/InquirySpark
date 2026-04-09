@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 #requires -Version 7.0
 <#
 .SYNOPSIS
@@ -64,6 +64,11 @@ param(
 
 # Import common functions
 . (Join-Path $PSScriptRoot 'common.ps1')
+
+# Multi-app support (T090)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 # Override OutputFormat if -Json switch is used
 if ($Json) {
