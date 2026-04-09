@@ -98,7 +98,7 @@ Purpose: ensure the repository meets documentation, cleanliness, and verificatio
 
 - [X] T031 Run `dotnet build InquirySpark.sln -warnaserror` and `dotnet test InquirySpark.sln`, capturing logs in .documentation/copilot/session-2026-04-07/sqlite-baseline-validation.md
 - [X] T032 [P] Verify no SQLite `.db` artifacts changed by checking `git status` and documenting the check in .documentation/copilot/session-2026-04-07/sqlite-data-assets.md
-- [ ] T033 Record the final terminology and documentation sweep in .documentation/copilot/session-2026-04-07/sqlite-terminology-review.md
+- [X] T033 Record the final terminology and documentation sweep in .documentation/copilot/session-2026-04-07/sqlite-terminology-review.md
 
 ---
 
