@@ -109,6 +109,7 @@ A user who started a survey but did not finish can resume from their last unansw
 - **FR-013**: Questions MUST be ordered by `QuestionGroup.GroupOrder` then `QuestionGroupMember` sequence within the survey, so navigation is deterministic.
 - **FR-014**: The API MUST be hosted under a versioned route prefix (e.g., `/api/v1/conversation/`) so future versions can be added without breaking existing clients.
 - **FR-015**: The Conversation API endpoints MUST be accessible without an ASP.NET Core Identity session or cookie. They MUST be decorated as anonymous endpoints. `POST /start` authenticates with `account_name` and `password` in the request body. `POST /next` is authorized solely by possession of a valid `conversation_id` that resolves to an existing `SurveyResponse.ConversationId`; no additional authorization layer is required.
+- **FR-016**: The API MUST be self-documenting via Swagger/OpenAPI. The Admin project MUST expose a Swagger UI endpoint (e.g., `/swagger`) documenting the Conversation API routes, HTTP status codes, and request/response schemas.
 
 ### Key Entities
 

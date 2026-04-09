@@ -10,14 +10,21 @@ Add a RESTful, HATEOAS-driven Conversation API to `InquirySpark.Admin` under `/a
 ## Technical Context
 
 **Language/Version**: C# / .NET 10
-**Primary Dependencies**: ASP.NET Core MVC, EF Core (SQLite provider), Microsoft.AspNetCore.Identity (PasswordHasher only — not full Identity framework)
+**Primary Dependencies**: ASP.NET Core MVC, EF Core (SQLite provider), Microsoft.AspNetCore.Identity (PasswordHasher only — not full Identity framework), Swashbuckle.AspNetCore (for API documentation)
 **Storage**: SQLite — `InquirySpark.db` (ReadWriteCreate in non-dev; ReadOnly in Development)
 **Testing**: `dotnet test` — InquirySpark.Common.Tests (existing); new integration tests targeting the Conversation API
 **Target Platform**: Linux/Windows server (Kestrel)
 **Project Type**: Web — existing multi-project .NET solution
 **Performance Goals**: Typical internal survey usage; no high-throughput requirements
 **Constraints**: SQLite single-writer model; no concurrent multi-user write pressure expected. Development environment is read-only — tests and local dev require `ReadWriteCreate` mode for conversation writes
-**Scale/Scope**: 2 new endpoints, 1 new service, 1 new controller, 2 schema columns added to existing tables, ~15 request/response DTOs
+**Scale/Scope**: 2 new endpoints, 1 new service, 1 new controller, 2 schema columns added to existing tables, ~15 request/response DTOs, plus Swagger documentation enabled.
+
+## Strategy: Thin Admin, Thick Common/Repository
+
+To comply with the request to keep the `Admin` project strictly thin, the following architectural boundaries are strictly held:
+- **InquirySpark.Admin**: Restricted entirely to standard configuration (DI, Swagger) and an ultra-thin controller (`ConversationController`). The controller contains zero business logic, performing only a direct pass-through query to the `IConversationService` mapping the response automatically via the existing `ApiResponseHelper.ExecuteAsync`.
+- **InquirySpark.Common**: Houses all portable DTOs (`ConversationEnvelope`, arguments), Enums (`SurveyResponseStatus`), and domain-agnostic helpers. This ensures any future client or cross-cutting project can reference the API definitions seamlessly without pulling in EF Core or heavy business logic.
+- **InquirySpark.Repository**: Houses the core domain logic, schema modifications, database context (`InquirySparkContext`), mapping translation between DB entities and portable DTOs, and the core `ConversationService`. 
 
 ## Constitution Check
 
@@ -75,7 +82,8 @@ InquirySpark.Common/
 │   ├── ConversationNextRequest.cs  # Next request DTO (new)
 │   ├── ConversationAction.cs       # Action sub-object DTO (new)
 │   ├── ConversationQuestion.cs     # Question sub-object DTO (new)
-│   └── ConversationSurveyOption.cs # Survey list item DTO (new)
+│   ├── ConversationSurveyOption.cs # Survey list item DTO (new)
+│   └── SurveyResponseStatus.cs     # Enum mapping to LuSurveyResponseStatus (new)
 
 InquirySpark.Repository/
 ├── Database/
