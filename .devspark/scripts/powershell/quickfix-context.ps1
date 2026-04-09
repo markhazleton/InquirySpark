@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Quickfix context gathering script
 # Supports rapid bug fixes and small features without full spec overhead
 
@@ -9,6 +9,11 @@ param(
 )
 
 . (Join-Path $PSScriptRoot 'common.ps1')
+
+# Multi-app support (T084)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 # Parse arguments
 $action = "create"

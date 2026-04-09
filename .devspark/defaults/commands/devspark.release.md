@@ -1,4 +1,4 @@
----
+﻿---
 description: Archive development artifacts at release, distill key decisions into permanent documentation, and prepare for next development cycle
 handoffs:
   - label: View Release History
@@ -48,6 +48,8 @@ Parse `$ARGUMENTS` for options:
 | `--dry-run` | Preview changes without writing files |
 
 ## Outline
+
+**Multi-app support**: If this repository uses multi-app mode (`.documentation/devspark.json` exists with `mode: "multi-app"`), check for `--app <id>` in the user input to scope this workflow to a specific application. When app context is provided, resolve artifacts from `{app.path}/.documentation/` instead of the repository root `.documentation/`. Print the resolved scope (app name, doc root) at the start of output.
 
 ### 1. Initialize Release Context
 

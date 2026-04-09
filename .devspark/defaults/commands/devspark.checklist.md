@@ -1,4 +1,4 @@
----
+﻿---
 description: Generate a custom checklist for the current feature based on user requirements.
 scripts:
   sh: .devspark/scripts/bash/check-prerequisites.sh --json

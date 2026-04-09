@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
     Pre-scan repository for harvest targets: completed specs, stale docs, spec-linked code comments.
@@ -39,6 +39,11 @@ param(
 
 # Import common functions
 . (Join-Path $PSScriptRoot 'common.ps1')
+
+# Multi-app support (T094)
+if (-not (Get-Command Detect-DevSparkMode -ErrorAction SilentlyContinue)) {
+    . "$PSScriptRoot/common.ps1"
+}
 
 $ErrorActionPreference = 'Continue'
 
