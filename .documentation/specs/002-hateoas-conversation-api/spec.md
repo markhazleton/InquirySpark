@@ -84,7 +84,7 @@ A user who started a survey but did not finish can resume from their last unansw
 ### Edge Cases
 
 - What happens when a question has no defined answer options (free-text only)? The API must accept `user_input` and store it in `SurveyResponseAnswer.AnswerComment`.
-- What happens if the same question is answered twice on the same response? The second submission overwrites the first (idempotent update).
+- What happens if the same question is answered twice on the same response? The second submission overwrites the first (idempotent update). Furthermore, any existing answers for subsequent questions MUST be deleted, forcing the user back into sequential generation based on this new answer. The API MUST only allow 1 step forward or 1 step back.
 - What if a `survey_id` belongs to a survey whose `EndDt` is in the past? Return `400 Bad Request` — survey is no longer active.
 - What if an `ApplicationUser` record exists but the password field is blank? Treat as unauthenticated — `401 Unauthorized`.
 - What if a survey has zero questions? Return `400 Bad Request` — no conversation can be started.
@@ -95,7 +95,7 @@ A user who started a survey but did not finish can resume from their last unansw
 
 ### Functional Requirements
 
-- **FR-001**: The API MUST authenticate callers by matching `account_name` to `ApplicationUser.AccountNm` and verifying the supplied password by hashing it and comparing the result against the stored hash in `ApplicationUser.Password`. Plain-text password comparison MUST NOT be used.
+- **FR-001**: The API MUST authenticate callers by matching `account_name` to `ApplicationUser.AccountNm` and verifying the supplied password using the ASP.NET Core Identity `PasswordHasher`. A new hashed password field must be added to `ApplicationUser`, and existing plaintext passwords iteratively converted or migrated.
 - **FR-002**: `POST /api/conversation/start` with valid credentials and no `survey_id` MUST return a list of available surveys for the supplied `application_id` (`SurveyNm`, `SurveyShortNm`, `SurveyDs`, `SurveyId`) plus `action_type: "survey_selection"`.
 - **FR-003**: `POST /api/conversation/start` behavior depends on whether `conversation_id` is supplied:
   - **No `conversation_id`**: Always creates a new `SurveyResponse` linked to the authenticated `ApplicationUser` and scoped to the specified `Application`. A new GUID `ConversationId` is generated and persisted on `SurveyResponse`. `survey_id` is required in this case and MUST refer to a survey available to that application.
@@ -108,7 +108,7 @@ A user who started a survey but did not finish can resume from their last unansw
 - **FR-007**: When the last question is answered, the API MUST update `SurveyResponse.StatusId` to the completed status and include `Survey.CompletionMessage` in the final response.
 - **FR-008**: Questions with predefined `QuestionAnswer` options MUST be returned with the full list of options (id, display text, sort order); the caller submits the chosen `question_answer_id`.
 - **FR-009**: Questions without predefined answers MUST accept a free-text `user_input` string stored in `SurveyResponseAnswer.AnswerComment`.
-- **FR-010**: The API MUST reuse the existing schema except for adding a new GUID `ConversationId` column to `SurveyResponse`; it MUST NOT introduce any new tables.
+- **FR-010**: The API MUST reuse the existing schema except for adding a new GUID `ConversationId` column to `SurveyResponse` and the new hashed password field. It MUST NOT introduce any new tables. Schema modifications and `.db` file updates MUST be applied using EF Core Migrations.
 - **FR-011**: All endpoints MUST return standard HTTP status codes: `200 OK`, `400 Bad Request`, `401 Unauthorized`, `404 Not Found`, `422 Unprocessable Entity`, `500 Internal Server Error`.
 - **FR-012**: The `next_url` in every response MUST be a fully-qualified relative URL the client can POST to without constructing its own path. The `{conversation_id}` segment in `next_url` MUST be the persisted `SurveyResponse.ConversationId` GUID and the `{question_id}` segment MUST be the `Question.QuestionId` primary key value as returned by the server.
 - **FR-013**: Questions MUST be ordered by `QuestionGroup.GroupOrder` then `QuestionGroupMember` sequence within the survey, so navigation is deterministic.
@@ -227,6 +227,9 @@ Every `/start` and `/next` response uses the same structure:
 
 ### Session 2026-04-08
 
+- Q: What hashing algorithm must be used to verify the legacy `ApplicationUser.Password` field? → A: Use ASP.NET Core Identity `PasswordHasher`. A new hashed password field will be created and existing plaintext passwords converted.
+- Q: If a user updates an answer to a previously answered question, how should the API determine the next step? → A: Delete existing answers for subsequent questions and return the immediate next question. The system ONLY allows 1 step forward, 1 step back.
+- Q: How will the new `ConversationId` column be added to the `SurveyResponse` table? → A: EF Core Migrations is the preferred way to modify the schema and update the `.db` files.
 - Q: How should `application_id` affect survey discovery and start behavior? → A: Filter available surveys by `application_id`, and reject starting any survey not available for that application.
 - Q: Should the public conversation identifier remain `response_id`, or switch to a GUID-backed `conversation_id`? → A: Add `SurveyResponse.ConversationId` as a GUID, and use it in `next_url` instead of `response_id`.
 - Q: How should `/next` be authorized after `/start` succeeds? → A: `/next` is authorized by `conversation_id` alone; no credentials are sent after `/start`.
@@ -240,7 +243,7 @@ Every `/start` and `/next` response uses the same structure:
 
 ## Assumptions
 
-1. `ApplicationUser.Password` stores a hashed value. The API hashes the caller-supplied password using the same algorithm before comparing — plain-text equality is not used.
+1. `ApplicationUser` requires a new hashed password field using ASP.NET Core Identity. Plaintext passwords must be migrated or converted.
 2. `application_id` is a required field on `/start`. No default is applied by the server; callers must supply a valid `Application.ApplicationId`.
 8. `application_id` is a hard scoping boundary: survey discovery returns only surveys available to that application, and `/start` rejects any `survey_id` outside that application scope.
 9. `SurveyResponse` will gain a new persisted GUID `ConversationId` column, and all public conversation URLs and request payloads will use `conversation_id` instead of the numeric `SurveyResponseId`.
