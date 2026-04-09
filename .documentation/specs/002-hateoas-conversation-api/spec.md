@@ -13,11 +13,6 @@ Add a RESTful, HATEOAS-driven Conversation API to `InquirySpark.Admin` that guid
 
 ## User Scenarios & Testing *(mandatory)*
 
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
 ### User Story 1 — Complete a Survey End-to-End (Priority: P1)
 
 A user authenticates with their account name and password, receives a list of available surveys, selects one, and is walked through each question one at a time until all questions are answered. Each answer is persisted immediately. At the end the user sees the survey's completion message.
@@ -28,8 +23,8 @@ A user authenticates with their account name and password, receives a list of av
 
 **Acceptance Scenarios**:
 
-1. **Given** valid `account_name` and `password`, **When** `POST /api/conversation/start` is called with a valid `survey_id`, **Then** a `SurveyResponse` record is created, the first question is returned in the response envelope, and `next_url` points to the first question step.
-2. **Given** an active conversation at step N, **When** `POST /api/conversation/next/{conversation_id}/{question_id}` is called with a valid answer, **Then** the answer is persisted as a `SurveyResponseAnswer`, and the response envelope returns the next question with an updated `next_url` (or `conversation_ended: true` if no more questions).
+1. **Given** valid `account_name` and `password`, **When** `POST /api/v1/conversation/start` is called with a valid `survey_id`, **Then** a `SurveyResponse` record is created, the first question is returned in the response envelope, and `next_url` points to the first question step.
+2. **Given** an active conversation at step N, **When** `POST /api/v1/conversation/next/{conversation_id}/{question_id}` is called with a valid answer, **Then** the answer is persisted as a `SurveyResponseAnswer`, and the response envelope returns the next question with an updated `next_url` (or `conversation_ended: true` if no more questions).
 3. **Given** the final question is answered, **When** the last `/next` call is made, **Then** `conversation_ended` is `true`, `next_url` is absent, and the `Survey.CompletionMessage` is included in the response.
 
 ---
@@ -40,13 +35,13 @@ Before a survey is selected, the user can discover which surveys are available t
 
 **Why this priority**: Needed for a self-service thin client that does not hardcode survey IDs.
 
-**Independent Test**: Call `POST /api/conversation/start` with valid credentials but no `survey_id`; response must include a list of available surveys with their IDs and names.
+**Independent Test**: Call `POST /api/v1/conversation/start` with valid credentials but no `survey_id`; response must include a list of available surveys with their IDs and names.
 
 **Acceptance Scenarios**:
 
-1. **Given** valid credentials and no `survey_id`, **When** `POST /api/conversation/start` is called, **Then** the response contains `action_type: "survey_selection"` and an array of available surveys.
-2. **Given** an invalid or unknown `survey_id`, **When** `POST /api/conversation/start` is called, **Then** the API returns `404 Not Found` with a descriptive error.
-3. **Given** valid credentials and a valid `application_id`, **When** `POST /api/conversation/start` is called without `survey_id`, **Then** only surveys available to that application are returned.
+1. **Given** valid credentials and no `survey_id`, **When** `POST /api/v1/conversation/start` is called, **Then** the response contains `action_type: "survey_selection"` and an array of available surveys.
+2. **Given** an invalid or unknown `survey_id`, **When** `POST /api/v1/conversation/start` is called, **Then** the API returns `404 Not Found` with a descriptive error.
+3. **Given** valid credentials and a valid `application_id`, **When** `POST /api/v1/conversation/start` is called without `survey_id`, **Then** only surveys available to that application are returned.
 
 ---
 
@@ -56,12 +51,12 @@ Attempts to start a conversation with incorrect credentials are rejected with a 
 
 **Why this priority**: Security boundary — must exist before any other story can be considered safe.
 
-**Independent Test**: Call `POST /api/conversation/start` with a wrong password; expect `401 Unauthorized`.
+**Independent Test**: Call `POST /api/v1/conversation/start` with a wrong password; expect `401 Unauthorized`.
 
 **Acceptance Scenarios**:
 
-1. **Given** an invalid password, **When** `POST /api/conversation/start` is called, **Then** `401 Unauthorized` is returned and no `SurveyResponse` is created.
-2. **Given** an unknown `account_name`, **When** `POST /api/conversation/start` is called, **Then** `401 Unauthorized` is returned (account existence is not revealed).
+1. **Given** an invalid password, **When** `POST /api/v1/conversation/start` is called, **Then** `401 Unauthorized` is returned and no `SurveyResponse` is created.
+2. **Given** an unknown `account_name`, **When** `POST /api/v1/conversation/start` is called, **Then** `401 Unauthorized` is returned (account existence is not revealed).
 
 ---
 
@@ -96,20 +91,20 @@ A user who started a survey but did not finish can resume from their last unansw
 ### Functional Requirements
 
 - **FR-001**: The API MUST authenticate callers by matching `account_name` to `ApplicationUser.AccountNm` and verifying the supplied password using the ASP.NET Core Identity `PasswordHasher`. A new hashed password field must be added to `ApplicationUser`, and existing plaintext passwords iteratively converted or migrated.
-- **FR-002**: `POST /api/conversation/start` with valid credentials and no `survey_id` MUST return a list of available surveys for the supplied `application_id` (`SurveyNm`, `SurveyShortNm`, `SurveyDs`, `SurveyId`) plus `action_type: "survey_selection"`.
-- **FR-003**: `POST /api/conversation/start` behavior depends on whether `conversation_id` is supplied:
+- **FR-002**: `POST /api/v1/conversation/start` with valid credentials and no `survey_id` MUST return a list of available surveys for the supplied `application_id` (`SurveyNm`, `SurveyShortNm`, `SurveyDs`, `SurveyId`) plus `action_type: "survey_selection"`.
+- **FR-003**: `POST /api/v1/conversation/start` behavior depends on whether `conversation_id` is supplied:
   - **No `conversation_id`**: Always creates a new `SurveyResponse` linked to the authenticated `ApplicationUser` and scoped to the specified `Application`. A new GUID `ConversationId` is generated and persisted on `SurveyResponse`. `survey_id` is required in this case and MUST refer to a survey available to that application.
   - **`conversation_id` + default or `action: "resume"`**: Locates the existing `SurveyResponse` by `ConversationId`, verifies it belongs to the authenticated user, and returns the next unanswered question (the first `Question` in ordered sequence that has no corresponding `SurveyResponseAnswer`).
   - **`conversation_id` + `action: "restart"`**: Locates the existing `SurveyResponse` by `ConversationId`, deletes all `SurveyResponseAnswer` rows for that `SurveyResponseId`, resets `SurveyResponse.StatusId` to in-progress, and returns question 1.
   - If `application_id` is absent or unknown, the API MUST return `400 Bad Request`. If a supplied `conversation_id` does not belong to the authenticated user, the API MUST return `400 Bad Request` (not `404`, to avoid user enumeration).
 - **FR-004**: Every response from `/start` and `/next` MUST follow the same envelope schema: `conversation_id`, `action` (containing `action_type` and `question` or `completion`), `next_url`, `prev_url` (when applicable), and `conversation_ended`.
-- **FR-005**: `POST /api/conversation/next/{conversation_id}/{question_id}` with an answer body MUST authorize the request by locating the matching `SurveyResponse.ConversationId`, persist the answer as a `SurveyResponseAnswer`, and return the next unanswered question, or set `conversation_ended: true` when no more questions remain.
-- **FR-006**: `POST /api/conversation/next/{conversation_id}/{question_id}` without an answer body MUST authorize the request by locating the matching `SurveyResponse.ConversationId` and return the current question for that step without modifying state (read mode).
+- **FR-005**: `POST /api/v1/conversation/next/{conversation_id}/{question_id}` with an answer body MUST authorize the request by locating the matching `SurveyResponse.ConversationId`, persist the answer as a `SurveyResponseAnswer`, and return the next unanswered question, or set `conversation_ended: true` when no more questions remain.
+- **FR-006**: `POST /api/v1/conversation/next/{conversation_id}/{question_id}` without an answer body MUST authorize the request by locating the matching `SurveyResponse.ConversationId` and return the current question for that step without modifying state (read mode).
 - **FR-007**: When the last question is answered, the API MUST update `SurveyResponse.StatusId` to the completed status and include `Survey.CompletionMessage` in the final response.
 - **FR-008**: Questions with predefined `QuestionAnswer` options MUST be returned with the full list of options (id, display text, sort order); the caller submits the chosen `question_answer_id`.
 - **FR-009**: Questions without predefined answers MUST accept a free-text `user_input` string stored in `SurveyResponseAnswer.AnswerComment`.
 - **FR-010**: The API MUST reuse the existing schema except for adding a new GUID `ConversationId` column to `SurveyResponse` and the new hashed password field. It MUST NOT introduce any new tables. Schema modifications and `.db` file updates MUST be applied using EF Core Migrations.
-- **FR-011**: All endpoints MUST return standard HTTP status codes: `200 OK`, `400 Bad Request`, `401 Unauthorized`, `404 Not Found`, `422 Unprocessable Entity`, `500 Internal Server Error`.
+- **FR-011**: All endpoints MUST return standard HTTP status codes: `200 OK`, `400 Bad Request`, `401 Unauthorized`, `404 Not Found`, `500 Internal Server Error`.
 - **FR-012**: The `next_url` in every response MUST be a fully-qualified relative URL the client can POST to without constructing its own path. The `{conversation_id}` segment in `next_url` MUST be the persisted `SurveyResponse.ConversationId` GUID and the `{question_id}` segment MUST be the `Question.QuestionId` primary key value as returned by the server.
 - **FR-013**: Questions MUST be ordered by `QuestionGroup.GroupOrder` then `QuestionGroupMember` sequence within the survey, so navigation is deterministic.
 - **FR-014**: The API MUST be hosted under a versioned route prefix (e.g., `/api/v1/conversation/`) so future versions can be added without breaking existing clients.
@@ -234,7 +229,7 @@ Every `/start` and `/next` response uses the same structure:
 - Q: Should the public conversation identifier remain `response_id`, or switch to a GUID-backed `conversation_id`? → A: Add `SurveyResponse.ConversationId` as a GUID, and use it in `next_url` instead of `response_id`.
 - Q: How should `/next` be authorized after `/start` succeeds? → A: `/next` is authorized by `conversation_id` alone; no credentials are sent after `/start`.
 - Q: What does `{question_id}` represent in the URL path `/next/{conversation_id}/{question_id}`? → A: The database `Question.QuestionId` primary key. Clients never construct or compute this value; they read it from `next_url` returned by the server.
-- Q: How is `ApplicationUser.Password` stored in the existing database? → A: Hashed — the API must hash the supplied password before comparing (not plain-text equality).
+- Q: How is `ApplicationUser.Password` stored in the existing database? → A: Plaintext — the API must use `PasswordHasher<ApplicationUser>` for verification, with lazy migration from the plaintext `Password` field to the new `PasswordHash` field on first successful login.
 - Q: Can the same user take the same survey more than once, and can an existing response be updated? → A: Yes to both. If `conversation_id` is omitted on `/start`, a new `SurveyResponse` is always created. If `conversation_id` is supplied, the default behavior is **resume** (return the next unanswered question). Supplying `action: "restart"` alongside `conversation_id` clears all existing `SurveyResponseAnswer` rows for that response and restarts from question 1.
 - Q: Must the Conversation API be protected by ASP.NET Core Identity session/cookie auth in addition to request-body credentials? → A: No — the endpoints are anonymous (no `[Authorize]` middleware). `/start` uses `account_name` + `password`; `/next` uses the returned `conversation_id`.
 - Q: What `Application.ApplicationId` should be used when the caller omits `application_id` on `/start`? → A: `application_id` is mandatory. The API MUST return `400 Bad Request` if it is omitted or does not refer to a known `Application`.
@@ -250,6 +245,6 @@ Every `/start` and `/next` response uses the same structure:
 10. After `/start` succeeds, the client follows HATEOAS links using `conversation_id` alone; `/next` does not require `account_name` or `password` in its request body.
 7. When `conversation_id` is supplied on `/start` with `action: "restart"`, the deletion of `SurveyResponseAnswer` rows is the only destructive operation — the `SurveyResponse` record itself is preserved and reused.
 3. The `SurveyResponse.DataSource` field will be set to `"ConversationAPI"` to identify responses created through this endpoint.
-4. Only surveys with `ActiveFl = true` (or equivalent — verified against the existing `Survey` entity flags) are returned in the list and eligible to start.
-5. No new tables are introduced; the only schema change is adding `SurveyResponse.ConversationId`.
+4. Only surveys with an `EndDt` that is null or in the future (and a `StartDt` that is null or in the past) are returned in the list and eligible to start.
+5. No new tables are introduced; the only schema changes are adding `SurveyResponse.ConversationId` and `ApplicationUser.PasswordHash`.
 6. No CRM handoff, no external triage engine (clearstep), and no multilingual translation are in scope.
