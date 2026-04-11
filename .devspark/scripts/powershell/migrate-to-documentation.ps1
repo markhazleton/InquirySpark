@@ -1,4 +1,4 @@
-﻿# migrate-to-documentation.ps1
+# migrate-to-documentation.ps1
 # Migrates DevSpark projects from old structure (.specify/, memory/, scripts/, templates/)
 # to new .documentation/ structure
 #

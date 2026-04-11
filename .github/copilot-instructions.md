@@ -50,7 +50,7 @@ public class SurveyService(InquirySparkContext context, ILogger<SurveyService> l
 Register services in Program.cs:
 ```csharp
 builder.Services.AddDbContext<InquirySparkContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlite(connectionString));
 builder.Services.AddTransient<ISurveyService, SurveyService>();
 ```
 

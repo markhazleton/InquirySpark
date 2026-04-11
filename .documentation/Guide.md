@@ -1,7 +1,8 @@
 # .documentation Guide
 
 > Living orientation document for the `.documentation/` directory.
-> Last updated: 2026-04-07
+> Stock DevSpark framework assets live under `.devspark/`; `.documentation/` is the team-owned override and work-product layer.
+> Last updated: 2026-04-11
 
 ## Directory Map
 
@@ -11,8 +12,8 @@
 | `copilot/` | Harvest reports and session-scoped output from AI coding assistant runs |
 | `specs/` | Active feature specification folders (spec, plan, tasks, data-model, checklists) |
 | `templates/` | Reusable templates for specs, plans, tasks, checklists, and agent files |
-| `scripts/powershell/` | Team-level PowerShell context scripts used by DevSpark commands |
-| `commands/` | Team-level overrides for DevSpark command prompts (empty = use stock defaults) |
+| `scripts/powershell/` | Optional team-level PowerShell overrides; current repo state uses stock `.devspark/scripts/powershell/` scripts |
+| `commands/` | Optional team-level overrides for DevSpark command prompts; current repo state uses stock `.devspark/defaults/commands/` prompts |
 | `decisions/` | Architecture Decision Records (ADRs) — empty until first ADR is added |
 
 ## Key Files
@@ -20,6 +21,7 @@
 | File | Description |
 |------|-------------|
 | `memory/constitution.md` | Project constitution — canonical engineering principles and conventions. **Never archive.** |
+| `AGENTS.md` | Shared repository context for DevSpark agent-context hydration |
 | `copilot/harvest-2026-04-07.md` | Most recent harvest report (2026-04-07) |
 
 ## Active Specs
@@ -38,26 +40,17 @@
 | `templates/checklist-template.md` | Creating feature or review checklists |
 | `templates/agent-file-template.md` | Authoring custom agent override files |
 
-## DevSpark Scripts
+Stock-only templates continue to live under `.devspark/templates/` unless the team chooses to override them. In DevSpark v1.5 this includes `quick-spec-template.md`.
 
-Scripts under `scripts/powershell/` are team-level overrides for DevSpark context-gathering commands. When a script is not present here the stock version under `.devspark/scripts/powershell/` is used automatically.
+## DevSpark Overrides
 
-| Script | Purpose |
-|--------|---------|
-| `archive-context.ps1` | Gathers archive candidates for `devspark.archive` |
-| `check-prerequisites.ps1` | Validates dev environment prerequisites |
-| `common.ps1` | Shared utilities used by other scripts |
-| `create-new-feature.ps1` | Scaffolds a new spec folder |
-| `evolution-context.ps1` | Prepares context for `devspark.evolve-constitution` |
-| `get-pr-context.ps1` | Collects context for `devspark.pr-review` |
-| `migrate-to-documentation.ps1` | Migrates legacy `docs/` content to `.documentation/` |
-| `quickfix-context.ps1` | Prepares context for `devspark.quickfix` |
-| `release-context.ps1` | Collects context for `devspark.release` |
-| `repo-story-context.ps1` | Collects context for `devspark.repo-story` |
-| `setup-plan.ps1` | Sets up plan scaffolding in a spec folder |
-| `site-audit.ps1` | Collects context for `devspark.site-audit` |
-| `sync-upstream.ps1` | Synchronizes DevSpark framework updates from upstream |
-| `update-agent-context.ps1` | Refreshes agent context across the repo |
+This repository currently tracks no active team PowerShell overrides and no active team command overrides. DevSpark resolves to stock assets under `.devspark/` by default.
+
+- PowerShell scripts: `.devspark/scripts/powershell/`
+- Stock commands: `.devspark/defaults/commands/`
+- Team override placeholders: `.documentation/scripts/powershell/README.md` and `.documentation/commands/README.md`
+
+This repository does not need `.documentation/scripts/bash/` unless the team intentionally decides to override Bash stock scripts as well.
 
 ## Constitution Location
 

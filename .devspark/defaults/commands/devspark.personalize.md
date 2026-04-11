@@ -1,4 +1,4 @@
-﻿---
+---
 description: Create a personalized copy of any DevSpark command prompt for the current git user.
 scripts:
   sh: .devspark/scripts/bash/check-prerequisites.sh --json
@@ -25,6 +25,8 @@ the prompt is resolved in this order (first match wins):
 ```
 
 Upgrades only write to `defaults/commands/`. Team and user customizations are never touched.
+
+This command only personalizes repository-owned overrides under `.documentation/`. It never edits stock prompts under `.devspark/defaults/commands/`.
 
 ## Outline
 

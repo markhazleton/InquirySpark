@@ -1,4 +1,4 @@
-﻿## Rationale Summary
+## Rationale Summary
 
 ### Core Problem
 

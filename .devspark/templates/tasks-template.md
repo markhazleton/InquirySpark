@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Task list template for feature implementation"
 ---
 
@@ -225,6 +225,18 @@ Task: "Integration test for [user journey] in tests/integration/test_[name].py"
 Task: "Create [Entity1] model in src/models/[entity1].py"
 Task: "Create [Entity2] model in src/models/[entity2].py"
 ```
+
+---
+
+## Gate Acknowledgements
+
+Record any explicit human decisions to proceed despite unresolved checklist, analyze, or critic findings.
+
+- Gate: [checklist|analyze|critic]
+- Concern: [concise unresolved issue]
+- Decision: [proceed/fix later/escalate]
+- Recorded By: [name or role]
+- Date: [YYYY-MM-DD]
 
 ---
 

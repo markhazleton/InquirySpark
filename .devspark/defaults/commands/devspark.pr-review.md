@@ -1,4 +1,4 @@
-﻿---
+---
 description: Perform constitution-aware pull request review with actionable feedback for any PR in the repository
 handoffs:
   - label: View Review History
@@ -22,6 +22,10 @@ You **MUST** consider the user input before proceeding (if not empty).
 This command reviews GitHub Pull Requests against the project constitution. It works for **any PR in the repository** regardless of feature branch or target branch. Reviews are stored in `/.documentation/specs/pr-review/pr-{id}.md` for historical reference.
 
 **IMPORTANT**: This command **only provides suggestions** - it does not make any code changes.
+
+Reviews are advisory. The agent must explain constitution or lifecycle issues, recommend a disposition, and let the human decide the next action.
+
+`/devspark.create-pr` is the preferred predecessor for spec-driven work because it collects task, checklist, and gate context before review. If the PR was created manually, continue with review but call out any missing lifecycle context.
 
 ## Prerequisites
 
@@ -126,6 +130,16 @@ Parse the full diff to:
 
 ### 4. Perform Constitution-Based Review
 
+Start the review with a gate result block:
+
+```yaml
+gate: pr-review
+status: pass | warn | fail
+blocking: true | false
+severity: info | warning | error | showstopper
+summary: "<concise outcome>"
+```
+
 For **each principle** in the constitution:
 
 #### A. Compliance Check
@@ -213,19 +227,38 @@ If constitution requires documentation:
 - Confirm API documentation updated
 - Check if CHANGELOG updated
 
-### 6. Check for Feature Context (Optional)
+### 6. Spec Lifecycle Validation (Required for Feature Branches)
 
-Try to determine if this PR maps to a feature spec:
+Determine if this PR maps to a feature spec and validate spec lifecycle status:
 
-- Extract feature number from branch name pattern (e.g., `001-feature-name`)
-- Check if `/.documentation/specs/{feature}/spec.md` exists
-- If spec exists, optionally cross-reference:
+1. **Detect feature spec**: Extract feature identifier from the source branch name pattern (e.g., `001-feature-name`). Check if `/.documentation/specs/{feature}/spec.md` exists. Also check `SPEC_STATUS` from the PR context script output (if available).
 
-  - Does implementation match spec requirements?
-  - Are acceptance criteria being addressed?
-  - Is scope appropriate for the spec?
+2. **If spec exists**, validate lifecycle completeness:
 
-**Note**: This is optional - PR review works without any spec.
+   a. **Spec Status Check**: Read the `**Status**:` field in spec.md. Valid values are: `Draft`, `In Progress`, `Complete`.
+      - If status is `Draft` or `In Progress`: **flag as CRITICAL finding** — spec must be `Complete` before merge.
+
+   b. **Task Completion Check**: Read `/.documentation/specs/{feature}/tasks.md` (if it exists).
+      - Count total tasks (lines matching `- [ ]` or `- [x]` or `- [X]`)
+      - Count completed tasks (lines matching `- [x]` or `- [X]`)
+      - If any tasks are incomplete (`- [ ]`): **flag as CRITICAL finding** — all tasks must be checked off before merge.
+      - If tasks.md does not exist but spec.md does: **flag as HIGH finding** — tasks should be generated.
+
+   c. **Cross-reference implementation**:
+      - Does implementation match spec requirements?
+      - Are acceptance criteria being addressed?
+      - Is scope appropriate for the spec?
+
+3. **If no spec exists** for a feature branch (branch name matches `\d+-.*` pattern):
+   - **Flag as CRITICAL finding**: Constitution requires features to be spec-driven (Constitution §Development Workflow: "Features must be spec-driven: specify first, plan second, implement third").
+   - Block APPROVE recommendation.
+
+4. **If branch is NOT a feature branch** (e.g., hotfix, chore, docs-only): Spec validation is not required. Note this in the review.
+
+5. **Include Spec Lifecycle Summary** in the Executive Summary section:
+   - **Spec Status**: [Complete | In Progress | Draft | Missing]
+   - **Task Completion**: [X/Y tasks complete | No tasks file | N/A]
+   - If spec is not `Complete` or tasks are incomplete, the **Approval Recommendation MUST be ⚠️ REQUEST CHANGES or ❌ REJECT** — never ✅ APPROVE.
 
 ### 6b. PR Scope Validation (Multi-App Mode)
 
@@ -316,6 +349,8 @@ Use this exact format:
 ## Executive Summary
 
 - ✅ **Constitution Compliance**: [PASS/FAIL] ([X]/[Y] principles checked)
+- 📋 **Spec Lifecycle**: [Complete | In Progress | Draft | Missing | N/A (not a feature branch)]
+- 📝 **Task Completion**: [X/Y tasks complete | No tasks file | N/A]
 - 🔒 **Security**: [X] issues found
 - 📊 **Code Quality**: [X] recommendations
 - 🧪 **Testing**: [PASS/FAIL/N/A]
@@ -324,6 +359,7 @@ Use this exact format:
 **Overall Assessment**: [1-2 sentence summary]
 
 **Approval Recommendation**: [✅ APPROVE | ⚠️ REQUEST CHANGES | ❌ REJECT]
+*Note: APPROVE is blocked if Spec Lifecycle is not Complete or tasks are incomplete for feature branches.*
 
 ## Critical Issues (Blocking)
 
