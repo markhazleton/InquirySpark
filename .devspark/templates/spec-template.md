@@ -1,8 +1,17 @@
-﻿# Feature Specification: [FEATURE NAME]
+---
+classification: full-spec
+risk_level: medium
+target_workflow: specify-full
+required_artifacts: spec, plan, tasks
+recommended_next_step: plan
+required_gates: checklist, analyze, critic
+---
+
+# Feature Specification: [FEATURE NAME]
 
 **Feature Branch**: `[###-feature-name]`
 **Created**: [DATE]
-**Status**: Draft
+**Status**: Draft <!-- Valid: Draft | In Progress | Complete -->
 **Input**: User description: "$ARGUMENTS"
 
 ## Rationale Summary

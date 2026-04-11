@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env pwsh
+#!/usr/bin/env pwsh
 #requires -Version 7.0
 # Archive context gathering script
 # Scans .documentation/ for archive candidates (never reads .archive/)

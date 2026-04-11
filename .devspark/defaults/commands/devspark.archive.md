@@ -1,4 +1,4 @@
-﻿---
+---
 description: Archive outdated documentation to .archive/, update Guide.md and CHANGELOG.md so .documentation stays current and clean
 handoffs:
   - label: Run a site audit after archiving
