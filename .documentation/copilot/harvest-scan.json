@@ -1,0 +1,1019 @@
+{
+  "summary": {
+    "specs_draft": 0,
+    "docs_to_archive": 5,
+    "code_comments_found": 0,
+    "changelog_gaps": 0,
+    "specs_completed": 1,
+    "bak_files_found": 0,
+    "specs_in_progress": 0
+  },
+  "scope": "full",
+  "archive_existing": [
+    ".archive/README.md",
+    ".archive/.documentation/copilot/harvest-2026-03-29.md",
+    ".archive/.documentation/scripts/powershell/harvest.ps1",
+    ".archive/.documentation/specs/001-benchmark-insights/data-model.md",
+    ".archive/.documentation/specs/001-benchmark-insights/IMPLEMENTATION-CLOSURE.md",
+    ".archive/.documentation/specs/001-benchmark-insights/plan.md",
+    ".archive/.documentation/specs/001-benchmark-insights/quickstart.md",
+    ".archive/.documentation/specs/001-benchmark-insights/research.md",
+    ".archive/.documentation/specs/001-benchmark-insights/spec.md",
+    ".archive/.documentation/specs/001-benchmark-insights/tasks.md",
+    ".archive/.documentation/specs/001-benchmark-insights/checklists/requirements.md",
+    ".archive/.documentation/specs/001-benchmark-insights/contracts/charting-api.yaml",
+    ".archive/docs/copilot/session-2025-12-04/BOOTSTRAP5-MODERNIZATION.md",
+    ".archive/docs/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md",
+    ".archive/docs/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md",
+    ".archive/docs/copilot/session-2025-12-04/DATATABLES-REFERENCE.md",
+    ".archive/docs/copilot/session-2025-12-04/legacy-sqlserver-project.md",
+    ".archive/docs/copilot/session-2025-12-04/NPM-BUILD.md",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-baseline-validation-build.log",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-baseline-validation-test.log",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-baseline-validation.md",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-build-checklist.md",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-data-assets.md",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-operational-readiness.md",
+    ".archive/docs/copilot/session-2025-12-04/sqlite-terminology-review.md",
+    ".archive/docs/copilot/session-2025-12-14/analytics-implementation-notes.md",
+    ".archive/docs/copilot/session-2025-12-14/BUILD-FIX-SUMMARY.md",
+    ".archive/docs/copilot/session-2025-12-14/IMPLEMENTATION-SUMMARY.md",
+    ".archive/docs/copilot/session-2025-12-14/implementation-verification.md",
+    ".archive/docs/copilot/session-2025-12-14/quickstart-updates.md",
+    ".archive/docs/copilot/session-2025-12-14/README.md"
+  ],
+  "path_roots": {
+    "canonical_documentation": ".documentation/",
+    "legacy_roots": []
+  },
+  "changelog_entries": [
+    {
+      "spec_number": "001",
+      "in_changelog": true,
+      "spec_name": "001-remove-sql-server",
+      "pr_review": "(archived) harvest-2026-03-29.md",
+      "status": "completed"
+    }
+  ],
+  "specs": [
+    {
+      "name": "001-remove-sql-server",
+      "files": [
+        ".documentation/specs/001-remove-sql-server/data-model.md",
+        ".documentation/specs/001-remove-sql-server/plan.md",
+        ".documentation/specs/001-remove-sql-server/quickstart.md",
+        ".documentation/specs/001-remove-sql-server/research.md",
+        ".documentation/specs/001-remove-sql-server/spec.md",
+        ".documentation/specs/001-remove-sql-server/tasks.md",
+        ".documentation/specs/001-remove-sql-server/checklists/requirements.md",
+        ".documentation/specs/001-remove-sql-server/contracts/system-health.openapi.yaml"
+      ],
+      "has_plan": true,
+      "completed_tasks": 33,
+      "has_tasks": true,
+      "has_spec": true,
+      "total_tasks": 33,
+      "status": "completed",
+      "in_changelog": true,
+      "incomplete_tasks": 0,
+      "path": ".documentation/specs/001-remove-sql-server",
+      "number": "001",
+      "pr_review": "(archived) harvest-2026-03-29.md"
+    }
+  ],
+  "code_comments": [],
+  "changelog_gaps": [],
+  "harvest_date": "2026-04-11",
+  "repo_root": "C:/GitHub/MarkHazleton/InquirySpark",
+  "report_path": ".documentation/copilot/harvest-2026-04-11.md",
+  "bak_files": [],
+  "docs": {
+    "living_reference": [
+      {
+        "category": "living_reference",
+        "path": ".documentation/AGENTS.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "AGENTS.md",
+        "usefulness_score": 95,
+        "size_bytes": 1309
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/Guide.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "Guide.md",
+        "usefulness_score": 95,
+        "size_bytes": 2939
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/commands/README.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "README.md",
+        "usefulness_score": 95,
+        "size_bytes": 424
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/copilot/harvest-2026-04-07.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "consolidate",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "harvest-2026-04-07.md",
+        "usefulness_score": 48,
+        "size_bytes": 1875
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/copilot/harvest-scan.json",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".json",
+        "disposition": "consolidate",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "harvest-scan.json",
+        "usefulness_score": 48,
+        "size_bytes": 0
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/memory/constitution.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "constitution.md",
+        "usefulness_score": 95,
+        "size_bytes": 5846
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/scripts/powershell/README.md",
+        "taxon": "OPERATIONS_RUNBOOK",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 15,
+          "operational_relevance": 34,
+          "freshness": 14,
+          "total": 83,
+          "authority": 20
+        },
+        "name": "README.md",
+        "usefulness_score": 83,
+        "size_bytes": 482
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/data-model.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "data-model.md",
+        "usefulness_score": 91,
+        "size_bytes": 3663
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/plan.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "plan.md",
+        "usefulness_score": 91,
+        "size_bytes": 3814
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/quickstart.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "quickstart.md",
+        "usefulness_score": 95,
+        "size_bytes": 15053
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/research.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "research.md",
+        "usefulness_score": 91,
+        "size_bytes": 2889
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/spec.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "spec.md",
+        "usefulness_score": 91,
+        "size_bytes": 10574
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/tasks.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "tasks.md",
+        "usefulness_score": 95,
+        "size_bytes": 9990
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/checklists/requirements.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "requirements.md",
+        "usefulness_score": 91,
+        "size_bytes": 1277
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/contracts/system-health.openapi.yaml",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".yaml",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "system-health.openapi.yaml",
+        "usefulness_score": 91,
+        "size_bytes": 2558
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/agent-file-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "agent-file-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 492
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/checklist-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "checklist-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 1352
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/plan-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "plan-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 3775
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/spec-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "spec-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 4075
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/tasks-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "tasks-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 9428
+      }
+    ],
+    "completed_reviews": [],
+    "impl_plans": [],
+    "legacy_root_docs": [],
+    "disposition_counts": {
+      "archive": 5,
+      "consolidate": 2,
+      "keep": 18
+    },
+    "stale_drafts": [],
+    "all": [
+      {
+        "category": "living_reference",
+        "path": ".documentation/AGENTS.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "AGENTS.md",
+        "usefulness_score": 95,
+        "size_bytes": 1309
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/Guide.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "Guide.md",
+        "usefulness_score": 95,
+        "size_bytes": 2939
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/commands/README.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "README.md",
+        "usefulness_score": 95,
+        "size_bytes": 424
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/copilot/harvest-2026-04-07.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "consolidate",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "harvest-2026-04-07.md",
+        "usefulness_score": 48,
+        "size_bytes": 1875
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/copilot/harvest-scan.json",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".json",
+        "disposition": "consolidate",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "harvest-scan.json",
+        "usefulness_score": 48,
+        "size_bytes": 0
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-baseline-validation.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-baseline-validation.md",
+        "usefulness_score": 48,
+        "size_bytes": 2784
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-build-checklist.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-build-checklist.md",
+        "usefulness_score": 48,
+        "size_bytes": 6994
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-data-assets.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-data-assets.md",
+        "usefulness_score": 48,
+        "size_bytes": 1961
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-operational-readiness.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-operational-readiness.md",
+        "usefulness_score": 48,
+        "size_bytes": 4363
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-terminology-review.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-terminology-review.md",
+        "usefulness_score": 48,
+        "size_bytes": 6892
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/memory/constitution.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "constitution.md",
+        "usefulness_score": 95,
+        "size_bytes": 5846
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/scripts/powershell/README.md",
+        "taxon": "OPERATIONS_RUNBOOK",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 15,
+          "operational_relevance": 34,
+          "freshness": 14,
+          "total": 83,
+          "authority": 20
+        },
+        "name": "README.md",
+        "usefulness_score": 83,
+        "size_bytes": 482
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/data-model.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "data-model.md",
+        "usefulness_score": 91,
+        "size_bytes": 3663
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/plan.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "plan.md",
+        "usefulness_score": 91,
+        "size_bytes": 3814
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/quickstart.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "quickstart.md",
+        "usefulness_score": 95,
+        "size_bytes": 15053
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/research.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "research.md",
+        "usefulness_score": 91,
+        "size_bytes": 2889
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/spec.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "spec.md",
+        "usefulness_score": 91,
+        "size_bytes": 10574
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/tasks.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 15,
+          "total": 95,
+          "authority": 24
+        },
+        "name": "tasks.md",
+        "usefulness_score": 95,
+        "size_bytes": 9990
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/checklists/requirements.md",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "requirements.md",
+        "usefulness_score": 91,
+        "size_bytes": 1277
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/specs/001-remove-sql-server/contracts/system-health.openapi.yaml",
+        "taxon": "AUTHORITATIVE_REFERENCE",
+        "extension": ".yaml",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 18,
+          "operational_relevance": 38,
+          "freshness": 11,
+          "total": 91,
+          "authority": 24
+        },
+        "name": "system-health.openapi.yaml",
+        "usefulness_score": 91,
+        "size_bytes": 2558
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/agent-file-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "agent-file-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 492
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/checklist-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "checklist-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 1352
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/plan-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "plan-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 3775
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/spec-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "spec-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 4075
+      },
+      {
+        "category": "living_reference",
+        "path": ".documentation/templates/tasks-template.md",
+        "taxon": "ENGINEERING_PATTERN",
+        "extension": ".md",
+        "disposition": "keep",
+        "last_modified": "2025-12-04",
+        "score_breakdown": {
+          "uniqueness": 16,
+          "operational_relevance": 31,
+          "freshness": 11,
+          "total": 80,
+          "authority": 22
+        },
+        "name": "tasks-template.md",
+        "usefulness_score": 80,
+        "size_bytes": 9428
+      }
+    ],
+    "quickfix_records": [],
+    "backup_files": [],
+    "orphaned_files": [],
+    "completed_audits": [],
+    "release_docs": [],
+    "session_notes": [
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-baseline-validation.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-baseline-validation.md",
+        "usefulness_score": 48,
+        "size_bytes": 2784
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-build-checklist.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-build-checklist.md",
+        "usefulness_score": 48,
+        "size_bytes": 6994
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-data-assets.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-data-assets.md",
+        "usefulness_score": 48,
+        "size_bytes": 1961
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-operational-readiness.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-operational-readiness.md",
+        "usefulness_score": 48,
+        "size_bytes": 4363
+      },
+      {
+        "category": "session_notes",
+        "path": ".documentation/copilot/session-2026-04-07/sqlite-terminology-review.md",
+        "taxon": "RESEARCH_OR_CONTEXT",
+        "extension": ".md",
+        "disposition": "archive",
+        "last_modified": "2026-04-11",
+        "score_breakdown": {
+          "uniqueness": 12,
+          "operational_relevance": 15,
+          "freshness": 12,
+          "total": 48,
+          "authority": 9
+        },
+        "name": "sqlite-terminology-review.md",
+        "usefulness_score": 48,
+        "size_bytes": 6892
+      }
+    ],
+    "taxonomy_counts": {
+      "RESEARCH_OR_CONTEXT": 7,
+      "OPERATIONS_RUNBOOK": 1,
+      "AUTHORITATIVE_REFERENCE": 12,
+      "ENGINEERING_PATTERN": 5
+    }
+  },
+  "harvest_timestamp": "2026-04-11T17:56:37Z"
+}

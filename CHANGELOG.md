@@ -9,6 +9,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### In Progress
 - **001-remove-sql-server (US2/US3)**: Build engineer baseline (TreatWarningsAsErrors, CI workflow, BuildVerification.ps1) and quality lead validation (health endpoints, integration tests) are still open.
 
+## [2026-04-11] Archive Run
+
+### Archive run (session notes archived)
+- Archived `.documentation/copilot/session-2026-04-07/` SQLite verification notes to `.archive/.documentation/copilot/session-2026-04-07/` (5 files).
+- Created `.documentation/copilot/harvest-2026-04-11.md` with the full harvest summary and dispositions.
+
+### Key decisions preserved
+- No changelog feature gaps were found for completed specs in this run.
+- No spec-linked code comments required rewrite (0 found).
+
 ## [2026-04-07] Archive Run
 
 ### Archive run (no files moved — all candidates current)
