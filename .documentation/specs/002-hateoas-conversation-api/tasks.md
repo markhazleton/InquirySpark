@@ -148,7 +148,7 @@ All paths are relative to the repository root `C:\GitHub\markhazleton\InquirySpa
 - [X] T047 [P] Handle edge case: free-text question accepts `user_input` and stores in `AnswerComment`; option-only question rejects `user_input` without `question_answer_id` — in `InquirySpark.Repository/Services/ConversationService.cs`
 - [X] T048 Create integration test scaffold `ConversationApiTests.cs` with at least one end-to-end test that calls `/start` → `/next` through all questions → verifies `conversation_ended` in `InquirySpark.Common.Tests/Integration/ConversationApiTests.cs`
 - [X] T049 Run full build verification: `dotnet build InquirySpark.sln -warnaserror` and `dotnet test` — fix any warnings or failures
-- [ ] T050 Run quickstart.md walkthrough validation — manually verify the curl examples from `quickstart.md` against a running instance
+- [X] T050 Run quickstart.md walkthrough validation — manually verify the curl examples from `quickstart.md` against a running instance
 
 ---
 

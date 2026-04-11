@@ -2,7 +2,7 @@
 
 **Feature Branch**: `002-hateoas-conversation-api`  
 **Created**: 2026-04-08  
-**Status**: Draft  
+**Status**: Complete  
 **Scope**: InquirySpark.Admin — new API area  
 
 ## Overview
