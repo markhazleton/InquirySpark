@@ -38,7 +38,7 @@ public class ConversationController(
     {
         _logger.LogInformation("Conversation/Start called for application {ApplicationId}", request?.ApplicationId);
         var result = await _service.StartConversationAsync(request!);
-        return MapResult(result);
+        return ApiResponseHelper.ToActionResult(this, result);
     }
 
     /// <summary>
@@ -64,43 +64,6 @@ public class ConversationController(
         _logger.LogInformation("Conversation/Next called for conversation {ConversationId} question {QuestionId}",
             conversationId, questionId);
         var result = await _service.NextStepAsync(conversationId, questionId, request!);
-        return MapResult(result);
-    }
-
-    // ─── Private ─────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Maps a <see cref="BaseResponse{T}"/> to the appropriate <see cref="IActionResult"/>.
-    /// Parses prefixed error messages (e.g. "401: Invalid credentials.") to determine HTTP status code.
-    /// </summary>
-    private IActionResult MapResult<T>(BaseResponse<T> result)
-    {
-        if (result.IsSuccessful)
-            return Ok(result.Data);
-
-        // Parse the first error for a status code prefix (e.g. "401: message")
-        var firstError = result.Errors.FirstOrDefault() ?? "An error occurred.";
-        var statusCode = ParseStatusCode(firstError, out var message);
-
-        return statusCode switch
-        {
-            401 => Unauthorized(new { error = message }),
-            404 => NotFound(new { error = message }),
-            _ => BadRequest(result.Errors)
-        };
-    }
-
-    private static int ParseStatusCode(string error, out string message)
-    {
-        if (error.Length > 4
-            && int.TryParse(error[..3], out var code)
-            && error[3] == ':')
-        {
-            message = error[5..].Trim();
-            return code;
-        }
-
-        message = error;
-        return 400;
+        return ApiResponseHelper.ToActionResult(this, result);
     }
 }

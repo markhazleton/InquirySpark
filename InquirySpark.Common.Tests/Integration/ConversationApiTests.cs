@@ -86,7 +86,7 @@ public class ConversationApiTests
     /// Verifies that /start with invalid credentials returns 401.
     /// </summary>
     [TestMethod]
-    [Ignore("Requires writable conversation-dev.db — run eng/apply-conversation-migration.ps1")]
+    [Ignore("Requires writable conversation-dev.db with migrated schema and seeded data")]
     public async Task Start_InvalidCredentials_Returns401()
     {
         var request = new ConversationStartRequest
@@ -128,7 +128,7 @@ public class ConversationApiTests
 
         Assert.IsFalse(root.GetProperty("conversationEnded").GetBoolean(),
             "conversationEnded must be false at the start.");
-        Assert.AreEqual("question", root.GetProperty("action").GetProperty("actionType").GetString(),
+        Assert.AreEqual("question", root.GetProperty("action").GetProperty("action_type").GetString(),
             "action_type must be 'question'.");
         Assert.IsTrue(root.GetProperty("conversationId").GetString() != "00000000-0000-0000-0000-000000000000",
             "conversationId must be set to a valid GUID.");
@@ -208,7 +208,7 @@ public class ConversationApiTests
 
         Assert.IsTrue(ended, "conversation_ended must be true after answering all questions.");
         Assert.AreEqual("complete", startEnvelope.RootElement
-            .GetProperty("action").GetProperty("actionType").GetString(),
+            .GetProperty("action").GetProperty("action_type").GetString(),
             "action_type must be 'complete' at the end.");
     }
 

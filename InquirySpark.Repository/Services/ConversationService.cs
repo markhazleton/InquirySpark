@@ -76,6 +76,9 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
                 ThrowDomain(400, "Question is not part of this survey.");
 
             var currentPair = orderedQuestions[currentPairIdx];
+            var previousQuestionId = currentPairIdx > 0
+                ? orderedQuestions[currentPairIdx - 1].Member.QuestionId
+                : (int?)null;
 
             // T027 — Read mode: null body or empty body returns current question without modification
             var isReadMode = request == null
@@ -83,7 +86,7 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
             if (isReadMode)
             {
                 return BuildEnvelope(conversationId, currentPair.Question,
-                    currentPair.Member.QuestionGroupId, currentPairIdx, orderedQuestions.Count);
+                    currentPair.Member.QuestionGroupId, previousQuestionId);
             }
 
             var question = currentPair.Question;
@@ -99,6 +102,12 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
                 .OrderBy(a => a.SequenceNumber)
                 .ToListAsync();
 
+            var questionAnswerId = request!.QuestionAnswerId;
+            if (!hasOptions && request.QuestionAnswerId == null)
+            {
+                questionAnswerId = await GetOrCreateFreeTextAnswerIdAsync(questionId, surveyResponse.ModifiedId);
+            }
+
             var currentAnswerIdx = existingAnswers.FindIndex(a => a.QuestionId == questionId);
 
             if (currentAnswerIdx >= 0)
@@ -106,7 +115,7 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
                 var subsequentAnswers = existingAnswers.Skip(currentAnswerIdx + 1).ToList();
                 _context.SurveyResponseAnswers.RemoveRange(subsequentAnswers);
                 var existingAnswer = existingAnswers[currentAnswerIdx];
-                existingAnswer.QuestionAnswerId = request!.QuestionAnswerId ?? 0;
+                existingAnswer.QuestionAnswerId = questionAnswerId ?? existingAnswer.QuestionAnswerId;
                 existingAnswer.AnswerComment = request.UserInput;
                 existingAnswer.ModifiedDt = DateTime.UtcNow;
             }
@@ -116,7 +125,7 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
                 {
                     SurveyResponseId = surveyResponse!.SurveyResponseId,
                     QuestionId = questionId,
-                    QuestionAnswerId = request!.QuestionAnswerId ?? 0,
+                    QuestionAnswerId = questionAnswerId ?? throw new InvalidOperationException("QuestionAnswerId is required."),
                     AnswerComment = request.UserInput,
                     AnswerType = request.QuestionAnswerId.HasValue ? "option" : "text",
                     SequenceNumber = existingAnswers.Count + 1,
@@ -143,7 +152,7 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
 
             var nextPair = orderedQuestions[nextIdx];
             return BuildEnvelope(conversationId, nextPair.Question,
-                nextPair.Member.QuestionGroupId, nextIdx, orderedQuestions.Count);
+                nextPair.Member.QuestionGroupId, questionId);
         });
     }
 
@@ -191,8 +200,12 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
         }
 
         var nextPair = orderedQuestions[nextPairIdx];
+        var previousQuestionId = nextPairIdx > 0
+            ? orderedQuestions[nextPairIdx - 1].Member.QuestionId
+            : (int?)null;
+
         return BuildEnvelope(existingResponse.ConversationId.GetValueOrDefault(), nextPair.Question,
-            nextPair.Member.QuestionGroupId, nextPairIdx, orderedQuestions.Count);
+            nextPair.Member.QuestionGroupId, previousQuestionId);
     }
 
     private async Task<ConversationEnvelope> BuildSurveyListEnvelopeAsync(int applicationId)
@@ -260,7 +273,7 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
 
         var firstPair = questions[0];
         return BuildEnvelope(surveyResponse.ConversationId.GetValueOrDefault(), firstPair.Question,
-            firstPair.Member.QuestionGroupId, 0, questions.Count);
+            firstPair.Member.QuestionGroupId, null);
     }
 
     // ─── Private: Helpers ────────────────────────────────────────────────────
@@ -336,14 +349,11 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
         Guid conversationId,
         Question question,
         int questionGroupId,
-        int currentIndex,
-        int totalQuestions)
+        int? previousQuestionId)
     {
-        var nextUrl = currentIndex + 1 < totalQuestions
-            ? $"/api/v1/conversation/next/{conversationId}/{question.QuestionId}"
-            : null;
-        var prevUrl = currentIndex > 0
-            ? $"/api/v1/conversation/next/{conversationId}/{question.QuestionId}"
+        var nextUrl = $"/api/v1/conversation/next/{conversationId}/{question.QuestionId}";
+        var prevUrl = previousQuestionId.HasValue
+            ? $"/api/v1/conversation/next/{conversationId}/{previousQuestionId.Value}"
             : null;
 
         return new ConversationEnvelope
@@ -388,6 +398,37 @@ public class ConversationService(InquirySparkContext context, ILogger<Conversati
             .Select(s => s.CompletionMessage)
             .FirstOrDefaultAsync();
         return message ?? "Thank you for completing the survey.";
+    }
+
+    private async Task<int> GetOrCreateFreeTextAnswerIdAsync(int questionId, int modifiedId)
+    {
+        var existingFreeTextAnswer = await _context.QuestionAnswers
+            .Where(a => a.QuestionId == questionId)
+            .OrderBy(a => a.QuestionAnswerSort)
+            .FirstOrDefaultAsync();
+
+        if (existingFreeTextAnswer != null)
+        {
+            return existingFreeTextAnswer.QuestionAnswerId;
+        }
+
+        var placeholder = new QuestionAnswer
+        {
+            QuestionId = questionId,
+            QuestionAnswerSort = 9999,
+            QuestionAnswerShortNm = "FREETEXT",
+            QuestionAnswerNm = "Free text response",
+            QuestionAnswerValue = 0,
+            QuestionAnswerDs = "System placeholder option for free-text persistence.",
+            CommentFl = true,
+            ActiveFl = false,
+            ModifiedId = modifiedId,
+            ModifiedDt = DateTime.UtcNow
+        };
+
+        _context.QuestionAnswers.Add(placeholder);
+        await _context.SaveChangesAsync();
+        return placeholder.QuestionAnswerId;
     }
 
     /// <summary>
