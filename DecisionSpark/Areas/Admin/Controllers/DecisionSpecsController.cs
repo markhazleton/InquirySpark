@@ -1,0 +1,686 @@
+using DecisionSpark.Areas.Admin.ViewModels.DecisionSpecs;
+using DecisionSpark.Core.Models.Spec;
+using DecisionSpark.Core.Persistence.Repositories;
+using DecisionSpark.Core.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DecisionSpark.Areas.Admin.Controllers;
+
+/// <summary>
+/// Admin controller for managing DecisionSpecs through the web UI.
+/// </summary>
+[Area("Admin")]
+[Route("Admin/DecisionSpecs")]
+public class DecisionSpecsController : Controller
+{
+    private readonly IDecisionSpecRepository _repository;
+    private readonly IOpenAIService _openAIService;
+    private readonly ILogger<DecisionSpecsController> _logger;
+
+    public DecisionSpecsController(
+        IDecisionSpecRepository repository,
+        IOpenAIService openAIService,
+        ILogger<DecisionSpecsController> logger)
+    {
+        _repository = repository;
+        _openAIService = openAIService;
+        _logger = logger;
+    }
+
+    /// <summary>
+    /// Displays the DecisionSpec catalog with search and filter capabilities.
+    /// </summary>
+    [HttpGet("")]
+    [HttpGet("Index")]
+    public async Task<IActionResult> Index(
+        [FromQuery] string? search = null,
+        [FromQuery] string? status = null,
+        [FromQuery] string? owner = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var summaries = await _repository.ListAsync(status, owner, search, cancellationToken);
+
+            var viewModel = new DecisionSpecListViewModel
+            {
+                Items = summaries
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(s => new DecisionSpecSummaryViewModel
+                    {
+                        SpecId = s.SpecId,
+                        Name = s.Name,
+                        Status = s.Status,
+                        Owner = s.Owner,
+                        Version = s.Version,
+                        UpdatedAt = s.UpdatedAt,
+                        QuestionCount = s.TraitCount,
+                        HasUnverifiedDraft = s.HasUnverifiedDraft
+                    })
+                    .ToList(),
+                Total = summaries.Count(),
+                Page = page,
+                PageSize = pageSize,
+                SearchTerm = search,
+                StatusFilter = status,
+                OwnerFilter = owner
+            };
+
+            return View(viewModel);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading DecisionSpec catalog");
+            TempData["Error"] = "Failed to load DecisionSpecs. Please try again.";
+            return View(new DecisionSpecListViewModel());
+        }
+    }
+
+    /// <summary>
+    /// Displays the create form for a new DecisionSpec.
+    /// </summary>
+    [HttpGet("Create")]
+    public IActionResult Create()
+    {
+        var viewModel = new DecisionSpecEditViewModel
+        {
+            Status = "Draft",
+            Metadata = new DecisionSpecMetadataViewModel
+            {
+                Tags = new List<string>()
+            },
+            Questions = new List<QuestionViewModel>(),
+            Outcomes = new List<OutcomeViewModel>()
+        };
+
+        return View("Edit", viewModel);
+    }
+
+    /// <summary>
+    /// Displays the edit form for an existing DecisionSpec.
+    /// </summary>
+    [HttpGet("Edit/{specId}")]
+    public async Task<IActionResult> Edit(
+        string specId,
+        [FromQuery] string? version = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _repository.GetAsync(specId, version, cancellationToken);
+
+            if (result == null)
+            {
+                TempData["Error"] = $"DecisionSpec '{specId}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var (doc, etag) = result.Value;
+
+            var viewModel = new DecisionSpecEditViewModel
+            {
+                SpecId = doc.SpecId,
+                Version = doc.Version,
+                Status = doc.Status,
+                ETag = etag,
+                CanonicalBaseUrl = doc.CanonicalBaseUrl,
+                SafetyPreamble = doc.SafetyPreamble,
+                Metadata = new DecisionSpecMetadataViewModel
+                {
+                    Name = doc.Metadata?.Name ?? string.Empty,
+                    Description = doc.Metadata?.Description ?? string.Empty,
+                    Tags = doc.Metadata?.Tags?.ToList() ?? new List<string>()
+                },
+                Questions = (doc.Traits ?? new List<TraitDefinition>()).Select(t => new QuestionViewModel
+                {
+                    QuestionId = t.Key,
+                    Type = t.AnswerType,
+                    Prompt = t.QuestionText,
+                    HelpText = "",
+                    ParseHint = t.ParseHint,
+                    Required = t.Required,
+                    IsPseudoTrait = t.IsPseudoTrait,
+                    AllowMultiple = t.AllowMultiple ?? false,
+                    DependsOn = t.DependsOn?.ToList() ?? new List<string>(),
+                    Comment = t.Comment,
+                    Bounds = t.Bounds != null ? new QuestionBoundsViewModel
+                    {
+                        Min = t.Bounds.Min,
+                        Max = t.Bounds.Max
+                    } : null,
+                    Options = (t.Options ?? new List<string>()).Select((o, idx) => new OptionViewModel
+                    {
+                        OptionId = $"opt{idx}",
+                        Label = o,
+                        Value = o,
+                        NextQuestionId = null
+                    }).ToList(),
+                    Validation = null,
+                    Mapping = t.Mapping
+                }).ToList(),
+                DerivedTraits = doc.DerivedTraits?.Select(dt => new DerivedTraitViewModel
+                {
+                    Key = dt.Key,
+                    Expression = dt.Expression
+                }).ToList() ?? new List<DerivedTraitViewModel>(),
+                ImmediateSelectRules = doc.ImmediateSelectIf?.Select(isr => new ImmediateSelectRuleViewModel
+                {
+                    OutcomeId = isr.OutcomeId,
+                    Rule = isr.Rule
+                }).ToList() ?? new List<ImmediateSelectRuleViewModel>(),
+                Outcomes = (doc.Outcomes ?? new List<OutcomeDefinition>()).Select(o => new OutcomeViewModel
+                {
+                    OutcomeId = o.OutcomeId,
+                    SelectionRules = o.SelectionRules?.ToList() ?? new List<string>(),
+                    CareTypeMessage = o.CareTypeMessage,
+                    DisplayCards = o.DisplayCards?.Select(dc => new OutcomeDisplayCardViewModel
+                    {
+                        Title = dc.Title,
+                        Subtitle = dc.Subtitle,
+                        GroupId = dc.GroupId,
+                        CareTypeMessage = dc.CareTypeMessage,
+                        IconUrl = dc.IconUrl,
+                        Description = string.Join(". ", dc.BodyText ?? new List<string>()),
+                        BodyText = dc.BodyText?.ToList() ?? new List<string>(),
+                        CareTypeDetails = dc.CareTypeDetails?.ToList() ?? new List<string>(),
+                        Rules = dc.Rules?.ToList() ?? new List<string>()
+                    }).ToList() ?? new List<OutcomeDisplayCardViewModel>(),
+                    FinalResult = o.FinalResult != null ? new OutcomeFinalResultViewModel
+                    {
+                        ResolutionButtonLabel = o.FinalResult.ResolutionButtonLabel,
+                        ResolutionButtonUrl = o.FinalResult.ResolutionButtonUrl,
+                        AnalyticsResolutionCode = o.FinalResult.AnalyticsResolutionCode
+                    } : null
+                }).ToList(),
+                TieStrategy = doc.TieStrategy != null ? new TieStrategyViewModel
+                {
+                    Mode = doc.TieStrategy.Mode,
+                    ClarifierMaxAttempts = doc.TieStrategy.ClarifierMaxAttempts,
+                    PseudoTraits = doc.TieStrategy.PseudoTraits?.Select(pt => new QuestionViewModel
+                    {
+                        QuestionId = pt.Key,
+                        Type = pt.AnswerType,
+                        Prompt = pt.QuestionText,
+                        HelpText = "",
+                        ParseHint = pt.ParseHint,
+                        Required = pt.Required,
+                        IsPseudoTrait = pt.IsPseudoTrait,
+                        Options = (pt.Options ?? new List<string>()).Select((o, idx) => new OptionViewModel
+                        {
+                            OptionId = $"opt{idx}",
+                            Label = o,
+                            Value = o
+                        }).ToList()
+                    }).ToList() ?? new List<QuestionViewModel>(),
+                    LlmPromptTemplate = doc.TieStrategy.LlmPromptTemplate
+                } : null,
+                Disambiguation = doc.Disambiguation != null ? new DisambiguationViewModel
+                {
+                    FallbackTraitOrder = doc.Disambiguation.FallbackTraitOrder?.ToList() ?? new List<string>()
+                } : null
+            };
+
+            return View(viewModel);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading DecisionSpec {SpecId} for editing", specId);
+            TempData["Error"] = "Failed to load DecisionSpec. Please try again.";
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    /// <summary>
+    /// Handles form submission for creating or updating a DecisionSpec.
+    /// </summary>
+    [HttpPost("Save")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Save(
+        DecisionSpecEditViewModel viewModel,
+        CancellationToken cancellationToken = default)
+    {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("Model validation failed for DecisionSpec {SpecId}. Errors: {Errors}",
+                viewModel.SpecId,
+                string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+
+            // Add a summary of all validation errors
+            var errorMessages = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .Where(m => !string.IsNullOrWhiteSpace(m))
+                .ToList();
+
+            if (errorMessages.Any())
+            {
+                ModelState.AddModelError("", $"Validation failed: {string.Join(", ", errorMessages)}");
+            }
+
+            return View("Edit", viewModel);
+        }
+
+        try
+        {
+            var doc = MapToDocument(viewModel);
+
+            if (string.IsNullOrWhiteSpace(viewModel.ETag))
+            {
+                // Create new spec
+                var (created, etag) = await _repository.CreateAsync(doc, cancellationToken);
+
+                _logger.LogInformation("Created DecisionSpec {SpecId} version {Version}", created.SpecId, created.Version);
+                TempData["Success"] = $"DecisionSpec '{created.SpecId}' created successfully.";
+
+                return RedirectToAction(nameof(Details), new { specId = created.SpecId });
+            }
+            else
+            {
+                // Update existing spec
+                var result = await _repository.UpdateAsync(viewModel.SpecId, doc, viewModel.ETag, cancellationToken);
+
+                if (result == null)
+                {
+                    _logger.LogWarning("DecisionSpec {SpecId} not found during update", viewModel.SpecId);
+                    ModelState.AddModelError("", $"DecisionSpec '{viewModel.SpecId}' not found.");
+                    return View("Edit", viewModel);
+                }
+
+                var (updated, etag) = result.Value;
+
+                _logger.LogInformation("Updated DecisionSpec {SpecId} version {Version}", updated.SpecId, updated.Version);
+                TempData["Success"] = $"DecisionSpec '{updated.SpecId}' updated successfully.";
+
+                return RedirectToAction(nameof(Details), new { specId = updated.SpecId });
+            }
+        }
+        catch (FluentValidation.ValidationException vex)
+        {
+            _logger.LogWarning("FluentValidation failed for DecisionSpec {SpecId}: {Errors}",
+                viewModel.SpecId,
+                string.Join("; ", vex.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+
+            // Add each validation error to ModelState
+            foreach (var error in vex.Errors)
+            {
+                var propertyName = error.PropertyName;
+                if (string.IsNullOrEmpty(propertyName))
+                {
+                    ModelState.AddModelError("", error.ErrorMessage);
+                }
+                else
+                {
+                    ModelState.AddModelError(propertyName, error.ErrorMessage);
+                }
+            }
+
+            // Also add a summary
+            var errorSummary = string.Join(", ", vex.Errors.Select(e =>
+                string.IsNullOrEmpty(e.PropertyName) ? e.ErrorMessage : $"{e.PropertyName}: {e.ErrorMessage}"));
+            ModelState.AddModelError("", $"Validation failed: {errorSummary}");
+
+            return View("Edit", viewModel);
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("ETag mismatch"))
+        {
+            _logger.LogWarning("Concurrency conflict while saving DecisionSpec {SpecId}", viewModel.SpecId);
+
+            ModelState.AddModelError("", "This DecisionSpec has been modified by another user. Please review the changes and try again.");
+            viewModel.ShowConcurrencyConflict = true;
+
+            return View("Edit", viewModel);
+        }
+        catch (ArgumentException argEx)
+        {
+            _logger.LogWarning(argEx, "Invalid argument while saving DecisionSpec {SpecId}", viewModel.SpecId);
+
+            ModelState.AddModelError("", $"Invalid data: {argEx.Message}");
+            return View("Edit", viewModel);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error saving DecisionSpec {SpecId}: {Message}", viewModel.SpecId, ex.Message);
+
+            // Include the actual error message instead of generic one
+            ModelState.AddModelError("", $"An error occurred while saving: {ex.Message}");
+
+            // If there's an inner exception, include that too
+            if (ex.InnerException != null)
+            {
+                ModelState.AddModelError("", $"Details: {ex.InnerException.Message}");
+                _logger.LogError(ex.InnerException, "Inner exception details");
+            }
+
+            return View("Edit", viewModel);
+        }
+    }
+
+    /// <summary>
+    /// Displays detailed information about a DecisionSpec including audit history.
+    /// </summary>
+    [HttpGet("Details/{specId}")]
+    public async Task<IActionResult> Details(
+        string specId,
+        [FromQuery] string? version = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _repository.GetAsync(specId, version, cancellationToken);
+
+            if (result == null)
+            {
+                TempData["Error"] = $"DecisionSpec '{specId}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var (doc, etag) = result.Value;
+            var auditEntries = await _repository.GetAuditHistoryAsync(specId, cancellationToken);
+
+            var viewModel = new DecisionSpecDetailsViewModel
+            {
+                SpecId = doc.SpecId,
+                Version = doc.Version,
+                Status = doc.Status,
+                ETag = etag,
+                Metadata = new DecisionSpecMetadataViewModel
+                {
+                    Name = doc.Metadata?.Name ?? string.Empty,
+                    Description = doc.Metadata?.Description ?? string.Empty,
+                    Tags = doc.Metadata?.Tags?.ToList() ?? new List<string>()
+                },
+                QuestionCount = doc.Traits?.Count ?? 0,
+                OutcomeCount = doc.Outcomes?.Count ?? 0,
+                CreatedAt = doc.Metadata?.CreatedAt ?? DateTimeOffset.UtcNow,
+                UpdatedAt = doc.Metadata?.UpdatedAt ?? DateTimeOffset.UtcNow,
+                CreatedBy = doc.Metadata?.CreatedBy ?? string.Empty,
+                UpdatedBy = doc.Metadata?.UpdatedBy ?? string.Empty,
+                AuditHistory = (auditEntries ?? Enumerable.Empty<AuditEntry>()).Select(a => new AuditEventViewModel
+                {
+                    Id = a.AuditId,
+                    Action = a.Action,
+                    Summary = a.Summary,
+                    Actor = a.Actor,
+                    Source = a.Source,
+                    CreatedAt = a.CreatedAt
+                }).ToList()
+            };
+
+            return View(viewModel);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading details for DecisionSpec {SpecId}", specId);
+            TempData["Error"] = "Failed to load DecisionSpec details. Please try again.";
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    /// <summary>
+    /// Handles soft delete of a DecisionSpec.
+    /// </summary>
+    [HttpPost("Delete/{specId}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(
+        string specId,
+        [FromQuery] string version,
+        [FromForm] string etag,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var success = await _repository.DeleteAsync(specId, version, etag, cancellationToken);
+
+            if (!success)
+            {
+                TempData["Error"] = $"DecisionSpec '{specId}' not found.";
+            }
+            else
+            {
+                _logger.LogInformation("Soft-deleted DecisionSpec {SpecId} version {Version}", specId, version);
+                TempData["Success"] = $"DecisionSpec '{specId}' has been deleted.";
+            }
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("ETag mismatch"))
+        {
+            _logger.LogWarning("Concurrency conflict while deleting DecisionSpec {SpecId}", specId);
+            TempData["Error"] = "This DecisionSpec has been modified. Please refresh and try again.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting DecisionSpec {SpecId}", specId);
+            TempData["Error"] = "An error occurred while deleting. Please try again.";
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    /// <summary>
+    /// Handles restoring a soft-deleted DecisionSpec.
+    /// </summary>
+    [HttpPost("Restore/{specId}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Restore(
+        string specId,
+        [FromQuery] string version,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _repository.RestoreAsync(specId, version, cancellationToken);
+
+            if (result == null)
+            {
+                TempData["Error"] = $"DecisionSpec '{specId}' not found in archive.";
+            }
+            else
+            {
+                _logger.LogInformation("Restored DecisionSpec {SpecId} version {Version}", specId, version);
+                TempData["Success"] = $"DecisionSpec '{specId}' has been restored.";
+
+                return RedirectToAction(nameof(Details), new { specId });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error restoring DecisionSpec {SpecId}", specId);
+            TempData["Error"] = "An error occurred while restoring. Please try again.";
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    /// <summary>
+    /// Transitions a DecisionSpec to a new lifecycle status.
+    /// </summary>
+    [HttpPost("TransitionStatus/{specId}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> TransitionStatus(
+        string specId,
+        [FromForm] string newStatus,
+        [FromForm] string etag,
+        [FromForm] string? comment,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var current = await _repository.GetAsync(specId, null, cancellationToken);
+
+            if (current == null)
+            {
+                TempData["Error"] = $"DecisionSpec '{specId}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var (doc, currentETag) = current.Value;
+
+            // Verify ETag
+            if (currentETag != etag)
+            {
+                TempData["Error"] = "This DecisionSpec has been modified. Please refresh and try again.";
+                return RedirectToAction(nameof(Details), new { specId });
+            }
+
+            // Update status
+            doc.Status = newStatus;
+            doc.Metadata ??= new DecisionSpark.Core.Models.Spec.DecisionSpecMetadata();
+            doc.Metadata.UpdatedAt = DateTimeOffset.UtcNow;
+            doc.Metadata.UpdatedBy = User.Identity?.Name ?? "Admin";
+
+            var result = await _repository.UpdateAsync(specId, doc, etag, cancellationToken);
+
+            if (result == null)
+            {
+                TempData["Error"] = "Failed to update status.";
+            }
+            else
+            {
+                _logger.LogInformation("Transitioned DecisionSpec {SpecId} to status {NewStatus}", specId, newStatus);
+                TempData["Success"] = $"Status updated to '{newStatus}'.";
+            }
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("ETag mismatch"))
+        {
+            TempData["Error"] = "This DecisionSpec has been modified. Please refresh and try again.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error transitioning status for DecisionSpec {SpecId}", specId);
+            TempData["Error"] = "An error occurred while updating status. Please try again.";
+        }
+
+        return RedirectToAction(nameof(Details), new { specId });
+    }
+
+    /// <summary>
+    /// Displays the full JSON representation of a DecisionSpec.
+    /// </summary>
+    [HttpGet("ViewJson/{specId}")]
+    public async Task<IActionResult> ViewJson(
+        string specId,
+        [FromQuery] string? version = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var json = await _repository.GetFullDocumentJsonAsync(specId, version, cancellationToken);
+
+            if (json == null)
+            {
+                TempData["Error"] = $"DecisionSpec '{specId}' not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.SpecId = specId;
+            ViewBag.Version = version;
+            ViewBag.JsonContent = json;
+
+            return View();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading JSON for DecisionSpec {SpecId}", specId);
+            TempData["Error"] = "Failed to load JSON. Please try again.";
+            return RedirectToAction(nameof(Details), new { specId });
+        }
+    }
+
+    #region Helper Methods
+
+    private static DecisionSpark.Core.Models.Spec.DecisionSpecDocument MapToDocument(DecisionSpecEditViewModel viewModel)
+    {
+        return new DecisionSpark.Core.Models.Spec.DecisionSpecDocument
+        {
+            SpecId = viewModel.SpecId,
+            Version = viewModel.Version,
+            Status = viewModel.Status,
+            CanonicalBaseUrl = viewModel.CanonicalBaseUrl ?? string.Empty,
+            SafetyPreamble = viewModel.SafetyPreamble ?? string.Empty,
+            Metadata = new DecisionSpark.Core.Models.Spec.DecisionSpecMetadata
+            {
+                Name = viewModel.Metadata?.Name ?? string.Empty,
+                Description = viewModel.Metadata?.Description ?? string.Empty,
+                Tags = viewModel.Metadata?.Tags ?? new List<string>()
+            },
+            Traits = (viewModel.Questions ?? new List<QuestionViewModel>()).Select(q => new TraitDefinition
+            {
+                Key = q.QuestionId,
+                AnswerType = q.Type,
+                QuestionText = q.Prompt,
+                ParseHint = q.ParseHint ?? string.Empty,
+                Required = q.Required,
+                IsPseudoTrait = q.IsPseudoTrait,
+                AllowMultiple = q.AllowMultiple,
+                DependsOn = q.DependsOn,
+                Comment = q.Comment,
+                Bounds = q.Bounds != null ? new TraitBounds
+                {
+                    Min = q.Bounds.Min ?? 0,
+                    Max = q.Bounds.Max ?? int.MaxValue
+                } : null,
+                Options = q.Options?.Select(o => o.Value).ToList(),
+                Mapping = q.Mapping
+            }).ToList(),
+            DerivedTraits = (viewModel.DerivedTraits ?? new List<DerivedTraitViewModel>()).Select(dt => new DerivedTraitDefinition
+            {
+                Key = dt.Key,
+                Expression = dt.Expression
+            }).ToList(),
+            ImmediateSelectIf = (viewModel.ImmediateSelectRules ?? new List<ImmediateSelectRuleViewModel>()).Select(isr => new ImmediateSelectRule
+            {
+                OutcomeId = isr.OutcomeId,
+                Rule = isr.Rule
+            }).ToList(),
+            Outcomes = (viewModel.Outcomes ?? new List<OutcomeViewModel>()).Select(o => new OutcomeDefinition
+            {
+                OutcomeId = o.OutcomeId,
+                SelectionRules = o.SelectionRules,
+                CareTypeMessage = o.CareTypeMessage ?? string.Empty,
+                DisplayCards = (o.DisplayCards ?? new List<OutcomeDisplayCardViewModel>()).Select(dc => new DisplayCard
+                {
+                    Title = dc.Title,
+                    Subtitle = dc.Subtitle ?? string.Empty,
+                    GroupId = dc.GroupId ?? string.Empty,
+                    CareTypeMessage = dc.CareTypeMessage ?? string.Empty,
+                    IconUrl = dc.IconUrl ?? string.Empty,
+                    BodyText = string.IsNullOrWhiteSpace(dc.Description)
+                        ? dc.BodyText
+                        : new List<string> { dc.Description },
+                    CareTypeDetails = dc.CareTypeDetails,
+                    Rules = dc.Rules
+                }).ToList(),
+                FinalResult = o.FinalResult != null ? new FinalResultDefinition
+                {
+                    ResolutionButtonLabel = o.FinalResult.ResolutionButtonLabel ?? string.Empty,
+                    ResolutionButtonUrl = o.FinalResult.ResolutionButtonUrl ?? string.Empty,
+                    AnalyticsResolutionCode = o.FinalResult.AnalyticsResolutionCode ?? string.Empty
+                } : new FinalResultDefinition()
+            }).ToList(),
+            TieStrategy = viewModel.TieStrategy != null ? new DecisionSpark.Core.Models.Spec.TieStrategy
+            {
+                Mode = viewModel.TieStrategy.Mode,
+                ClarifierMaxAttempts = viewModel.TieStrategy.ClarifierMaxAttempts,
+                PseudoTraits = (viewModel.TieStrategy.PseudoTraits ?? new List<QuestionViewModel>()).Select(pt => new TraitDefinition
+                {
+                    Key = pt.QuestionId,
+                    AnswerType = pt.Type,
+                    QuestionText = pt.Prompt,
+                    ParseHint = pt.ParseHint ?? string.Empty,
+                    Required = pt.Required,
+                    IsPseudoTrait = pt.IsPseudoTrait,
+                    Options = pt.Options?.Select(o => o.Value).ToList()
+                }).ToList(),
+                LlmPromptTemplate = viewModel.TieStrategy.LlmPromptTemplate ?? string.Empty
+            } : new DecisionSpark.Core.Models.Spec.TieStrategy(),
+            Disambiguation = viewModel.Disambiguation != null ? new DecisionSpark.Core.Models.Spec.Disambiguation
+            {
+                FallbackTraitOrder = viewModel.Disambiguation.FallbackTraitOrder
+            } : new DecisionSpark.Core.Models.Spec.Disambiguation()
+        };
+    }
+
+    #endregion
+}

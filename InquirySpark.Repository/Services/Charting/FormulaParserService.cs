@@ -28,7 +28,7 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
     private readonly ILogger<FormulaParserService> _logger = logger;
 
     // Safe functions allowed in formulas
-    private static readonly HashSet<string> AllowedFunctions = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly HashSet<string> _allowedFunctions = new(StringComparer.OrdinalIgnoreCase)
     {
         // Math functions
         "Abs", "Acos", "Asin", "Atan", "Ceiling", "Cos", "Exp", "Floor", "Log", "Log10",
@@ -45,7 +45,7 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
     };
 
     // Chart type specific function compatibility
-    private static readonly Dictionary<string, List<string>> ChartTypeFunctions = new()
+    private static readonly Dictionary<string, List<string>> _chartTypeFunctions = new()
     {
         ["bar"] = new() { "Sum", "Avg", "Count", "Max", "Min" },
         ["line"] = new() { "Sum", "Avg", "Count", "Max", "Min", "StdDev" },
@@ -104,7 +104,7 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
                 var functionName = match.Groups[1].Value;
                 result.DetectedFunctions.Add(functionName);
 
-                if (!AllowedFunctions.Contains(functionName))
+                if (!_allowedFunctions.Contains(functionName))
                 {
                     result.Errors.Add($"Function '{functionName}' is not allowed");
                     result.IsValid = false;
@@ -112,9 +112,9 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
             }
 
             // Check chart type compatibility
-            if (!string.IsNullOrEmpty(chartType) && ChartTypeFunctions.ContainsKey(chartType.ToLower()))
+            if (!string.IsNullOrEmpty(chartType) && _chartTypeFunctions.ContainsKey(chartType.ToLower()))
             {
-                var allowedForChart = ChartTypeFunctions[chartType.ToLower()];
+                var allowedForChart = _chartTypeFunctions[chartType.ToLower()];
                 foreach (var detectedFunc in result.DetectedFunctions)
                 {
                     if (!allowedForChart.Contains(detectedFunc, StringComparer.OrdinalIgnoreCase))
@@ -184,7 +184,7 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
 
     public List<string> GetSupportedFunctions()
     {
-        return AllowedFunctions.OrderBy(f => f).ToList();
+        return _allowedFunctions.OrderBy(f => f).ToList();
     }
 
     public List<string> GetFunctionsForChartType(string chartType)
@@ -192,7 +192,7 @@ public class FormulaParserService(ILogger<FormulaParserService> logger) : IFormu
         if (string.IsNullOrEmpty(chartType))
             return GetSupportedFunctions();
 
-        if (ChartTypeFunctions.TryGetValue(chartType.ToLower(), out var functions))
+        if (_chartTypeFunctions.TryGetValue(chartType.ToLower(), out var functions))
         {
             return functions.OrderBy(f => f).ToList();
         }

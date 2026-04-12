@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Documentation - DecisionSpark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: none;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .card-header h4 {
+            margin: 0;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            overflow-x: auto;
+        }
+        code {
+            color: #d63384;
+        }
+        .endpoint-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+        }
+        .nav-pills .nav-link {
+            color: #667eea;
+            border: 1px solid #667eea;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #667eea !important;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: #667eea !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        .top-nav .nav-link:hover, .top-nav .nav-link.active {
+            color: #764ba2 !important;
+            background-color: rgba(102, 126, 234, 0.1);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg top-nav">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <i class="bi bi-diagram-3-fill"></i> DecisionSpark
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <i class="bi bi-house-door"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i> Admin
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                <li><a class="dropdown-item" href="/Admin/DecisionSpecs">
+                                    <i class="bi bi-diagram-3"></i> Manage Specs
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/Admin/DecisionSpecs/Create">
+                                    <i class="bi bi-plus-circle"></i> Create New Spec
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#llmAssistModal">
+                                    <i class="bi bi-magic"></i> LLM Create Spec
+                                </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/swagger">
+                                <i class="bi bi-file-code"></i> API
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/about">
+                                <i class="bi bi-info-circle"></i> About
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="text-center mb-4">
+            <h1 class="text-white display-4 fw-bold">
+                <i class="bi bi-book-fill"></i> API Documentation
+            </h1>
+            <p class="text-white lead">Complete guide to the DecisionSpark API</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                
+                <!-- Table of Contents -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="bi bi-list-ul"></i> Table of Contents</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#getting-started">Getting Started</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#authentication">Authentication</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#endpoints">API Endpoints</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#conversation-flow">Conversation Flow</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#question-types">Question Types</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#response-formats">Response Formats</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#error-handling">Error Handling</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#examples">Code Examples</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Overview -->
+                <div class="card" id="overview">
+                    <div class="card-header">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Overview</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>What is DecisionSpark?</h5>
+                        <p>
+                            DecisionSpark is a <strong>dynamic decision routing engine</strong> that uses conversational APIs to guide users 
+                            through minimal questions and recommend optimal outcomes based on configurable rules.
+                        </p>
+                        <p>
+                            Instead of asking users to fill out lengthy forms, DecisionSpark intelligently determines which questions 
+                            to ask based on previous answers, applying immediate rules and evaluating outcomes in real-time.
+                        </p>
+                        
+                        <h5 class="mt-4">Key Features</h5>
+                        <ul>
+                            <li><strong>Conversational API:</strong> Natural question-and-answer flow</li>
+                            <li><strong>Minimal Questions:</strong> Only asks what's needed for a decision</li>
+                            <li><strong>Smart Routing:</strong> Immediate rules short-circuit unnecessary questions</li>
+                            <li><strong>Derived Traits:</strong> Automatically calculates min/max/count from collected data</li>
+                            <li><strong>Multiple Question Types:</strong> Free text, single-select, multi-select with options</li>
+                            <li><strong>Validation & Retry:</strong> Rephrases questions when input is invalid</li>
+                            <li><strong>HATEOAS:</strong> Self-documenting with hypermedia links (next_url)</li>
+                            <li><strong>Configurable:</strong> JSON-based decision specifications</li>
+                        </ul>
+                        
+                        <h5 class="mt-4">Use Cases</h5>
+                        <ul>
+                            <li>Activity recommendations (e.g., family outing planner)</li>
+                            <li>Healthcare triage and routing</li>
+                            <li>Product recommendation engines</li>
+                            <li>Customer service routing</li>
+                            <li>Configuration wizards</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Getting Started -->
+                <div class="card" id="getting-started">
+                    <div class="card-header">
+                        <h4><i class="bi bi-play-circle-fill"></i> Getting Started</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>Quick Start</h5>
+                        <p>To use the DecisionSpark API, you'll need:</p>
+                        <ol>
+                            <li>An <strong>API key</strong> (configured in appsettings.json)</li>
+                            <li>An HTTP client capable of making POST requests</li>
+                            <li>The base URL of the API (e.g., <code>https://localhost:44356</code>)</li>
+                        </ol>
+
+                        <h5 class="mt-4">Basic Workflow</h5>
+                        <pre><code>1. POST /conversation/start → Get first question + session ID
+2. POST /conversation/{sessionId}/next → Submit answer, get next question
+3. Repeat step 2 until is_complete: true
+4. Receive final recommendation</code></pre>
+
+                        <h5 class="mt-4">Base URL</h5>
+                        <p>All endpoints are relative to your API base URL:</p>
+                        <pre><code>Production: https://your-domain.com
+Development: https://localhost:44356</code></pre>
+                    </div>
+                </div>
+
+                <!-- Authentication -->
+                <div class="card" id="authentication">
+                    <div class="card-header">
+                        <h4><i class="bi bi-shield-check"></i> Authentication</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>API Key Authentication</h5>
+                        <p>
+                            All conversation endpoints require an API key passed in the <code>X-API-KEY</code> header.
+                        </p>
+                        
+                        <h5 class="mt-3">Request Header</h5>
+                        <pre><code>X-API-KEY: your-api-key-here</code></pre>
+                        
+                        <h5 class="mt-3">Example Request</h5>
+                        <pre><code>POST /conversation/start
+Content-Type: application/json
+X-API-KEY: dev-api-key-change-in-production
+
+{
+  "spec_id": "FAMILY_SATURDAY_V1"
+}</code></pre>
+
+                        <h5 class="mt-3">Authentication Errors</h5>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Error</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-danger">401</span></td>
+                                    <td><code>INVALID_API_KEY</code></td>
+                                    <td>Missing or invalid API key</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- API Endpoints -->
+                <div class="card" id="endpoints">
+                    <div class="card-header">
+                        <h4><i class="bi bi-cloud-arrow-up-fill"></i> API Endpoints</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Endpoint</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-info endpoint-badge">GET</span></td>
+                                    <td><code>/conversation/specs</code></td>
+                                    <td>Get list of available decision specs</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-success endpoint-badge">POST</span></td>
+                                    <td><code>/conversation/start</code></td>
+                                    <td>Start a new decision session</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-success endpoint-badge">POST</span></td>
+                                    <td><code>/conversation/{sessionId}/next</code></td>
+                                    <td>Submit answer and get next question or outcome</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5 class="mt-4">1. GET /conversation/specs</h5>
+                        <p><strong>Purpose:</strong> Retrieve all available decision specifications</p>
+                        <p><strong>Request:</strong></p>
+                        <pre><code>GET /conversation/specs
+X-API-KEY: your-api-key</code></pre>
+                        
+                        <p><strong>Response (200 OK):</strong></p>
+                        <pre><code>{
+  "specs": [
+    {
+      "specId": "FAMILY_SATURDAY_V1",
+      "fileName": "FAMILY_SATURDAY_V1.0.0.0.active.json",
+      "displayName": "FAMILY SATURDAY V1",
+      "isDefault": true
+    }
+  ]
+}</code></pre>
+
+                        <h5 class="mt-4">2. POST /conversation/start</h5>
+                        <p><strong>Purpose:</strong> Initialize a new decision session</p>
+                        <p><strong>Request:</strong></p>
+                        <pre><code>POST /conversation/start
+Content-Type: application/json
+X-API-KEY: your-api-key
+
+{
+  "spec_id": "FAMILY_SATURDAY_V1"  // Optional, defaults to DefaultSpecId
+}</code></pre>
+
+                        <p><strong>Response (200 OK) - With Question:</strong></p>
+                        <pre><code>{
+  "texts": ["Let's figure out the best plan for Saturday."],
+  "question": {
+    "id": "group_size",
+    "source": "FAMILY_SATURDAY_V1",
+    "text": "How many people are going on the outing?",
+    "type": "text",
+    "allowFreeText": true,
+    "isFreeText": true,
+    "allowMultiSelect": false,
+    "isMultiSelect": false,
+    "retryAttempt": 0,
+    "options": [],
+    "metadata": {
+      "llmReasoning": "Free-text question",
+      "confidence": 0.9,
+      "allowFreeText": true,
+      "validationHints": []
+    }
+  },
+  "nextUrl": "https://api.example.com/conversation/abc123/next",
+  "sessionId": "abc123"
+}</code></pre>
+
+                        <p><strong>Response (200 OK) - Immediate Complete:</strong></p>
+                        <pre><code>{
+  "isComplete": true,
+  "texts": ["Here's what I recommend:"],
+  "displayCards": [...],
+  "careTypeMessage": "Recommendation message",
+  "finalResult": {
+    "outcomeId": "GO_BOWLING",
+    "resolutionButtonLabel": "Reserve a lane",
+    "resolutionButtonUrl": "https://example.com/bowling",
+    "analyticsResolutionCode": "ROUTE_BOWLING"
+  }
+}</code></pre>
+
+                        <h5 class="mt-4">3. POST /conversation/{sessionId}/next</h5>
+                        <p><strong>Purpose:</strong> Submit user's answer and continue conversation</p>
+                        <p><strong>Request (Free Text):</strong></p>
+                        <pre><code>POST /conversation/abc123/next
+Content-Type: application/json
+X-API-KEY: your-api-key
+
+{
+  "user_input": "5 people"
+}</code></pre>
+
+                        <p><strong>Request (Structured Options):</strong></p>
+                        <pre><code>{
+  "selected_option_ids": ["option-id-1", "option-id-2"],
+  "selected_option_texts": ["Option 1", "Option 2"],
+  "user_input": "fallback text"
+}</code></pre>
+
+                        <p><strong>Response (200 OK) - Next Question:</strong></p>
+                        <pre><code>{
+  "texts": ["Thanks! Next question:"],
+  "question": {
+    "id": "all_ages",
+    "source": "FAMILY_SATURDAY_V1",
+    "text": "What are the ages of everyone who's going?",
+    "type": "text",
+    "allowFreeText": true,
+    "isFreeText": true,
+    "retryAttempt": 0,
+    "options": []
+  },
+  "nextUrl": "https://api.example.com/conversation/abc123/next",
+  "prevUrl": null,
+  "answeredCount": 1
+}</code></pre>
+
+                        <p><strong>Response (200 OK) - Complete:</strong></p>
+                        <pre><code>{
+  "isComplete": true,
+  "texts": ["Here's what I recommend:"],
+  "displayCards": [
+    {
+      "title": "Bowling Night 🎳",
+      "subtitle": "Perfect for groups!",
+      "bodyText": ["Great for all ages", "Indoor activity"],
+      "tags": ["family-friendly", "group-activity"]
+    }
+  ],
+  "careTypeMessage": "Bowling is perfect for your crew",
+  "finalResult": {
+    "outcomeId": "GO_BOWLING",
+    "resolutionButtonLabel": "Reserve a lane",
+    "resolutionButtonUrl": "https://example.com/bowling",
+    "analyticsResolutionCode": "ROUTE_BOWLING"
+  },
+  "answeredCount": 2
+}</code></pre>
+
+                        <p><strong>Response (400 Bad Request) - Invalid Input:</strong></p>
+                        <pre><code>{
+  "error": {
+    "code": "INVALID_INPUT",
+    "message": "Could not find valid ages. Please list as numbers (0-120)."
+  },
+  "question": {
+    "id": "all_ages",
+    "text": "Let me rephrase: What are the ages?",
+    "type": "text",
+    "retryAttempt": 1,
+    ...
+  },
+  "nextUrl": "https://api.example.com/conversation/abc123/next"
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Conversation Flow -->
+                <div class="card" id="conversation-flow">
+                    <div class="card-header">
+                        <h4><i class="bi bi-diagram-3-fill"></i> Conversation Flow</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>How the Decision Engine Works</h5>
+                        <ol>
+                            <li><strong>Session Initialization:</strong> Create session with unique ID and load decision spec</li>
+                            <li><strong>Rule Evaluation:</strong> Check immediate rules (short-circuit logic)</li>
+                            <li><strong>Question Generation:</strong> Ask for next required trait</li>
+                            <li><strong>Input Parsing:</strong> Extract structured data from natural language</li>
+                            <li><strong>Trait Storage:</strong> Save validated trait values to session</li>
+                            <li><strong>Derived Traits:</strong> Calculate min_age, max_age, adult_count, etc.</li>
+                            <li><strong>Outcome Evaluation:</strong> Match rules against collected traits</li>
+                            <li><strong>Final Recommendation:</strong> Return best-fit outcome or continue questioning</li>
+                        </ol>
+
+                        <h5 class="mt-4">Complete Example Flow</h5>
+                        <pre><code><strong>Step 1: Start Session</strong>
+POST /conversation/start
+→ Session abc123 created
+→ Question: "How many people are going on the outing?"
+
+<strong>Step 2: Answer Group Size</strong>
+POST /conversation/abc123/next
+Body: { "user_input": "6 people" }
+→ Parsed: group_size = 6
+→ Question: "What are the ages of everyone who's going?"
+
+<strong>Step 3: Answer Ages</strong>
+POST /conversation/abc123/next
+Body: { "user_input": "ages: 8, 10, 12, 35, 37, 40" }
+→ Parsed: all_ages = [8, 10, 12, 35, 37, 40]
+→ Derived: min_age = 8, max_age = 40, adult_count = 3
+→ Evaluated: group_size >= 4 AND min_age >= 5
+→ Outcome: GO_BOWLING
+
+<strong>Step 4: Receive Recommendation</strong>
+{
+  "isComplete": true,
+  "careTypeMessage": "Bowling is perfect for your crew",
+  "finalResult": { "outcomeId": "GO_BOWLING", ... }
+}</code></pre>
+
+                        <h5 class="mt-4">Immediate Rules (Short-Circuit Logic)</h5>
+                        <p>
+                            The engine can skip unnecessary questions if an immediate rule matches. For example:
+                        </p>
+                        <pre><code>If min_age < 5 → MOVIE_NIGHT (no need to ask more questions)</code></pre>
+                        <p>
+                            This saves time and improves user experience by not asking irrelevant questions.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Question Types -->
+                <div class="card" id="question-types">
+                    <div class="card-header">
+                        <h4><i class="bi bi-ui-checks"></i> Question Types</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>1. Free Text Questions</h5>
+                        <p>User can type any natural language response.</p>
+                        <pre><code>{
+  "question": {
+    "type": "text",
+    "isFreeText": true,
+    "allowFreeText": true,
+    "text": "How many people are going?",
+    "options": []
+  }
+}
+
+// User submits:
+{ "user_input": "5 people" }
+// or
+{ "user_input": "5" }</code></pre>
+
+                        <h5 class="mt-4">2. Single-Select Questions</h5>
+                        <p>User must choose exactly one option.</p>
+                        <pre><code>{
+  "question": {
+    "type": "single-select",
+    "isFreeText": false,
+    "allowFreeText": true,  // Can still type custom answer
+    "text": "What's your preferred activity?",
+    "options": [
+      {
+        "id": "indoor-sports",
+        "label": "Indoor sports",
+        "value": "indoor-sports",
+        "isNegative": false
+      },
+      {
+        "id": "outdoor-activities",
+        "label": "Outdoor activities",
+        "value": "outdoor-activities",
+        "isNegative": false
+      },
+      {
+        "id": "none-of-the-above",
+        "label": "None of the above",
+        "value": "none",
+        "isNegative": true
+      }
+    ]
+  }
+}
+
+// User submits:
+{ "selected_option_ids": ["indoor-sports"] }</code></pre>
+
+                        <h5 class="mt-4">3. Multi-Select Questions</h5>
+                        <p>User can choose multiple options.</p>
+                        <pre><code>{
+  "question": {
+    "type": "multi-select",
+    "isMultiSelect": true,
+    "allowFreeText": true,
+    "text": "What symptoms are you experiencing?",
+    "options": [
+      { "id": "fever", "label": "Fever", "value": "fever" },
+      { "id": "cough", "label": "Cough", "value": "cough" },
+      { "id": "headache", "label": "Headache", "value": "headache" },
+      { "id": "none", "label": "None of these", "value": "none", "isNegative": true }
+    ]
+  }
+}
+
+// User submits:
+{ 
+  "selected_option_ids": ["fever", "cough"],
+  "selected_option_texts": ["Fever", "Cough"]
+}</code></pre>
+
+                        <h5 class="mt-4">Negative Options</h5>
+                        <p>
+                            Options with <code>isNegative: true</code> (e.g., "None of the above") override all other selections.
+                            If a negative option is selected, only that option is stored.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Response Formats -->
+                <div class="card">
+    <div class="card-header">
+   <h4 class="mb-0"><i class="bi bi-code-slash"></i> Sample Code</h4>
+    </div>
+     <div class="card-body">
+            <h5>JavaScript / Fetch API</h5>
+           <pre><code>// Start a conversation
+const response = await fetch('/conversation/start', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-KEY': 'your-api-key'
+  },
+  body: JSON.stringify({})
+});
+
+const data = await response.json();
+console.log(data.question.text);
+
+// Submit an answer
+const nextResponse = await fetch(data.nextUrl, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-KEY': 'your-api-key'
+  },
+  body: JSON.stringify({
+  user_input: "6 people"
+  })
+});
+
+const nextData = await nextResponse.json();</code></pre>
+
+  <h5 class="mt-4">C# / HttpClient</h5>
+                   <pre><code>var client = new HttpClient();
+client.DefaultRequestHeaders.Add("X-API-KEY", "your-api-key");
+
+var response = await client.PostAsJsonAsync("/conversation/start", new { });
+var data = await response.Content.ReadFromJsonAsync&lt;StartResponse&gt;();
+
+var answerResponse = await client.PostAsJsonAsync(
+    data.NextUrl,
+    new { user_input = "6 people" }
+);</code></pre>
+         </div>
+       </div>
+
+                <!-- Response Formats -->
+                <div class="card" id="response-formats">
+                    <div class="card-header">
+                        <h4><i class="bi bi-filetype-json"></i> Response Formats</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>All responses are in JSON format. Key properties are described in the endpoint documentation above.</p>
+                        <p>See the <a href="/swagger">Swagger documentation</a> for complete schema definitions.</p>
+                    </div>
+                </div>
+
+                <!-- Error Handling -->
+                <div class="card" id="error-handling">
+                    <div class="card-header">
+                        <h4><i class="bi bi-exclamation-triangle-fill"></i> Error Handling</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>HTTP Status Codes</h5>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-success">200</span></td>
+                                    <td>Success</td>
+                                    <td>Request processed successfully</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning">400</span></td>
+                                    <td><code>INVALID_INPUT</code></td>
+                                    <td>User input couldn't be parsed - question will be rephrased</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">401</span></td>
+                                    <td><code>INVALID_API_KEY</code></td>
+                                    <td>Missing or invalid API key</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">404</span></td>
+                                    <td><code>SESSION_NOT_FOUND</code></td>
+                                    <td>Session ID not found or expired</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">413</span></td>
+                                    <td><code>INPUT_TOO_LARGE</code></td>
+                                    <td>Input exceeds 2KB limit</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">500</span></td>
+                                    <td><code>INTERNAL_ERROR</code></td>
+                                    <td>Server error</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5 class="mt-4">Error Response Format</h5>
+                        <pre><code>{
+  "error": {
+    "code": "INVALID_INPUT",
+    "message": "Could not parse input. Please try again."
+  },
+  "question": {
+    "text": "Let me rephrase that question...",
+    "retryAttempt": 1,
+    ...
+  },
+  "nextUrl": "/conversation/abc123/next"
+}</code></pre>
+                    </div>
+                </div>
+
+             <!-- Technology Stack -->
+        <div class="card">
+      <div class="card-header">
+<h4 class="mb-0"><i class="bi bi-stack"></i> Technology Stack</h4>
+                 </div>
+     <div class="card-body">
+     <ul class="list-unstyled">
+     <li><strong>? .NET 9</strong> - Latest ASP.NET Core framework</li>
+      <li><strong>? C# 13.0</strong> - Modern C# features</li>
+         <li><strong>? Swagger/OpenAPI</strong> - Interactive API documentation</li>
+ <li><strong>? Serilog</strong> - Structured logging</li>
+          <li><strong>? Bootstrap 5</strong> - Responsive UI framework</li>
+       <li><strong>? JSON-based Configuration</strong> - Easy to modify decision specs</li>
+       </ul>
+   </div>
+             </div>
+
+       <!-- Links -->
+    <div class="card">
+      <div class="card-header">
+       <h4 class="mb-0"><i class="bi bi-link-45deg"></i> Quick Links</h4>
+   </div>
+     <div class="card-body">
+       <div class="d-grid gap-2">
+        <a href="/" class="btn btn-primary">
+            <i class="bi bi-house-fill"></i> Test Interface
+          </a>
+         <a href="/swagger" class="btn btn-info text-white" target="_blank">
+           <i class="bi bi-book"></i> API Documentation
+   </a>
+      <a href="https://github.com/markhazleton/DecisionSpark" class="btn btn-dark" target="_blank">
+       <i class="bi bi-github"></i> GitHub Repository
+      </a>
+         </div>
+</div>
+   </div>
+     </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

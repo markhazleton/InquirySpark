@@ -1,0 +1,215 @@
+@model DecisionSpark.Areas.Admin.ViewModels.DecisionSpecs.QuestionViewModel
+@{
+    var index = ViewData["Index"] as int? ?? 0;
+}
+
+<div class="question-editor border rounded p-3 mb-3" data-index="@index">
+    <div class="d-flex justify-content-between mb-3">
+        <h6>Question @(index + 1)</h6>
+        <button type="button" class="btn btn-sm btn-danger" onclick="removeQuestion(@index)">
+            <i class="bi bi-trash"></i>
+        </button>
+    </div>
+
+    <div class="mb-3">
+        <label for="Questions_@(index)__QuestionId" class="form-label">Question ID *</label>
+        <input type="text" 
+               name="Questions[@index].QuestionId" 
+               id="Questions_@(index)__QuestionId"
+               value="@Model.QuestionId" 
+               class="form-control" 
+               placeholder="e.g., Q1, question_1, user-preference" 
+               required />
+        <small class="form-text text-muted">Unique identifier - letters, numbers, underscores, hyphens</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="Questions_@(index)__Type" class="form-label">Question Type *</label>
+        <select name="Questions[@index].Type" 
+                id="Questions_@(index)__Type"
+                class="form-select question-type-selector" 
+                data-question-index="@index"
+                required>
+            <option value="SingleSelect" selected="@(Model.Type == "SingleSelect")">Single Select</option>
+            <option value="MultiSelect" selected="@(Model.Type == "MultiSelect")">Multi Select</option>
+            <option value="Text" selected="@(Model.Type == "Text")">Text</option>
+            <option value="Number" selected="@(Model.Type == "Number")">Number</option>
+            <option value="Date" selected="@(Model.Type == "Date")">Date</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Questions_@(index)__Prompt" class="form-label">Question Prompt *</label>
+        <textarea name="Questions[@index].Prompt" 
+                  id="Questions_@(index)__Prompt"
+                  class="form-control" 
+                  rows="2"
+                  placeholder="Enter the question text..." 
+                  required>@Model.Prompt</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="Questions_@(index)__HelpText" class="form-label">Help Text</label>
+        <input type="text" 
+               name="Questions[@index].HelpText" 
+               id="Questions_@(index)__HelpText"
+               value="@Model.HelpText" 
+               class="form-control" 
+               placeholder="Additional guidance for users (optional)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Questions_@(index)__ParseHint" class="form-label">Parse Hint</label>
+        <textarea name="Questions[@index].ParseHint" 
+                  id="Questions_@(index)__ParseHint"
+                  class="form-control" 
+                  rows="2"
+                  placeholder="Instructions for LLM to parse user responses...">@Model.ParseHint</textarea>
+        <small class="form-text text-muted">Guide the LLM on how to interpret answers</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="Questions_@(index)__Comment" class="form-label">Comment</label>
+        <input type="text" 
+               name="Questions[@index].Comment" 
+               id="Questions_@(index)__Comment"
+               value="@Model.Comment" 
+               class="form-control" 
+               placeholder="Internal comment about this question" />
+        <small class="form-text text-muted">For documentation purposes (max 500 characters)</small>
+    </div>
+
+    @if (Model.IsPseudoTrait)
+    {
+        <div class="mb-3">
+            <label for="Questions_@(index)__Mapping" class="form-label">Mapping (JSON)</label>
+            <textarea name="Questions[@index].Mapping" 
+                      id="Questions_@(index)__Mapping"
+                      class="form-control font-monospace" 
+                      rows="3"
+                      placeholder='{"OUTCOME_A": ["option1", "option2"], "OUTCOME_B": ["option3"]}'>@(Model.Mapping != null ? System.Text.Json.JsonSerializer.Serialize(Model.Mapping) : "")</textarea>
+            <small class="form-text text-muted">Tie-breaking logic for pseudo-traits - maps outcome IDs to option lists (JSON format)</small>
+        </div>
+    }
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <div class="form-check">
+                <input type="checkbox" 
+                       name="Questions[@index].Required" 
+                       id="Questions_@(index)__Required"
+                       class="form-check-input" 
+                       checked="@Model.Required" 
+                       value="true" />
+                <input type="hidden" name="Questions[@index].Required" value="false" />
+                <label class="form-check-label" for="Questions_@(index)__Required">
+                    Required question
+                </label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-check">
+                <input type="checkbox" 
+                       name="Questions[@index].IsPseudoTrait" 
+                       id="Questions_@(index)__IsPseudoTrait"
+                       class="form-check-input" 
+                       checked="@Model.IsPseudoTrait" 
+                       value="true" />
+                <input type="hidden" name="Questions[@index].IsPseudoTrait" value="false" />
+                <label class="form-check-label" for="Questions_@(index)__IsPseudoTrait">
+                    Is pseudo-trait
+                </label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-check">
+                <input type="checkbox" 
+                       name="Questions[@index].AllowMultiple" 
+                       id="Questions_@(index)__AllowMultiple"
+                       class="form-check-input" 
+                       checked="@Model.AllowMultiple" 
+                       value="true" />
+                <input type="hidden" name="Questions[@index].AllowMultiple" value="false" />
+                <label class="form-check-label" for="Questions_@(index)__AllowMultiple">
+                    Allow multiple selections
+                </label>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Type == "Number")
+    {
+        <div class="mb-3">
+            <label class="form-label">Bounds (Optional)</label>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <input type="number" 
+                           name="Questions[@index].Bounds.Min" 
+                           value="@Model.Bounds?.Min"
+                           class="form-control" 
+                           placeholder="Min value" />
+                </div>
+                <div class="col-md-6">
+                    <input type="number" 
+                           name="Questions[@index].Bounds.Max" 
+                           value="@Model.Bounds?.Max"
+                           class="form-control" 
+                           placeholder="Max value" />
+                </div>
+            </div>
+            <small class="form-text text-muted">Set minimum and maximum allowed values</small>
+        </div>
+    }
+
+    @if (Model.Type == "SingleSelect" || Model.Type == "MultiSelect")
+    {
+        <div class="mb-3 options-section" id="optionsSection_@index" data-question-index="@index">
+            <label class="form-label">Options *</label>
+            <small class="form-text text-muted d-block mb-2">At least one option is required for select-type questions</small>
+            <div id="optionsContainer_@index">
+                @for (int i = 0; i < Model.Options.Count; i++)
+                {
+                    var option = Model.Options[i];
+                    <div class="input-group mb-2" data-option-index="@i">
+                        <input type="hidden" name="Questions[@index].Options[@i].OptionId" value="@option.OptionId" />
+                        <input type="text" 
+                               name="Questions[@index].Options[@i].Label" 
+                               value="@option.Label"
+                               class="form-control" 
+                               placeholder="Option label" 
+                               required />
+                        <input type="text" 
+                               name="Questions[@index].Options[@i].Value" 
+                               value="@option.Value"
+                               class="form-control" 
+                               placeholder="Value" />
+                        <button type="button" class="btn btn-outline-danger" onclick="removeOption(@index, @i)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                }
+                @if (Model.Options.Count == 0)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i> No options added yet. At least one option is required for @Model.Type questions.
+                    </div>
+                }
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addOption(@index)">
+                <i class="bi bi-plus"></i> Add Option
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="mb-3 options-section" id="optionsSection_@index" data-question-index="@index" style="display: none;">
+            <label class="form-label">Options *</label>
+            <small class="form-text text-muted d-block mb-2">At least one option is required for select-type questions</small>
+            <div id="optionsContainer_@index">
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addOption(@index)">
+                <i class="bi bi-plus"></i> Add Option
+            </button>
+        </div>
+    }
+</div>

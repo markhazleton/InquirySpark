@@ -1,0 +1,42 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "Microsoft.AspNetCore": "Information"
+    }
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Information",
+        "Microsoft.AspNetCore": "Warning",
+        "System": "Warning"
+      }
+    },
+    "LogDirectory": "./logs"
+  },
+  "DecisionEngine": {
+    "ConfigPath": "./Config/DecisionSpecs",
+    "DefaultSpecId": "TECH_STACK_ADVISOR_V1",
+    "ApiKey": "dev-api-key-change-in-production"
+  },
+  "ConversationStorage": {
+    "Path": "./conversations"
+  },
+  "DecisionSpecs": {
+    "RootPath": "./Config/DecisionSpecs",
+    "SoftDeleteRetentionDays": 30,
+    "IndexFileName": "DecisionSpecIndex.json"
+  },
+  "OpenAI": {
+    "Provider": "OpenAI",
+    "ApiKey": "your-openai-api-key-here",
+    "Model": "gpt-4",
+    "MaxTokens": 500,
+    "Temperature": 0.7,
+    "EnableFallback": true,
+    "TimeoutSeconds": 30
+  },
+  "AllowedHosts": "*"
+}

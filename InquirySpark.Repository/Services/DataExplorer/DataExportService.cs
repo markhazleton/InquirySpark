@@ -47,7 +47,7 @@ public class DataExportService(
 {
     private readonly InquirySparkContext _context = context;
     private readonly ILogger<DataExportService> _logger = logger;
-    private const int MaxRowCap = 50000; // Hard limit per spec
+    private const int _maxRowCap = 50000; // Hard limit per spec
 
     /// <summary>
     /// Creates a new export request and queues it for background processing
@@ -64,7 +64,7 @@ public class DataExportService(
                 .FirstOrDefaultAsync(c => c.ChartDefinitionId == chartDefinitionId) ?? throw new KeyNotFoundException($"Chart definition {chartDefinitionId} not found");
 
             // Enforce row cap
-            var rowLimit = Math.Min(options.MaxRows, MaxRowCap);
+            var rowLimit = Math.Min(options.MaxRows, _maxRowCap);
 
             // Create export request
             var exportRequest = new DataExportRequestEntity

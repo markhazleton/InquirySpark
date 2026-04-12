@@ -74,8 +74,8 @@ public static class LogExtensions
             type.IsPrimitive ||
             new Type[]
             {
-                typeof(String),
-                typeof(Decimal),
+                typeof(string),
+                typeof(decimal),
                 typeof(DateTime),
                 typeof(DateTimeOffset),
                 typeof(TimeSpan),

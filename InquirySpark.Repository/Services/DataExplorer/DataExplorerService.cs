@@ -93,7 +93,7 @@ public class DataExplorerService(
     private readonly InquirySparkContext _context = context;
     private readonly IAuditLogService _auditService = auditService;
     private readonly ILogger<DataExplorerService> _logger = logger;
-    private const int MaxRowLimit = 100000; // Hard limit for data exploration
+    private const int _maxRowLimit = 100000; // Hard limit for data exploration
 
     /// <summary>
     /// Retrieves paged, filtered, and sorted data for a chart definition's dataset

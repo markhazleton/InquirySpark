@@ -12,12 +12,12 @@ public sealed class StrongDictionary<TKey, TValue>
     /// <summary>
     /// The dictionary
     /// </summary>
-    private readonly Dictionary<TKey, TValue> _Dictionary;
+    private readonly Dictionary<TKey, TValue> _dictionary;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StrongDictionary{TKey, TValue}"/> class.
     /// </summary>
-    public StrongDictionary() { _Dictionary = []; }
+    public StrongDictionary() { _dictionary = []; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StrongDictionary{TKey, TValue}"/> class.
@@ -32,19 +32,19 @@ public sealed class StrongDictionary<TKey, TValue>
     {
         get
         {
-            _Dictionary.TryGetValue(key, out TValue vOut);
+            _dictionary.TryGetValue(key, out TValue vOut);
             return vOut;
         }
         set
         {
-            _Dictionary.TryGetValue(key, out TValue vOut);
+            _dictionary.TryGetValue(key, out TValue vOut);
             if (vOut == null)
             {
-                _Dictionary.Add(key, value);
+                _dictionary.Add(key, value);
             }
             else
             {
-                _Dictionary[key] = value;
+                _dictionary[key] = value;
             }
         }
     }
@@ -68,10 +68,10 @@ public sealed class StrongDictionary<TKey, TValue>
     /// <param name="value">The value.</param>
     public void Add(TKey key, TValue value)
     {
-        if (_Dictionary.ContainsKey(key))
-            _Dictionary[key] = value;
+        if (_dictionary.ContainsKey(key))
+            _dictionary[key] = value;
         else
-            _Dictionary.Add(key, value);
+            _dictionary.Add(key, value);
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public sealed class StrongDictionary<TKey, TValue>
     public List<string> GetList()
     {
         List<string> list = [];
-        foreach (var item in _Dictionary)
+        foreach (var item in _dictionary)
         {
             list.Add($"{item.Key} - {item.Value}");
         }
@@ -94,11 +94,11 @@ public sealed class StrongDictionary<TKey, TValue>
     /// <param name="info">The information.</param>
     public void GetObjectData(SerializationInfo info)
     {
-        foreach (TKey key in _Dictionary.Keys)
+        foreach (TKey key in _dictionary.Keys)
         {
             if (key != null)
             {
-                info.AddValue(key.ToString(), _Dictionary[key]);
+                info.AddValue(key.ToString(), _dictionary[key]);
             }
         }
     }

@@ -4,6 +4,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Deterministic>false</Deterministic>
@@ -29,8 +30,8 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.1.7" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="Views\Shared\navigation.json">

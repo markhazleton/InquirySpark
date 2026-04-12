@@ -13,7 +13,7 @@ namespace InquirySpark.Repository.Configuration;
 /// </summary>
 public static class SqliteOptionsConfigurator
 {
-    private const int DefaultCommandTimeout = 30;
+    private const int _defaultCommandTimeout = 30;
 
     /// <summary>
     /// Applies the shared SQLite configuration to the supplied options builder.
@@ -35,7 +35,7 @@ public static class SqliteOptionsConfigurator
 
         optionsBuilder.UseSqlite(normalizedConfig.ConnectionString, sqliteOptions =>
         {
-            sqliteOptions.CommandTimeout(normalizedConfig.CommandTimeoutSeconds ?? DefaultCommandTimeout);
+            sqliteOptions.CommandTimeout(normalizedConfig.CommandTimeoutSeconds ?? _defaultCommandTimeout);
             sqliteOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
         });
 

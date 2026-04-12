@@ -15,7 +15,7 @@ public static class StringExtensions
     public static decimal GetDecimalFromString(this string str, decimal defaultValue)
     {
         decimal returnDecimal = defaultValue;
-        Boolean parsed = Decimal.TryParse(str, out returnDecimal);
+        bool parsed = decimal.TryParse(str, out returnDecimal);
         if (!parsed)
             returnDecimal = defaultValue;
         return returnDecimal;
@@ -30,7 +30,7 @@ public static class StringExtensions
     public static int? GetIntFromString(this string str, int? defaultValue)
     {
         int returnInt = defaultValue ?? 0;
-        Boolean parsed = Int32.TryParse(str, out returnInt);
+        bool parsed = int.TryParse(str, out returnInt);
         if (parsed)
         {
             return returnInt;
@@ -50,7 +50,7 @@ public static class StringExtensions
     public static int GetIntFromString(this string str, int defaultValue)
     {
         int returnInt = defaultValue;
-        Boolean parsed = Int32.TryParse(str, out returnInt);
+        bool parsed = int.TryParse(str, out returnInt);
         if (!parsed)
             returnInt = defaultValue;
         return returnInt;

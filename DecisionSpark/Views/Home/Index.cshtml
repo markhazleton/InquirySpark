@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DecisionSpark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+     :root {
+            --primary-color: #0d6efd;
+       --success-color: #198754;
+     --danger-color: #dc3545;
+       --warning-color: #ffc107;
+}
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         min-height: 100vh;
+        padding: 20px 0;
+        }
+
+        .main-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .debug-sidebar .card {
+            margin-bottom: 0;
+        }
+
+   .card-header {
+     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+       color: white;
+            border-radius: 15px 15px 0 0 !important;
+ padding: 20px;
+        }
+
+    .conversation-area {
+            max-height: 500px;
+    overflow-y: auto;
+      padding: 20px;
+ background-color: #f8f9fa;
+            border-radius: 10px;
+     }
+
+        .message {
+    padding: 15px;
+    border-radius: 10px;
+     margin-bottom: 15px;
+         animation: fadeIn 0.3s ease-in;
+        }
+
+        @@keyframes fadeIn {
+from {
+        opacity: 0;
+    transform: translateY(10px);
+      }
+  to {
+       opacity: 1;
+      transform: translateY(0);
+   }
+        }
+
+        .message.assistant {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--primary-color);
+        }
+
+ .message.user {
+        background-color: #f1f8e9;
+    border-left: 4px solid var(--success-color);
+        }
+
+     .message.recommendation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+          border: none;
+    }
+
+        .message.error {
+            background-color: #ffebee;
+   border-left: 4px solid var(--danger-color);
+        }
+
+        .message-label {
+        font-weight: bold;
+   margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+.message-content {
+       font-size: 1.1rem;
+  line-height: 1.6;
+   }
+
+        .input-area {
+            background-color: white;
+          border-radius: 10px;
+        padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+  .btn-send {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+     padding: 12px 30px;
+ font-weight: bold;
+     transition: transform 0.2s;
+        }
+
+        .btn-send:hover {
+     transform: scale(1.05);
+        }
+
+  .btn-send:disabled {
+            background: #6c757d;
+   transform: none;
+   }
+
+        .recommendation-card {
+            background: white;
+     border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .recommendation-title {
+    font-size: 2rem;
+         font-weight: bold;
+ margin-bottom: 10px;
+     }
+
+        .recommendation-details {
+            padding-left: 20px;
+    }
+
+        .recommendation-details li {
+            margin-bottom: 10px;
+        }
+
+        .badge-session {
+background-color: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+ font-size: 0.9rem;
+        }
+
+   .spinner-border-sm {
+     width: 1rem;
+   height: 1rem;
+        }
+
+        .status-indicator {
+    display: inline-block;
+  width: 10px;
+     height: 10px;
+  border-radius: 50%;
+ margin-right: 5px;
+       animation: pulse 2s infinite;
+        }
+
+        .status-indicator.active {
+ background-color: var(--success-color);
+        }
+
+     .status-indicator.complete {
+            background-color: var(--primary-color);
+        }
+
+        @@keyframes pulse {
+            0%, 100% {
+      opacity: 1;
+            }
+     50% {
+     opacity: 0.5;
+   }
+     }
+
+.quick-actions {
+     display: flex;
+            gap: 10px;
+    flex-wrap: wrap;
+          margin-top: 10px;
+   }
+
+     .quick-action-btn {
+        border-radius: 20px;
+  padding: 5px 15px;
+    font-size: 0.9rem;
+   }
+
+        /* Debug section styles */
+        .debug-section {
+       background-color: #1e1e1e;
+      color: #d4d4d4;
+border-radius: 10px;
+     padding: 15px;
+       font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+   max-height: 400px;
+            overflow-y: auto;
+        }
+
+  .debug-section pre {
+        margin: 0;
+        white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .debug-header {
+      background-color: #2d2d30;
+    padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+  }
+
+        .debug-success {
+         color: #4ec9b0;
+ }
+
+        .debug-error {
+     color: #f48771;
+        }
+
+     .debug-warning {
+       color: #dcdcaa;
+        }
+
+     .debug-timestamp {
+  color: #858585;
+        font-size: 0.75rem;
+        }
+
+   .copy-btn {
+         font-size: 0.75rem;
+ padding: 2px 8px;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #667eea !important;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: #667eea !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #764ba2 !important;
+            background-color: rgba(102, 126, 234, 0.1);
+            border-radius: 5px;
+        }
+
+        /* Resizable layout */
+        .content-wrapper {
+            display: flex !important;
+            gap: 15px;
+            position: relative;
+            flex-wrap: nowrap !important;
+            align-items: stretch;
+            width: 100%;
+        }
+        
+        .main-content {
+            flex: 1 1 auto !important;
+            min-width: 0;
+            max-width: none;
+            width: auto;
+        }
+        
+        .main-content.expanded {
+            max-width: none;
+        }
+        
+        .debug-sidebar {
+            flex: 0 0 400px;
+            width: 400px;
+            min-width: 250px;
+            max-width: 800px;
+            transition: flex-basis 0.3s ease, width 0.3s ease, margin-left 0.3s ease;
+            position: relative;
+            display: block !important;
+        }
+        
+        .debug-sidebar .card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .debug-sidebar .card-body {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .debug-sidebar.resizing {
+            transition: none !important;
+        }
+        
+        .debug-sidebar.collapsed {
+            flex: 0 0 0 !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            margin-left: -15px !important;
+            overflow: hidden;
+            padding: 0 !important;
+        }
+        
+        .resize-handle {
+            position: absolute;
+            left: -8px;
+            top: 0;
+            bottom: 0;
+            width: 16px;
+            cursor: col-resize;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .resize-handle:hover::before,
+        .resize-handle.dragging::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+        
+        .resize-handle.dragging::before {
+            opacity: 1;
+        }
+        
+        .debug-toggle-btn {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .debug-toggle-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .debug-sidebar.collapsed + .debug-toggle-btn {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <i class="bi bi-diagram-3-fill"></i> DecisionSpark
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">
+                                <i class="bi bi-house-door"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i> Admin
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                <li><a class="dropdown-item" href="/Admin/DecisionSpecs">
+                                    <i class="bi bi-diagram-3"></i> Manage Specs
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/Admin/DecisionSpecs/Create">
+                                    <i class="bi bi-plus-circle"></i> Create New Spec
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#llmAssistModal">
+                                    <i class="bi bi-magic"></i> LLM Create Spec
+                                </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/swagger">
+                                <i class="bi bi-file-code"></i> API
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">
+                                <i class="bi bi-info-circle"></i> About
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="text-center mb-4">
+            <h1 class="text-white display-4 fw-bold">Test Interface</h1>
+            <p class="text-white lead">Try the DecisionSpark API interactively</p>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="main-content">
+                <!-- Control Panel -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-gear-fill"></i> Controls</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Spec Selector -->
+                        <div class="mb-3">
+                            <label for="specSelector" class="form-label fw-bold">Select Scenario:</label>
+                            <select class="form-select" id="specSelector">
+                                <option value="">Loading...</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn btn-success w-100 mb-2" id="startBtn" onclick="startConversation()">
+                            <i class="bi bi-play-circle-fill"></i> Start New Conversation
+                        </button>
+                        <button class="btn btn-warning w-100 mb-2" onclick="resetConversation()">
+                            <i class="bi bi-arrow-clockwise"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Conversation Card -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+       <h5 class="mb-0">
+              <i class="bi bi-chat-square-text"></i> Conversation
+    </h5>
+     </div>
+  <div>
+             <span class="badge-session" id="sessionBadge">
+          <i class="bi bi-circle-fill status-indicator" id="statusIndicator"></i>
+          <span id="sessionIdDisplay">Not Started</span>
+      </span>
+     </div>
+  </div>
+            <div class="card-body">
+           <div class="conversation-area" id="conversationArea">
+          <div class="text-center text-muted py-5">
+    <i class="bi bi-chat-dots display-1"></i>
+      <p class="mt-3">Click "Start New Conversation" to begin</p>
+      </div>
+        </div>
+
+         <div class="input-area mt-3" id="inputArea" style="display: none;">
+     <form id="answerForm">
+        <div class="mb-3">
+     <label for="inputContainer" class="form-label fw-bold">Your Answer:</label>
+         <div id="inputContainer">
+             <!-- Dynamic input will be rendered here -->
+             <textarea class="form-control form-control-lg" id="userInput" rows="2" 
+    placeholder="Type your answer here..." required></textarea>
+         </div>
+               <div class="form-text" id="inputHint"></div>
+       </div>
+     <div class="d-flex justify-content-between align-items-center">
+  <div class="quick-actions" id="quickActions"></div>
+           <button type="submit" class="btn btn-primary btn-send" id="sendBtn">
+      <i class="bi bi-send-fill"></i> Send Answer
+     </button>
+       </div>
+     </form>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End .main-content -->
+
+            <div class="debug-sidebar" id="debugSidebar">
+                <div class="resize-handle" id="resizeHandle"></div>
+                <!-- Debug Panel -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-bug-fill"></i> Debug Console</h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-light" onclick="copyAllDebug()" title="Copy all debug entries">
+                                <i class="bi bi-files"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-light" onclick="toggleDebugPanel()" title="Collapse panel">
+                                <i class="bi bi-chevron-right" id="debugCollapseIcon"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-light" onclick="clearDebug()">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" id="debugPanel">
+                        <div class="debug-section" id="debugContent">
+                            <div class="debug-header">
+                                <i class="bi bi-info-circle"></i> Debug information will appear here
+                            </div>
+                            <div class="text-muted">Start a conversation to see API request/response details</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="debug-toggle-btn" id="debugToggleBtn" onclick="toggleDebugPanel()" title="Show debug panel">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_KEY = '@ViewBag.ApiKey';
+        const BASE_URL = '@ViewBag.BaseUrl';
+        let currentSessionId = null;
+        let currentNextUrl = null;
+        let debugVisible = true;
+        let debugLog = [];
+
+        // Resizable panel functionality
+        let isResizing = false;
+        let startX = 0;
+        let startWidth = 0;
+        
+        const resizeHandle = document.getElementById('resizeHandle');
+        const debugSidebar = document.getElementById('debugSidebar');
+        
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = debugSidebar.offsetWidth;
+            resizeHandle.classList.add('dragging');
+            debugSidebar.classList.add('resizing');
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            
+            const delta = startX - e.clientX;
+            const newWidth = startWidth + delta;
+            
+            if (newWidth >= 250 && newWidth <= 800) {
+                debugSidebar.style.width = newWidth + 'px';
+                debugSidebar.style.flexBasis = newWidth + 'px';
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                resizeHandle.classList.remove('dragging');
+                debugSidebar.classList.remove('resizing');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        });
+        
+        function toggleDebugPanel() {
+            debugVisible = !debugVisible;
+            const icon = document.getElementById('debugCollapseIcon');
+            const mainContent = document.querySelector('.main-content');
+            
+            if (debugVisible) {
+                debugSidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                icon.className = 'bi bi-chevron-right';
+            } else {
+                debugSidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                icon.className = 'bi bi-chevron-left';
+            }
+        }
+
+        // Debug functions
+        function clearDebug() {
+            debugLog = [];
+            updateDebugDisplay();
+        }
+
+        function addDebugEntry(type, title, data) {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = { type, title, data, timestamp };
+            debugLog.push(entry);
+            updateDebugDisplay();
+            
+            // Auto-show debug panel on errors
+            if (type === 'error' && !debugVisible) {
+                toggleDebugPanel();
+            }
+        }
+
+        function updateDebugDisplay() {
+            const content = document.getElementById('debugContent');
+            if (debugLog.length === 0) {
+                content.innerHTML = `
+                    <div class="debug-header">
+                        <i class="bi bi-info-circle"></i> Debug information will appear here
+                    </div>
+                    <div class="text-muted">Start a conversation to see API request/response details</div>
+                `;
+                return;
+            }
+
+            let html = '';
+            debugLog.forEach((entry, index) => {
+                const colorClass = entry.type === 'error' ? 'debug-error' : 
+                                 entry.type === 'warning' ? 'debug-warning' : 'debug-success';
+                
+                html += `
+                    <div class="debug-header ${colorClass}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                <i class="bi bi-${entry.type === 'error' ? 'x-circle' : entry.type === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                                ${entry.title}
+                            </span>
+                            <div>
+                                <span class="debug-timestamp me-2">${entry.timestamp}</span>
+                                <button class="btn btn-sm btn-outline-light copy-btn" onclick="copyDebugEntry(${index})" title="Copy to clipboard">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <pre>${escapeHtml(JSON.stringify(entry.data, null, 2))}</pre>
+                    ${index < debugLog.length - 1 ? '<hr style="border-color: #444; margin: 15px 0;">' : ''}
+                `;
+            });
+
+            content.innerHTML = html;
+            content.scrollTop = content.scrollHeight;
+        }
+
+        // Copy individual debug entry to clipboard
+        function copyDebugEntry(index) {
+            const entry = debugLog[index];
+            const textToCopy = `=== ${entry.title} ===
+Timestamp: ${entry.timestamp}
+Type: ${entry.type}
+
+${JSON.stringify(entry.data, null, 2)}
+`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = event.target.closest('button');
+                if (!btn) return;
+                
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check"></i>';
+                btn.classList.add('btn-success');
+                btn.classList.remove('btn-outline-light');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-light');
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        // Copy all debug entries to clipboard
+        function copyAllDebug() {
+            if (debugLog.length === 0) {
+                alert('No debug entries to copy');
+                return;
+            }
+
+            let allText = '=== DecisionSpark Debug Log ===\n';
+            allText += `Generated: ${new Date().toLocaleString()}\n`;
+            allText += `Total Entries: ${debugLog.length}\n\n`;
+            
+            debugLog.forEach((entry, index) => {
+                allText += `\n${'='.repeat(60)}\n`;
+                allText += `Entry ${index + 1}: ${entry.title}\n`;
+                allText += `Timestamp: ${entry.timestamp}\n`;
+                allText += `Type: ${entry.type}\n`;
+                allText += `${'='.repeat(60)}\n`;
+                allText += JSON.stringify(entry.data, null, 2);
+                allText += '\n';
+            });
+
+            navigator.clipboard.writeText(allText).then(() => {
+                alert(`Copied all ${debugLog.length} debug entries to clipboard!`);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Start a new conversation
+        async function startConversation() {
+            try {
+                showLoading('Starting conversation...');
+                document.getElementById('startBtn').disabled = true;
+
+                const requestUrl = `${BASE_URL}/conversation/start`;
+                const requestHeaders = {
+                    'Content-Type': 'application/json',
+                    'X-API-KEY': API_KEY
+                };
+                
+                // Get selected spec
+                const selectedSpec = document.getElementById('specSelector').value;
+                const requestBody = selectedSpec ? { spec_id: selectedSpec } : {};
+
+                addDebugEntry('success', '?? Starting Conversation', {
+                    url: requestUrl,
+                    method: 'POST',
+                    headers: requestHeaders,
+                    body: requestBody
+                });
+
+                const response = await fetch(requestUrl, {
+                    method: 'POST',
+                    headers: requestHeaders,
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                addDebugEntry('success', `?? Start Response (${response.status})`, {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    body: data
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                handleStartResponse(data);
+            } catch (error) {
+                addDebugEntry('error', '? Start Error', {
+                    error: error.message,
+                    stack: error.stack
+                });
+                console.error('Error starting conversation:', error);
+                addMessage('error', 'Failed to start conversation: ' + error.message);
+            } finally {
+                document.getElementById('startBtn').disabled = false;
+            }
+        }
+
+        // Handle start response
+        function handleStartResponse(data) {
+            clearConversation();
+            
+            // Extract session ID from nextUrl
+            if (data.nextUrl) {
+                const matches = data.nextUrl.match(/conversation\/([^\/]+)\//);
+                if (matches) {
+                    currentSessionId = matches[1];
+                    currentNextUrl = data.nextUrl;
+                    updateSessionDisplay(currentSessionId, 'active');
+                }
+            }
+
+            // Display welcome message
+            if (data.texts && data.texts.length > 0) {
+                addMessage('assistant', data.texts.join(' '));
+            }
+
+            // Display question
+            if (data.question) {
+                addMessage('assistant', data.question.text);
+                showInputArea(data.question);
+            }
+
+            // Check if already complete
+            if (data.isComplete) {
+                handleCompletion(data);
+            }
+        }
+
+        // Submit answer
+        document.getElementById('answerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get user input based on input type
+            let userInput = '';
+            let requestBody = {};
+            
+            // Check if radio buttons exist
+            const selectedRadio = document.querySelector('input[name="selectedOption"]:checked');
+            if (selectedRadio) {
+                userInput = selectedRadio.value;
+                requestBody = { 
+                    selected_option_ids: [selectedRadio.closest('.form-check').querySelector('input').id.replace('option_', '')]
+                };
+            } else {
+                // Check if checkboxes exist
+                const selectedCheckboxes = document.querySelectorAll('input[name="selectedOptions"]:checked');
+                if (selectedCheckboxes.length > 0) {
+                    const optionIds = Array.from(selectedCheckboxes).map(cb => 
+                        cb.id.replace('option_', '')
+                    );
+                    userInput = Array.from(selectedCheckboxes).map(cb => cb.value).join(', ');
+                    requestBody = { selected_option_ids: optionIds };
+                } else {
+                    // Text input
+                    const textInput = document.getElementById('userInput');
+                    if (!textInput) return;
+                    userInput = textInput.value.trim();
+                    if (!userInput) return;
+                    requestBody = { user_input: userInput };
+                }
+            }
+            
+            if (!userInput || !currentNextUrl) return;
+
+            try {
+                document.getElementById('sendBtn').disabled = true;
+                document.getElementById('sendBtn').innerHTML = '<span class=\"spinner-border spinner-border-sm me-2\"></span>Sending...';
+
+                // Show user's answer
+                addMessage('user', userInput);
+                
+                // Clear input
+                const textInput = document.getElementById('userInput');
+                if (textInput) textInput.value = '';
+
+                // Construct full URL
+                const fullUrl = currentNextUrl.startsWith('http') 
+                    ? currentNextUrl 
+                    : `${BASE_URL}${currentNextUrl}`;
+
+                const requestHeaders = {
+                    'Content-Type': 'application/json',
+                    'X-API-KEY': API_KEY
+                };
+
+                addDebugEntry('success', '?? Sending Answer', {
+                    url: fullUrl,
+                    method: 'POST',
+                    headers: requestHeaders,
+                    body: requestBody,
+                    note: requestBody.selected_option_ids ? 'Using selected_option_ids array' : 'Property name: user_input (snake_case)'
+                });
+
+                const response = await fetch(fullUrl, {
+                    method: 'POST',
+                    headers: requestHeaders,
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                const statusType = response.ok ? 'success' : 'error';
+                const statusIcon = response.ok ? '??' : '?';
+                
+                addDebugEntry(statusType, `${statusIcon} Answer Response (${response.status})`, {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    body: data
+                });
+
+                if (!response.ok) {
+                    handleErrorResponse(data);
+                    return;
+                }
+
+                handleNextResponse(data);
+            } catch (error) {
+                addDebugEntry('error', '? Answer Error', {
+                    error: error.message,
+                    stack: error.stack
+                });
+                console.error('Error submitting answer:', error);
+                addMessage('error', 'Failed to submit answer: ' + error.message);
+            } finally {
+                document.getElementById('sendBtn').disabled = false;
+                document.getElementById('sendBtn').innerHTML = '<i class="bi bi-send-fill"></i> Send Answer';
+            }
+        });
+
+        // Handle next response
+        function handleNextResponse(data) {
+            // Update next URL
+            if (data.nextUrl) {
+                currentNextUrl = data.nextUrl;
+            }
+
+            // Display any text messages
+            if (data.texts && data.texts.length > 0) {
+                addMessage('assistant', data.texts.join(' '));
+            }
+
+            // Display question if not complete
+            if (!data.isComplete && data.question) {
+                addMessage('assistant', data.question.text);
+                showInputArea(data.question);
+            }
+
+            // Handle completion
+            if (data.isComplete) {
+                handleCompletion(data);
+            }
+        }
+
+        // Handle error response
+        function handleErrorResponse(data) {
+            if (data.error) {
+                const errorMsg = typeof data.error === 'string' ? data.error : data.error.message;
+                addMessage('error', errorMsg);
+            }
+
+            // Show rephrased question if available
+            if (data.question) {
+                addMessage('assistant', data.question.text);
+                showInputArea(data.question);
+            }
+        }
+
+        // Handle conversation completion
+        function handleCompletion(data) {
+            updateSessionDisplay(currentSessionId, 'complete');
+            document.getElementById('inputArea').style.display = 'none';
+
+            if (data.displayCards && data.displayCards.length > 0) {
+                const card = data.displayCards[0];
+                addRecommendation(card);
+            }
+
+            if (data.finalResult) {
+                addMessage('assistant', `? Recommendation complete: ${data.finalResult.outcomeId}`);
+            }
+        }
+
+        // Add message to conversation
+        function addMessage(type, content) {
+            const conversationArea = document.getElementById('conversationArea');
+            
+            // Remove empty state
+            if (conversationArea.querySelector('.text-muted')) {
+                conversationArea.innerHTML = '';
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            let icon = '';
+            let label = '';
+            
+            switch(type) {
+                case 'assistant':
+                    icon = '<i class="bi bi-robot"></i>';
+                    label = 'Assistant';
+                    break;
+                case 'user':
+                    icon = '<i class="bi bi-person-fill"></i>';
+                    label = 'You';
+                    break;
+                case 'error':
+                    icon = '<i class="bi bi-exclamation-triangle-fill"></i>';
+                    label = 'Error';
+                    break;
+                case 'recommendation':
+                    icon = '<i class="bi bi-star-fill"></i>';
+                    label = 'Recommendation';
+                    break;
+            }
+
+            messageDiv.innerHTML = `
+                <div class="message-label">${icon} ${label}</div>
+                <div class="message-content">${escapeHtml(content)}</div>
+            `;
+
+            conversationArea.appendChild(messageDiv);
+            conversationArea.scrollTop = conversationArea.scrollHeight;
+        }
+
+        // Add recommendation card
+        function addRecommendation(card) {
+            const conversationArea = document.getElementById('conversationArea');
+            
+            const recDiv = document.createElement('div');
+            recDiv.className = 'message recommendation';
+            
+            let detailsHtml = '';
+            if (card.bodyText && card.bodyText.length > 0) {
+                detailsHtml = '<ul class="recommendation-details">';
+                card.bodyText.forEach(item => {
+                    detailsHtml += `<li>${escapeHtml(item)}</li>`;
+                });
+                detailsHtml += '</ul>';
+            }
+
+            recDiv.innerHTML = `
+                <div class="recommendation-title">${escapeHtml(card.title)}</div>
+                <p class="lead">${escapeHtml(card.subtitle)}</p>
+                <p>${escapeHtml(card.careTypeMessage)}</p>
+                ${detailsHtml}
+            `;
+
+            conversationArea.appendChild(recDiv);
+            conversationArea.scrollTop = conversationArea.scrollHeight;
+        }
+
+        // Show input area with dynamic rendering based on question type
+        function showInputArea(question) {
+            const inputArea = document.getElementById('inputArea');
+            const inputContainer = document.getElementById('inputContainer');
+            const hintDiv = document.getElementById('inputHint');
+            const quickActionsDiv = document.getElementById('quickActions');
+            
+            inputArea.style.display = 'block';
+            quickActionsDiv.innerHTML = '';
+
+            // Render based on question type
+            if (question.type === 'single-select' && question.options && question.options.length > 0) {
+                // Render radio buttons
+                inputContainer.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const radioDiv = document.createElement('div');
+                    radioDiv.className = 'form-check mb-2';
+                    
+                    const radioInput = document.createElement('input');
+                    radioInput.className = 'form-check-input';
+                    radioInput.type = 'radio';
+                    radioInput.name = 'selectedOption';
+                    radioInput.id = `option_${option.id}`;
+                    radioInput.value = option.value;
+                    radioInput.required = index === 0; // Only first needs required
+                    
+                    const radioLabel = document.createElement('label');
+                    radioLabel.className = 'form-check-label';
+                    radioLabel.htmlFor = `option_${option.id}`;
+                    radioLabel.textContent = option.label;
+                    
+                    radioDiv.appendChild(radioInput);
+                    radioDiv.appendChild(radioLabel);
+                    inputContainer.appendChild(radioDiv);
+                });
+                
+                hintDiv.textContent = 'Select one option';
+                
+            } else if (question.type === 'multi-select' && question.options && question.options.length > 0) {
+                // Render checkboxes
+                inputContainer.innerHTML = '';
+                question.options.forEach(option => {
+                    const checkDiv = document.createElement('div');
+                    checkDiv.className = 'form-check mb-2';
+                    
+                    const checkInput = document.createElement('input');
+                    checkInput.className = 'form-check-input';
+                    checkInput.type = 'checkbox';
+                    checkInput.name = 'selectedOptions';
+                    checkInput.id = `option_${option.id}`;
+                    checkInput.value = option.value;
+                    
+                    const checkLabel = document.createElement('label');
+                    checkLabel.className = 'form-check-label';
+                    checkLabel.htmlFor = `option_${option.id}`;
+                    checkLabel.textContent = option.label;
+                    
+                    if (option.isNegative) {
+                        const badge = document.createElement('span');
+                        badge.className = 'badge bg-secondary ms-2';
+                        badge.textContent = 'Clears others';
+                        checkLabel.appendChild(badge);
+                    }
+                    
+                    checkDiv.appendChild(checkInput);
+                    checkDiv.appendChild(checkLabel);
+                    inputContainer.appendChild(checkDiv);
+                });
+                
+                hintDiv.textContent = 'Select one or more options';
+                
+            } else {
+                // Render text input (default)
+                inputContainer.innerHTML = `
+                    <textarea class="form-control form-control-lg" id="userInput" rows="2" 
+                        placeholder="Type your answer here..." required></textarea>
+                `;
+                
+                if (question.allowFreeText) {
+                    hintDiv.textContent = 'Answer naturally. Examples: "5 people", "ages: 4, 9, 35, 40"';
+                } else {
+                    hintDiv.textContent = 'Type your answer';
+                }
+
+                // Add quick action examples for specific questions
+                let examples = [];
+                if (question.id === 'group_size' || question.id === 'team_size') {
+                    examples = ['3', '5 people', '10'];
+                } else if (question.id === 'all_ages') {
+                    examples = ['8, 10, 35, 40', '4, 6, 35', '18, 25, 30'];
+                }
+
+                examples.forEach(example => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'btn btn-outline-secondary btn-sm quick-action-btn';
+                    btn.textContent = example;
+                    btn.onclick = () => {
+                        document.getElementById('userInput').value = example;
+                    };
+                    quickActionsDiv.appendChild(btn);
+                });
+
+                document.getElementById('userInput').focus();
+            }
+        }
+
+        // Update session display
+        function updateSessionDisplay(sessionId, status) {
+            const sessionIdDisplay = document.getElementById('sessionIdDisplay');
+            const statusIndicator = document.getElementById('statusIndicator');
+            
+            sessionIdDisplay.textContent = sessionId ? sessionId : 'Not Started';
+            
+            if (status === 'active') {
+                statusIndicator.className = 'status-indicator active';
+            } else if (status === 'complete') {
+                statusIndicator.className = 'status-indicator complete';
+            } else {
+                statusIndicator.className = 'status-indicator';
+            }
+        }
+
+        // Show loading state
+        function showLoading(message) {
+            const conversationArea = document.getElementById('conversationArea');
+            conversationArea.innerHTML = `
+                <div class="text-center text-muted py-5">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Clear conversation
+        function clearConversation() {
+            const conversationArea = document.getElementById('conversationArea');
+            conversationArea.innerHTML = '';
+            document.getElementById('inputArea').style.display = 'none';
+        }
+
+        // Reset conversation
+        function resetConversation() {
+            currentSessionId = null;
+            currentNextUrl = null;
+            clearConversation();
+            updateSessionDisplay(null, '');
+            
+            const conversationArea = document.getElementById('conversationArea');
+            conversationArea.innerHTML = `
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-chat-dots display-1"></i>
+                    <p class="mt-3">Click "Start New Conversation" to begin</p>
+                </div>
+            `;
+        }
+
+        // Load available specs on page load
+        async function loadSpecs() {
+            try {
+                const response = await fetch(`${BASE_URL}/conversation/specs`, {
+                    headers: { 'X-API-KEY': API_KEY }
+                });
+                
+                if (!response.ok) {
+                    console.error('Failed to load specs:', response.status);
+                    return;
+                }
+                
+                const data = await response.json();
+                const specSelector = document.getElementById('specSelector');
+                
+                specSelector.innerHTML = '';
+                
+                if (data.specs && data.specs.length > 0) {
+                    data.specs.forEach(spec => {
+                        const option = document.createElement('option');
+                        option.value = spec.specId;
+                        option.textContent = spec.displayName + (spec.isDefault ? ' (Default)' : '');
+                        option.selected = spec.isDefault;
+                        specSelector.appendChild(option);
+                    });
+                } else {
+                    specSelector.innerHTML = '<option value="">No specs available</option>';
+                }
+            } catch (error) {
+                console.error('Error loading specs:', error);
+                document.getElementById('specSelector').innerHTML = '<option value="">Error loading specs</option>';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSpecs();
+        });
+
+        // Expose functions to global scope for onclick handlers
+        window.startConversation = startConversation;
+        window.resetConversation = resetConversation;
+        window.toggleDebugPanel = toggleDebugPanel;
+        window.clearDebug = clearDebug;
+        window.copyDebugEntry = copyDebugEntry;
+        window.copyAllDebug = copyAllDebug;
+    </script>
+</body>
+</html>
+
