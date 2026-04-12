@@ -70,6 +70,22 @@ InquirySpark.Common.Tests/
 
 **Terminology Convention**: "Capability completion" = building features in InquirySpark.Web. "Migration" = technical data/identity transitions. "Decommission" = final removal of legacy apps. "Greenfield" = new UX layer over existing shared services (not a backend rewrite).
 
+## Phase Mapping Reference
+
+The plan uses design phases (0, 1); tasks.md uses implementation phases (1–7). This table cross-references them.
+
+| Plan Design Phase | Task Implementation Phase | Task Range |
+|-------------------|--------------------------|------------|
+| Phase 0: Research | Task Phase 1 (Setup) | T001–T004 |
+| Phase 1: Design | Task Phase 2 (Foundational) | T004A–T019A |
+| — | Task Phase 3 (US1 – MVP) | T020–T030B |
+| — | Task Phase 4 (US2 – UX) | T031–T037 |
+| — | Task Phase 5 (US3 – Cutover) | T038–T047B |
+| — | Task Phase 6 (US4 – Governance) | T047C–T055A |
+| — | Task Phase 7 (Polish) | T056–T067 |
+
+---
+
 ## Phase 0: Research Plan
 
 Research objectives derived from spec ambiguity/risk profile:

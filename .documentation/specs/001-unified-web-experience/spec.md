@@ -113,7 +113,7 @@ Platform owners can prove that the unified app preserves compliance, operational
 ### Functional Requirements
 
 - **FR-001**: InquirySpark.Web MUST provide full feature parity for all user-facing capabilities currently delivered by BOTH DecisionSpark and InquirySpark.Admin without loss of functional coverage. The authoritative capability inventory created from both legacy applications defines the required parity scope until decommission is complete.
-- **FR-002**: Users MUST be able to access all merged capabilities through one unified entry point and one authenticated session backed by the existing InquirySpark.Admin authentication and sign-in implementation over the canonical identity authority.
+- **FR-002**: Users MUST be able to access all merged capabilities through one unified entry point and one authenticated session backed by the existing InquirySpark.Admin authentication and sign-in implementation over the `ControlSparkUserContextConnection` Identity SQLite store (canonical identity authority).
 - **FR-003**: The unified experience MUST provide a single navigation model that exposes former DecisionSpark and InquirySpark.Admin features in a coherent information architecture.
 - **FR-004**: The system MUST preserve current role and permission semantics for both legacy capability sets during and after migration, including role mapping across identity migration.
 - **FR-005**: The solution MUST support phased capability completion by domain so capability groups can be introduced and validated incrementally. FR-010 defines the tracking artifact (capability matrix) that records per-domain completion status for this phased process.
@@ -155,7 +155,7 @@ Platform owners can prove that the unified app preserves compliance, operational
 
 - **SC-001**: 100% of the capabilities inventoried from BOTH DecisionSpark and InquirySpark.Admin are implemented in InquirySpark.Web and marked complete in the capability matrix.
 - **SC-002**: At least 95% of validated unified workflows complete successfully in InquirySpark.Web during pre-release validation.
-- **SC-003**: Users perform cross-domain tasks in InquirySpark.Web without opening a second application in 100% of tested scenarios.
+- **SC-003**: Users perform cross-domain tasks in InquirySpark.Web without opening a second application in 100% of scenarios enumerated in the capability parity traceability matrix (`contracts/capability-parity-traceability.md`).
 - **SC-004**: Post-cutover, zero user-reported incidents are attributed to app-switching confusion within 30 days of final decommission.
 - **SC-005**: Completion and cutover readiness checks (functional parity, access parity, operational readiness) achieve 100% pass rate before final decommissioning of legacy applications.
 - **SC-006**: Within 30 days after cutover, no Sev-1 incidents are attributed to missing migrated functionality.
