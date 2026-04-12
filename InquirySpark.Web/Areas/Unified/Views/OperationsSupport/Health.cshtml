@@ -1,0 +1,70 @@
+@{
+    ViewData["Title"] = "System Health";
+    var dbStatus = ViewData["DbStatus"] as string ?? "Unknown";
+    var provider = ViewData["Provider"] as string ?? "Unknown";
+    var checkedAt = ViewData["CheckedAt"] is DateTime dt ? dt.ToString("O") : "N/A";
+    var error = ViewData["Error"] as string;
+    var isConnected = dbStatus == "Connected";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-heart-pulse"></i> System Health</h2>
+        <span class="badge bg-light text-primary"><i class="bi bi-clock"></i> Checked: @checkedAt</span>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body">
+                        <i class="bi @(isConnected ? "bi-database-check text-success" : "bi-database-x text-danger") fs-1"></i>
+                        <div class="h4 mt-2 @(isConnected ? "text-success" : "text-danger")">@dbStatus</div>
+                        <div class="text-muted small">Database Connection</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-server fs-1 text-info"></i>
+                        <div class="h5 mt-2 text-info text-break">@provider</div>
+                        <div class="text-muted small">Database Provider</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-check-circle-fill fs-1 @(isConnected ? "text-success" : "text-danger")"></i>
+                        <div class="h4 mt-2 @(isConnected ? "text-success" : "text-danger")">
+                            @(isConnected ? "Healthy" : "Degraded")
+                        </div>
+                        <div class="text-muted small">Overall Status</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(error))
+        {
+            <div class="alert alert-danger mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> <strong>Error:</strong> @error
+            </div>
+        }
+
+        <div class="alert @(isConnected ? "alert-success" : "alert-warning") mt-3" role="alert">
+            <i class="bi @(isConnected ? "bi-check-lg" : "bi-exclamation-triangle")"></i>
+            @if (isConnected)
+            {
+                <span>All systems operational. The InquirySpark database is reachable and responding.</span>
+            }
+            else
+            {
+                <span>Database connection unavailable. Some functionality may be limited.</span>
+            }
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <i class="bi bi-info-circle"></i> Health checked at @checkedAt UTC
+    </div>
+</div>

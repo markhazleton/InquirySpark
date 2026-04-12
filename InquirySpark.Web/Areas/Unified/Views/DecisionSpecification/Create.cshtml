@@ -1,0 +1,49 @@
+@model InquirySpark.Common.Models.Spec.DecisionSpecDocument
+@{
+    ViewData["Title"] = "Create Decision Specification";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0"><i class="bi bi-plus-circle"></i> Create Decision Specification</h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="SpecId" class="form-label fw-semibold">Spec ID</label>
+                    <input asp-for="SpecId" class="form-control" placeholder="e.g. decision-routing-v1" />
+                    <span asp-validation-for="SpecId" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Version" class="form-label fw-semibold">Version</label>
+                    <input asp-for="Version" class="form-control" placeholder="e.g. 1.0.0" />
+                    <span asp-validation-for="Version" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="CanonicalBaseUrl" class="form-label fw-semibold">Canonical Base URL</label>
+                    <input asp-for="CanonicalBaseUrl" class="form-control" placeholder="https://example.com/api/v1" />
+                    <span asp-validation-for="CanonicalBaseUrl" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="SafetyPreamble" class="form-label fw-semibold">Safety Preamble</label>
+                    <textarea asp-for="SafetyPreamble" class="form-control" rows="3"
+                              placeholder="Optional safety or compliance preamble…"></textarea>
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Create Specification
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

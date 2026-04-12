@@ -1,0 +1,48 @@
+@model IEnumerable<InquirySpark.Common.Models.Spec.DecisionSpec>
+@{
+    ViewData["Title"] = "Decision Conversations";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-chat-dots"></i> Decision Conversations</h2>
+        <a asp-action="Sessions" class="btn btn-light btn-sm">
+            <i class="bi bi-clock-history"></i> My Sessions
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="bi bi-key"></i> Spec ID</th>
+                        <th><i class="bi bi-file-earmark-text"></i> Version</th>
+                        <th><i class="bi bi-list-ul"></i> Traits</th>
+                        <th><i class="bi bi-diagram-3"></i> Outcomes</th>
+                        <th class="no-sort">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><code>@item.SpecId</code></td>
+                            <td><span class="badge bg-secondary">@item.Version</span></td>
+                            <td>@item.Traits.Count</td>
+                            <td>@item.Outcomes.Count</td>
+                            <td>
+                                <a asp-action="Start" asp-route-specId="@item.SpecId" class="btn btn-sm btn-outline-primary" title="Start Conversation">
+                                    <i class="bi bi-play-circle"></i> Start
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle"></i> Total: @Model.Count() decision specs</span>
+        <span><i class="bi bi-lightning"></i> DataTables enabled</span>
+    </div>
+</div>

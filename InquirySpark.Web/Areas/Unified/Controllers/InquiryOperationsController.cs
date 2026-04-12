@@ -47,7 +47,6 @@ public sealed class InquiryOperationsController(
     {
         var items = await context.Surveys
             .Include(s => s.SurveyType)
-            .Select(s => new { s.SurveyId, s.SurveyNm, s.SurveyShortNm, s.ModifiedDt })
             .ToListAsync(cancellationToken);
         return View(nameof(SurveyStatus), items);
     }

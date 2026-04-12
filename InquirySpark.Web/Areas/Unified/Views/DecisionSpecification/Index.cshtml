@@ -1,0 +1,76 @@
+@model IEnumerable<InquirySpark.Common.Models.Spec.DecisionSpec>
+@{
+    ViewData["Title"] = "Decision Specifications";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-file-earmark-text"></i> Decision Specifications</h2>
+        <a asp-action="Create" class="btn btn-light btn-sm">
+            <i class="bi bi-plus-circle"></i> Create New
+        </a>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-md-6">
+                <input type="search" name="search" class="form-control" placeholder="Search by ID or content…"
+                       value="@Context.Request.Query["search"]" />
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">All statuses</option>
+                    <option value="Draft" selected="@(Context.Request.Query["status"] == "Draft")">Draft</option>
+                    <option value="Active" selected="@(Context.Request.Query["status"] == "Active")">Active</option>
+                    <option value="Archived" selected="@(Context.Request.Query["status"] == "Archived")">Archived</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Filter</button>
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-x-circle"></i> Clear</a>
+            </div>
+        </form>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="bi bi-key"></i> Spec ID</th>
+                        <th><i class="bi bi-layers"></i> Version</th>
+                        <th><i class="bi bi-list-ul"></i> Traits</th>
+                        <th><i class="bi bi-diagram-3"></i> Outcomes</th>
+                        <th class="no-sort">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><code>@item.SpecId</code></td>
+                            <td><span class="badge bg-secondary">@item.Version</span></td>
+                            <td>@item.Traits.Count</td>
+                            <td>@item.Outcomes.Count</td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-action="Details" asp-route-specId="@item.SpecId" class="btn btn-outline-info" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-specId="@item.SpecId" class="btn btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Audit" asp-route-specId="@item.SpecId" class="btn btn-outline-secondary" title="Audit History">
+                                        <i class="bi bi-clock-history"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle"></i> Total: @Model.Count() specifications</span>
+        <span><i class="bi bi-lightning"></i> DataTables enabled</span>
+    </div>
+</div>

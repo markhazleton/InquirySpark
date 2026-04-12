@@ -1,0 +1,49 @@
+@model List<InquirySpark.Repository.Database.SiteRole>
+@{
+    ViewData["Title"] = "Site Roles";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-shield-lock"></i> Site Roles</h2>
+        <span class="badge bg-light text-primary">@Model.Count roles</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="bi bi-hash"></i> ID</th>
+                        <th><i class="bi bi-shield"></i> Role Name</th>
+                        <th><i class="bi bi-toggle-on"></i> Active</th>
+                        <th><i class="bi bi-people"></i> Users</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td><strong>@item.RoleName</strong></td>
+                            <td>
+                                @if (item.Active)
+                                {
+                                    <span class="badge bg-success"><i class="bi bi-check"></i> Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </td>
+                            <td>@item.ApplicationUsers.Count</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle"></i> Total: @Model.Count roles</span>
+        <span><i class="bi bi-lightning"></i> DataTables enabled</span>
+    </div>
+</div>

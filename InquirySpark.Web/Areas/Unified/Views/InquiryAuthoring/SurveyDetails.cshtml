@@ -1,0 +1,62 @@
+@model InquirySpark.Repository.Database.Survey
+@{
+    ViewData["Title"] = $"Survey — {Model.SurveyNm}";
+}
+
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-journal-check"></i> @Model.SurveyNm</h2>
+        <span class="badge bg-light text-primary">@Model.SurveyShortNm</span>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Survey ID</dt>
+            <dd class="col-sm-9">@Model.SurveyId</dd>
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.SurveyNm</dd>
+            <dt class="col-sm-3">Short Name</dt>
+            <dd class="col-sm-9">@Model.SurveyShortNm</dd>
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.SurveyDs</dd>
+            <dt class="col-sm-3">Type</dt>
+            <dd class="col-sm-9">@Model.SurveyType?.SurveyTypeNm</dd>
+            <dt class="col-sm-3">Use Groups</dt>
+            <dd class="col-sm-9">@(Model.UseQuestionGroupsFl ? "Yes" : "No")</dd>
+            <dt class="col-sm-3">Modified</dt>
+            <dd class="col-sm-9">@Model.ModifiedDt.ToString("yyyy-MM-dd")</dd>
+        </dl>
+
+        @if (Model.QuestionGroups?.Any() == true)
+        {
+            <h5 class="mt-3"><i class="bi bi-collection"></i> Question Groups (@Model.QuestionGroups.Count)</h5>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Short Name</th>
+                            <th>Order</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.QuestionGroups.OrderBy(g => g.GroupOrder))
+                        {
+                            <tr>
+                                <td>@group.QuestionGroupId</td>
+                                <td>@group.QuestionGroupNm</td>
+                                <td>@group.QuestionGroupShortNm</td>
+                                <td>@group.GroupOrder</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <a asp-action="Surveys" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back to Surveys
+        </a>
+    </div>
+</div>

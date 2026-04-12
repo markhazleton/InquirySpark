@@ -1,0 +1,38 @@
+@model InquirySpark.Repository.Database.Application
+@{
+    ViewData["Title"] = $"Application — {Model.ApplicationNm}";
+}
+
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-grid"></i> @Model.ApplicationNm</h2>
+        <code class="text-white">@Model.ApplicationCd</code>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Application ID</dt>
+            <dd class="col-sm-9">@Model.ApplicationId</dd>
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.ApplicationNm</dd>
+            <dt class="col-sm-3">Code</dt>
+            <dd class="col-sm-9"><code>@Model.ApplicationCd</code></dd>
+            <dt class="col-sm-3">Short Name</dt>
+            <dd class="col-sm-9">@Model.ApplicationShortNm</dd>
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@(Model.ApplicationDs ?? "—")</dd>
+            <dt class="col-sm-3">Type</dt>
+            <dd class="col-sm-9">@Model.ApplicationType?.ApplicationTypeNm</dd>
+            <dt class="col-sm-3">Company</dt>
+            <dd class="col-sm-9">@Model.Company?.Name</dd>
+            <dt class="col-sm-3">Menu Order</dt>
+            <dd class="col-sm-9">@Model.MenuOrder</dd>
+            <dt class="col-sm-3">Folder</dt>
+            <dd class="col-sm-9"><code>@Model.ApplicationFolder</code></dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Applications" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back to Applications
+        </a>
+    </div>
+</div>

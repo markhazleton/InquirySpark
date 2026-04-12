@@ -1,0 +1,84 @@
+@model InquirySpark.Common.Models.Spec.DecisionSpec
+@{
+    ViewData["Title"] = $"Conversation — {Model.SpecId}";
+}
+
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-play-circle"></i> @Model.SpecId</h2>
+        <span class="badge bg-light text-primary">v@Model.Version</span>
+    </div>
+    <div class="card-body">
+        @if (!string.IsNullOrEmpty(Model.SafetyPreamble))
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-shield-check"></i> <strong>Safety preamble:</strong> @Model.SafetyPreamble
+            </div>
+        }
+        <div class="row g-3 mb-3">
+            <div class="col-md-4 text-center">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <div class="display-6 fw-bold text-primary">@Model.Traits.Count</div>
+                        <div class="text-muted small">Traits</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <div class="display-6 fw-bold text-success">@Model.Outcomes.Count</div>
+                        <div class="text-muted small">Outcomes</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <div class="display-6 fw-bold text-info">@Model.DerivedTraits.Count</div>
+                        <div class="text-muted small">Derived Traits</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5><i class="bi bi-list-ul"></i> Traits</h5>
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Key</th>
+                        <th>Question</th>
+                        <th>Answer Type</th>
+                        <th>Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trait in Model.Traits)
+                    {
+                        <tr>
+                            <td><code>@trait.Key</code></td>
+                            <td>@trait.QuestionText</td>
+                            <td><span class="badge bg-secondary">@trait.AnswerType</span></td>
+                            <td>
+                                @if (trait.Required)
+                                {
+                                    <span class="badge bg-danger">Required</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-dark">Optional</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
