@@ -12,7 +12,7 @@ Consolidate overlapping admin capabilities from `DecisionSpark` and `InquirySpar
 **Language/Version**: C# on .NET 10 (`net10.0`)  
 **Primary Dependencies**: ASP.NET Core MVC/Razor, Entity Framework Core (SQLite provider), existing shared libraries in `InquirySpark.Common` and `InquirySpark.Repository`, existing UI stack (Bootstrap 5 + DataTables + Bootswatch pattern)  
 **Client Framework/Library**: Server-rendered ASP.NET Core Razor views with Bootstrap 5, DataTables, and targeted TypeScript/JavaScript modules (no SPA framework baseline)  
-**Storage**: Existing SQLite assets and current repository/context model; no new primary persistence engine introduced by this feature  
+**Storage**: Existing SQLite assets and current repository/context model. NO new database objects or EF models will be created. Migration orchestrations (capability matrix, cutover) are strictly managed via `appsettings.json` config structures. Audit events rely exclusively on the `ILogger` pipeline. DecisionSpark does not use SQLite and its data mechanisms will seamlessly deploy alongside the existing `InquirySpark.Repository` without schema conflicts.  
 **Testing**: `dotnet test` (MSTest projects), integration tests for cross-domain workflows and cutover/readiness paths  
 **Target Platform**: ASP.NET Core web hosting (development on Windows; deployable on standard .NET-supported server environments)  
 **Project Type**: Web application consolidation (single unified user experience over existing shared backend/services)  
@@ -63,6 +63,10 @@ InquirySpark.Common.Tests/
 ```
 
 **Structure Decision**: Use web-application consolidation structure centered on `InquirySpark.Web` as the unified experience layer, while extracting/reusing domain logic through `InquirySpark.Common` and `InquirySpark.Repository`. DecisionSpark and InquirySpark.Admin are source references during development and are removed from active runtime deployment when completion gates pass.
+
+**Note**: `InquirySpark.Web` does not yet exist in the repository and must be scaffolded (csproj, Program.cs, Area registration, solution integration) as the first foundational task before any code tasks that reference it.
+
+**Terminology Convention**: "Capability completion" = building features in InquirySpark.Web. "Migration" = technical data/identity transitions. "Decommission" = final removal of legacy apps. "Greenfield" = new UX layer over existing shared services (not a backend rewrite).
 
 ## Phase 0: Research Plan
 

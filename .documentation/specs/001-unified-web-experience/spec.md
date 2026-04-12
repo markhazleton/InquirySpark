@@ -115,34 +115,38 @@ Platform owners can prove that the unified app preserves compliance, operational
 - **FR-002**: Users MUST be able to access all merged capabilities through one unified entry point and one authenticated session backed by a canonical identity authority.
 - **FR-003**: The unified experience MUST provide a single navigation model that exposes former DecisionSpark and InquirySpark.Admin features in a coherent information architecture.
 - **FR-004**: The system MUST preserve current role and permission semantics for both legacy capability sets during and after migration, including role mapping across identity migration.
-- **FR-005**: The solution MUST support phased capability completion by domain so capability groups can be introduced and validated incrementally.
+- **FR-005**: The solution MUST support phased capability completion by domain so capability groups can be introduced and validated incrementally. FR-010 defines the tracking artifact (capability matrix) that records per-domain completion status for this phased process.
 - **FR-006**: The system MUST support rollback-safe cutover controls to prevent irreversible production disruption.
-- **FR-007**: The unified application MUST preserve existing operational auditability, including user actions and administrative events needed for support and compliance.
+- **FR-007**: The unified application MUST preserve existing operational auditability, including user actions and administrative events needed for support and compliance. Required audit event types include: user authentication/authorization events, CRUD operations on surveys/questions/decisions, capability completion state changes, cutover decisions, role/permission changes, and administrative configuration changes.
 - **FR-008**: InquirySpark.Web MUST define canonical routes for all unified workflows and MUST NOT depend on legacy route compatibility behavior.
 - **FR-009**: The unified application MUST present consistent UX patterns (page layout, action placement, and terminology) across all migrated capability areas.
-- **FR-010**: The solution MUST define and publish a capability-by-capability migration matrix showing parity status: not started, in progress, validated, and cut over.
-- **FR-011**: The solution MUST define objective completion and cutover criteria per capability domain and require those criteria to pass before finalizing as the only web application.
+- **FR-010**: The solution MUST define and publish a capability-by-capability completion matrix showing parity status: not started, in progress, validated, and cut over. This matrix is the implementation artifact for the phased completion process defined in FR-005.
+- **FR-011**: The solution MUST define objective completion and pre-cutover gate criteria per capability domain and require those criteria to pass before finalizing as the only web application. FR-014 defines the post-cutover runtime validation procedures that confirm parity after cutover is executed.
 - **FR-012**: The solution MUST provide stakeholder-facing communication artifacts for capability completion phases, cutover windows, decommission timing, and user impact.
-- **FR-013**: The unified experience MUST maintain current service-level expectations for availability and response behavior during phased capability completion, including 95% of key user actions completing in 2 seconds or less.
-- **FR-014**: The solution MUST provide post-cutover validation procedures that confirm parity, permissions, and critical workflow integrity.
+- **FR-013**: The unified experience MUST maintain current service-level expectations for availability and response behavior during phased capability completion, including 95% of the following key user actions completing in 2 seconds or less: (1) page load for any primary navigation destination, (2) list/search results display for surveys, questions, decisions, and applications, (3) single-record create/edit/save round-trip, (4) cross-domain navigation switch, (5) login and session establishment.
+- **FR-014**: The solution MUST provide post-cutover runtime validation procedures that confirm functional parity, permissions, and critical workflow integrity after each domain cutover is executed. This complements pre-cutover gate criteria defined in FR-011.
 - **FR-015**: The consolidation MUST use a single canonical identity store with a completion bridge that supports phased user/account transition without requiring parallel long-term sign-in models.
 - **FR-016**: Once InquirySpark.Web completion criteria are met, DecisionSpark and InquirySpark.Admin MUST be removed from active runtime deployment.
 
 ### Key Entities *(include if feature involves data)*
 
-- **Capability Inventory Item**: Represents one functional area from DecisionSpark or InquirySpark.Admin with attributes for owner, parity status, dependencies, and migration phase.
-- **Unified Navigation Node**: Represents a navigable destination in InquirySpark.Web mapped to one or more legacy entry points.
-- **Migration Phase**: Represents a controlled rollout stage including scope, eligibility criteria, readiness checks, and rollback conditions.
-- **Parity Validation Record**: Represents evidence that a migrated capability meets functional, permission, and UX expectations.
-- **Cutover Decision Record**: Represents go/no-go outcomes for retiring legacy application entry points.
+*CRITICAL CONSTRAINT: No new database objects, schemas, or EF Core entities will be created. The existing `InquirySpark.Repository` will be used as-is. All tracking for migration, capabilities, and parity will exist as configuration models (e.g. `appsettings.json`) or in-memory state. DecisionSpark does not use SQLite and its data access will be integrated securely without conflicting with the immutable SQLite rules in the constitution. Audit tracking will be routed completely through standard `ILogger` logging pipelines.*
+
+- **Capability Inventory Item**: Represents one functional area from DecisionSpark or InquirySpark.Admin with attributes for owner, parity status, dependencies, and migration phase (Configuration Model).
+- **Unified Navigation Node**: Represents a navigable destination in InquirySpark.Web mapped to one or more legacy entry points (Configuration Model).
+- **Migration Phase**: Represents a controlled rollout stage including scope, eligibility criteria, readiness checks, and rollback conditions (Configuration Model).
+- **Parity Validation Record**: Represents evidence that a migrated capability meets functional, permission, and UX expectations (Configuration Model).
+- **Cutover Decision Record**: Represents go/no-go outcomes for retiring legacy application entry points (Configuration Model).
 
 ### Assumptions
 
+- "Greenfield" means new user-facing UX built in InquirySpark.Web that consumes existing shared services in `InquirySpark.Common` and `InquirySpark.Repository`. It does not mean rewriting backend domain logic. Legacy controller/view code in DecisionSpark and InquirySpark.Admin serves as a functional reference, not as code to be ported.
 - New development occurs in InquirySpark.Web and does not rely on legacy runtime behavior.
 - Current user roles and access policies are the baseline authority and must be preserved unless explicitly re-approved.
 - Consolidation target is a single end-user experience under InquirySpark.Web, even if internal migration occurs in phases.
 - Existing business capabilities from the two current admin applications are implemented natively in InquirySpark.Web.
 - The target-state authentication model is one canonical identity authority, with temporary migration bridging only during transition.
+- **Terminology convention**: "Capability completion" refers to the process of building features in InquirySpark.Web. "Migration" refers to technical data/identity transitions. "Decommission" refers to final removal of legacy apps from active deployment.
 
 ## Success Criteria *(mandatory)*
 
@@ -151,7 +155,7 @@ Platform owners can prove that the unified app preserves compliance, operational
 - **SC-001**: 100% of capabilities from DecisionSpark and InquirySpark.Admin are implemented in InquirySpark.Web and marked complete in the capability matrix.
 - **SC-002**: At least 95% of validated unified workflows complete successfully in InquirySpark.Web during pre-release validation.
 - **SC-003**: Users perform cross-domain tasks in InquirySpark.Web without opening a second application in 100% of tested scenarios.
-- **SC-004**: Post-cutover support requests attributable to app-switching confusion decrease by at least 50% compared with the pre-cutover baseline period.
+- **SC-004**: Post-cutover, zero user-reported incidents are attributed to app-switching confusion within 30 days of final decommission.
 - **SC-005**: Completion and cutover readiness checks (functional parity, access parity, operational readiness) achieve 100% pass rate before final decommissioning of legacy applications.
 - **SC-006**: Within 30 days after cutover, no Sev-1 incidents are attributed to missing migrated functionality.
-- **SC-007**: During migration validation and after cutover, 95% of key user actions complete in 2 seconds or less.
+- **SC-007**: During migration validation and after cutover, 95% of key user actions (as enumerated in FR-013) complete in 2 seconds or less.
