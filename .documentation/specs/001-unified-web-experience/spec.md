@@ -18,8 +18,9 @@ required_gates: checklist, analyze, critic
 
 ### Session 2026-04-12
 
+- Q: What parity standard applies to the unified app scope? → A: Full feature parity across BOTH DecisionSpark and InquirySpark.Admin; no discovered user-facing capability is omitted without explicit decommission approval.
 - Q: What is the migration rollout unit for cutover gates? → A: Capability-domain phased cutover.
-- Q: What identity model should InquirySpark.Web use during consolidation? → A: Single canonical identity store with migration bridge.
+- Q: What identity model should InquirySpark.Web use during consolidation? → A: Reuse the existing InquirySpark.Admin authentication and sign-in implementation over `ControlSparkUserContextConnection` as the canonical identity baseline, with migration bridge support only where phased account transition requires it.
 - Q: How should legacy URLs/bookmarks be handled post-cutover? → None, this is greenfield-only development.
 - Q: What user-facing performance target should define migration success? → A: 95% of key actions complete in <=2 seconds.
 
@@ -111,8 +112,8 @@ Platform owners can prove that the unified app preserves compliance, operational
 
 ### Functional Requirements
 
-- **FR-001**: InquirySpark.Web MUST provide all user-facing capabilities currently delivered by DecisionSpark and InquirySpark.Admin without loss of functional coverage.
-- **FR-002**: Users MUST be able to access all merged capabilities through one unified entry point and one authenticated session backed by a canonical identity authority.
+- **FR-001**: InquirySpark.Web MUST provide full feature parity for all user-facing capabilities currently delivered by BOTH DecisionSpark and InquirySpark.Admin without loss of functional coverage. The authoritative capability inventory created from both legacy applications defines the required parity scope until decommission is complete.
+- **FR-002**: Users MUST be able to access all merged capabilities through one unified entry point and one authenticated session backed by the existing InquirySpark.Admin authentication and sign-in implementation over the canonical identity authority.
 - **FR-003**: The unified experience MUST provide a single navigation model that exposes former DecisionSpark and InquirySpark.Admin features in a coherent information architecture.
 - **FR-004**: The system MUST preserve current role and permission semantics for both legacy capability sets during and after migration, including role mapping across identity migration.
 - **FR-005**: The solution MUST support phased capability completion by domain so capability groups can be introduced and validated incrementally. FR-010 defines the tracking artifact (capability matrix) that records per-domain completion status for this phased process.
@@ -125,7 +126,7 @@ Platform owners can prove that the unified app preserves compliance, operational
 - **FR-012**: The solution MUST provide stakeholder-facing communication artifacts for capability completion phases, cutover windows, decommission timing, and user impact.
 - **FR-013**: The unified experience MUST maintain current service-level expectations for availability and response behavior during phased capability completion, including 95% of the following key user actions completing in 2 seconds or less: (1) page load for any primary navigation destination, (2) list/search results display for surveys, questions, decisions, and applications, (3) single-record create/edit/save round-trip, (4) cross-domain navigation switch, (5) login and session establishment.
 - **FR-014**: The solution MUST provide post-cutover runtime validation procedures that confirm functional parity, permissions, and critical workflow integrity after each domain cutover is executed. This complements pre-cutover gate criteria defined in FR-011.
-- **FR-015**: The consolidation MUST use a single canonical identity store mapped explicitly to the existing `ControlSparkUserContextConnection` (Identity SQLite) with a completion bridge that supports phased user/account transition without requiring parallel long-term sign-in models.
+- **FR-015**: The consolidation MUST use a single canonical identity store mapped explicitly to the existing `ControlSparkUserContextConnection` (Identity SQLite) and MUST reuse the InquirySpark.Admin authentication/sign-in implementation pattern (`AddDefaultIdentity`, role support, and Identity UI endpoints) as the baseline for InquirySpark.Web. Any completion bridge supports phased user/account transition only and MUST NOT introduce a parallel long-term sign-in model.
 - **FR-016**: Once InquirySpark.Web completion criteria are met, DecisionSpark and InquirySpark.Admin MUST be removed from active runtime deployment.
 
 ### Key Entities *(include if feature involves data)*
@@ -140,19 +141,19 @@ Platform owners can prove that the unified app preserves compliance, operational
 
 ### Assumptions
 
-- "Greenfield" means new user-facing UX built in InquirySpark.Web that consumes existing shared services in `InquirySpark.Common` and `InquirySpark.Repository`. It does not mean rewriting backend domain logic. Legacy controller/view code in DecisionSpark and InquirySpark.Admin serves as a functional reference, not as code to be ported.
+- "Greenfield" means new user-facing UX built in InquirySpark.Web that consumes existing shared services in `InquirySpark.Common` and `InquirySpark.Repository`. It does not mean rewriting backend domain logic. Legacy controller/view code in DecisionSpark and InquirySpark.Admin serves as a functional reference and parity baseline, not as code to be ported verbatim.
 - New development occurs in InquirySpark.Web and does not rely on legacy runtime behavior.
 - Current user roles and access policies are the baseline authority and must be preserved unless explicitly re-approved.
 - Consolidation target is a single end-user experience under InquirySpark.Web, even if internal migration occurs in phases.
-- Existing business capabilities from the two current admin applications are implemented natively in InquirySpark.Web.
-- The target-state authentication model is one canonical identity authority, with temporary migration bridging only during transition.
+- Existing business capabilities from BOTH current admin applications are implemented natively in InquirySpark.Web and remain in scope until parity evidence marks them complete.
+- The target-state authentication model reuses the existing InquirySpark.Admin authentication/sign-in stack over one canonical identity authority, with temporary migration bridging only during transition.
 - **Terminology convention**: "Capability completion" refers to the process of building features in InquirySpark.Web. "Migration" refers to technical data/identity transitions. "Decommission" refers to final removal of legacy apps from active deployment.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: 100% of capabilities from DecisionSpark and InquirySpark.Admin are implemented in InquirySpark.Web and marked complete in the capability matrix.
+- **SC-001**: 100% of the capabilities inventoried from BOTH DecisionSpark and InquirySpark.Admin are implemented in InquirySpark.Web and marked complete in the capability matrix.
 - **SC-002**: At least 95% of validated unified workflows complete successfully in InquirySpark.Web during pre-release validation.
 - **SC-003**: Users perform cross-domain tasks in InquirySpark.Web without opening a second application in 100% of tested scenarios.
 - **SC-004**: Post-cutover, zero user-reported incidents are attributed to app-switching confusion within 30 days of final decommission.

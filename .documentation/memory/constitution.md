@@ -21,7 +21,7 @@ All InquirySpark.Admin CRUD pages follow the Bootstrap 5 + DataTables card templ
 
 ## Engineering Constraints & Standards
 
-- **Tech Stack**: .NET 10 solution with WebApi (REST + Swagger), Admin MVC app, Web Razor Pages app, shared logic in Common/Repository.
+- **Tech Stack**: .NET 10 solution with WebApi (REST + Swagger), Admin MVC app, and Web MVC app using controllers and Razor views, with Razor Pages enabled where shared Identity UI requires it. Shared logic resides in Common/Repository.
 - **Frontend Assets**: No CDN usage. JavaScript packages (jQuery 3.7.1, Bootstrap 5.3.8 JS, DataTables 2.3.5 + extensions, Bootstrap Icons, validation libs, JSZip/PDFMake) are sourced via npm, copied to `wwwroot/lib` by `npm run build`, and executed automatically on `dotnet build`. CSS originates from the WebSpark.Bootswatch theme system.
 - **DataTables Behavior**: `.table` elements auto-initialize with pagination, search, and state saving. Use `data-datatable="false"` to opt out and `.datatable-export` to enable export buttons.
 - **Global Usings**: Respect project-level `GlobalUsing.cs` files; add explicit `using` statements only when necessary.
@@ -29,7 +29,7 @@ All InquirySpark.Admin CRUD pages follow the Bootstrap 5 + DataTables card templ
 
 ## Development Workflow & Quality Gates
 
-- **Build Commands**: `dotnet build InquirySpark.sln` for the full solution; project-specific builds (e.g., `dotnet build InquirySpark.Admin/InquirySpark.Admin.csproj`) automatically trigger the npm pipeline.
+- **Build Commands**: `dotnet build InquirySpark.sln` for routine local builds; `dotnet build InquirySpark.sln -warnaserror` is the required zero-warning validation gate before merge. Project-specific builds (e.g., `dotnet build InquirySpark.Admin/InquirySpark.Admin.csproj`) automatically trigger the npm pipeline.
 - **Run Targets**: `dotnet run --project InquirySpark.WebApi` (https://localhost:5001), `InquirySpark.Admin` (https://localhost:7001), `InquirySpark.Web` (https://localhost:5002).
 - **Testing**: Use `dotnet test` or target projects such as `InquirySpark.Common.Tests` explicitly.
 - **UI Rules**: No inline styles; rely on Bootstrap utility classes. All action columns include `.no-sort`. Buttons follow the standard outlined in the table template (details/edit/delete with Bootstrap Icon glyphs).
@@ -57,4 +57,4 @@ All InquirySpark.Admin CRUD pages follow the Bootstrap 5 + DataTables card templ
 ### Amendment Process
 Amendments require: (1) documenting rationale in the change, (2) updating `copilot-instructions.md` to reflect the change, and (3) incrementing the version metadata below.
 
-**Version**: 1.1.0 | **Ratified**: 2025-12-04 | **Last Amended**: 2026-04-07
+**Version**: 1.2.0 | **Ratified**: 2025-12-04 | **Last Amended**: 2026-04-12

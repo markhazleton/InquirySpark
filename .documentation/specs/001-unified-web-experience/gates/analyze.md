@@ -3,52 +3,58 @@ gate: analyze
 status: pass
 blocking: false
 severity: info
-summary: "0 Critical constitution violations detected."
+summary: "Blocking issues resolved: constitution, spec, plan, and tasks now align on MVC controllers/views, full parity across BOTH legacy apps, reuse of InquirySpark.Admin authentication/sign-in, zero-warning validation, and non-mutating evidence tasks."
 ---
 
 ## Specification Analysis Report
 
 | ID | Category | Severity | Location(s) | Summary | Recommendation |
 |----|----------|----------|-------------|---------|----------------|
-
-
-
-
+| N0 | Alignment | INFO | constitution.md:L24-L32; spec.md:L21-L22; spec.md:L115-L129; plan.md:L8-L21; tasks.md:L31-L33; tasks.md:L45; tasks.md:L62-L67; tasks.md:L89-L97; tasks.md:L175-L181 | No blocking inconsistencies remain across constitution, spec, plan, and tasks. The feature now defines MVC controller/view architecture, full parity scope across BOTH legacy apps, reuse of the InquirySpark.Admin sign-in stack, required auth/session validation, and a zero-warning exit gate. | Proceed with implementation using the parity traceability matrix as the execution control artifact. |
 
 **Coverage Summary Table:**
 
-| Requirement Key | Has Task? | Task IDs (Examples) | Notes |
-|-----------------|-----------|---------------------|-------|
-| FR-001 (Parity) | Yes       | T028, T029          | Addressed via new capability shells over existing logic |
-| FR-002 (Auth)   | Yes       | T020, T013          | Addressed via Operations Workspace controller |
-| FR-003 (Nav)    | Yes       | T023, T024, T025    | Handled via unified navigation builder service |
-| FR-004 (Roles)  | Yes       | T004B, T013A        | Mapped explicitly in RoleMappingItem & MigrationBridge |
-| FR-005 (Phasing)| Yes       | T038, T039, T040    | Managed by Matrix tracking UI and capabilities domains |
-| FR-006 (Rollback)| Yes      | T047A               | Mapped via code-level rollback guards |
-| FR-007 (Audit)  | Yes       | T048, T049, T050    | Event payload model and UnifiedAuditService implementations |
-| FR-008 (Routes) | Yes       | T027                | Canonical route policy addressed |
-| FR-009 (UX Ptrs)| Yes       | T032, T033, T034    | Addressed in DataTables component shells |
-| FR-010 (Matrix) | Yes       | T002, T038          | Captured via seed tasks and matrix UI models |
-| FR-011 (Gates)  | Yes       | T008, T042          | Mapped through validation record objects |
-| FR-012 (Comms)  | Yes       | T047                | Documentation placeholder provisioned |
-| FR-013 (Perf)   | Yes       | T019, T059, T060    | Instrumented metrics limits and validation steps planned |
-| FR-014 (Parity Validation)| Yes | T062A           | Execution steps reserved prior to legacy decommission |
-| FR-015 (Identify Bridge)| Yes | T012, T013      | Migration bridge service wired |
-| FR-016 (Decommission)| Yes  | T063, T064, T065    | Mapped directly in Phase 7 / Polish |
+| Requirement Key | Has Task? | Task IDs | Notes |
+|-----------------|-----------|----------|-------|
+| all-capabilities-preserved | Yes | T001A, T002, T002A, T002B, T028, T029, T029A, T029B, T029C, T029D, T030B, T062A | Full parity scope is explicitly controlled by the inventory and traceability matrix. |
+| single-session-canonical-identity | Yes | T012, T013, T016, T016A, T016B, T019A, T030 | Reuse of the InquirySpark.Admin sign-in flow and session validation is explicit. |
+| unified-navigation-model | Yes | T020, T023, T024, T025, T026, T027, T030A | Adequately represented. |
+| preserve-role-permission-semantics | Yes | T004B, T013A, T016B, T047B | Adequately represented. |
+| phased-capability-completion | Yes | T003, T038, T041, T043, T045 | Adequately represented. |
+| rollback-safe-cutover | Yes | T044, T046, T047A | Adequately represented. |
+| operational-auditability | Yes | T047C, T048, T049, T050, T051, T055A | Adequately represented. |
+| canonical-routes-only | Yes | T001, T026, T027, T057 | Adequately represented through policy and evidence artifacts. |
+| consistent-ux-patterns | Yes | T031, T032, T033, T034, T035, T036, T037 | Adequately represented. |
+| publish-capability-matrix | Yes | T002A, T038, T039, T040 | Adequately represented. |
+| objective-precutover-gates | Yes | T008, T042, T046, T054, T057 | Adequately represented. |
+| stakeholder-communications | Yes | T047 | Adequately represented. |
+| performance-slo | Yes | T019, T059, T060 | Adequately represented. |
+| post-cutover-runtime-validation | Yes | T062A, T067 | Adequately represented. |
+| single-canonical-identity-store | Yes | T012, T013, T016, T016A, T016B, T017, T018, T019A | Adequately represented. |
+| retire-legacy-apps | Yes | T063, T064, T065, T066, T067 | Adequately represented. |
 
 **Constitution Alignment Issues:**
-- None detected. All scaffolding tasks comply with SQLite and CDN-Free/NPM mandates.
+
+- None.
+
+**Unmapped Tasks:**
+
+- None.
 
 **Metrics:**
-- Total Requirements: **16**
-- Total Tasks: **67**
-- Coverage %: **100%**
-- Ambiguity Count: **1**
-- Duplication Count: **0**
-- Critical Issues Count: **2**
+
+- Total Requirements: 16
+- Total Tasks: 89
+- Coverage % (requirements with >=1 task): 100%
+- Ambiguity Count: 0
+- Duplication Count: 0
+- Critical Issues Count: 0
 
 ### Next Actions
 
-- **Clear to Proceed**: You may execute /devspark.implement. Missing database and NPM scaffolding gaps have been resolved within 	asks.md and spec.md.
+- You may proceed to `/devspark.critic` for adversarial review or `/devspark.implement` when ready.
+- During implementation, keep the capability parity traceability matrix current so decommission decisions remain evidence-based.
+
+Would you like me to decompose the capability-family tasks one level further into controller-by-controller implementation tasks?
 
 

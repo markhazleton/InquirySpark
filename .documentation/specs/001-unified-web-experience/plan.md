@@ -5,20 +5,20 @@
 
 ## Summary
 
-Consolidate overlapping admin capabilities from `DecisionSpark` and `InquirySpark.Admin` into a single unified application experience under `InquirySpark.Web` as new greenfield development, using canonical identity authority with completion bridging and completion-based cutover controls. The implementation prioritizes zero-loss functional parity, unified navigation/UX consistency, and final removal of legacy application runtime use.
+Consolidate overlapping admin capabilities from `DecisionSpark` and `InquirySpark.Admin` into a single unified MVC application experience under `InquirySpark.Web` as new greenfield development, reusing the existing `InquirySpark.Admin` authentication/sign-in implementation over the canonical identity authority and enforcing completion-based cutover controls. The implementation prioritizes full feature parity across BOTH legacy applications, unified navigation/UX consistency, and final removal of legacy application runtime use.
 
 ## Technical Context
 
 **Language/Version**: C# on .NET 10 (`net10.0`)  
-**Primary Dependencies**: ASP.NET Core MVC/Razor, Entity Framework Core (SQLite provider), existing shared libraries in `InquirySpark.Common` and `InquirySpark.Repository`, existing UI stack (Bootstrap 5 + DataTables + Bootswatch pattern)  
-**Client Framework/Library**: Server-rendered ASP.NET Core Razor views with Bootstrap 5, DataTables, and targeted TypeScript/JavaScript modules (no SPA framework baseline)  
+**Primary Dependencies**: ASP.NET Core MVC controllers and Razor views, ASP.NET Core Identity via the existing `InquirySpark.Admin` sign-in pattern, Entity Framework Core (SQLite provider), existing shared libraries in `InquirySpark.Common` and `InquirySpark.Repository`, existing UI stack (Bootstrap 5 + DataTables + Bootswatch pattern)  
+**Client Framework/Library**: Server-rendered ASP.NET Core MVC using controllers and Razor views, with Razor Pages enabled only for shared Identity UI endpoints mirrored from `InquirySpark.Admin`; Bootstrap 5, DataTables, and targeted TypeScript/JavaScript modules (no SPA framework baseline)  
 **Storage**: Existing SQLite assets and current repository/context model. NO new database objects or EF models will be created. Migration orchestrations (capability matrix, cutover) are strictly managed via `appsettings.json` config structures. Audit events rely exclusively on the `ILogger` pipeline. DecisionSpark relies exclusively on file storage, not a database, and its file-based mechanisms will seamlessly deploy alongside the existing `InquirySpark.Repository` without schema conflicts, respecting the constitution's SQLite-only database constraint.  
-**Testing**: `dotnet test` (MSTest projects), integration tests for cross-domain workflows and cutover/readiness paths  
+**Testing**: `dotnet test` (MSTest projects), integration tests for cross-domain workflows and cutover/readiness paths, authentication/session continuity tests, and required zero-warning validation with `dotnet build InquirySpark.sln -warnaserror`  
 **Target Platform**: ASP.NET Core web hosting (development on Windows; deployable on standard .NET-supported server environments)  
 **Project Type**: Web application consolidation (single unified user experience over existing shared backend/services)  
 **Performance Goals**: 95% of key user actions complete in <=2 seconds during validation and post-cutover  
-**Constraints**: Capability-domain phased completion; rollback-safe cutover; preserve role semantics; canonical identity authority; documentation and artifacts remain under `.documentation/`  
-**Scale/Scope**: Full functional parity across both current admin surfaces, including shared navigation, capability completion matrix, and final decommissioning of DecisionSpark and InquirySpark.Admin
+**Constraints**: Capability-domain phased completion; rollback-safe cutover; preserve role semantics; reuse the existing `InquirySpark.Admin` authentication/sign-in implementation; canonical identity authority; documentation and artifacts remain under `.documentation/`  
+**Scale/Scope**: Full feature parity across BOTH current admin surfaces, including all discovered controller/view workflows, shared navigation, capability completion matrix, and final decommissioning of DecisionSpark and InquirySpark.Admin
 
 ## Constitution Check
 
@@ -29,8 +29,10 @@ Pre-Design Gate Review:
 1. Response wrapper consistency: PASS (plan maintains service-level response patterns through existing shared/repository conventions).
 2. DI discipline: PASS (no direct service construction introduced by design intent).
 3. EF context stewardship: PASS (existing `InquirySparkContext` remains source of truth; no ad-hoc persistence bypass proposed).
-4. Admin UI standardization: PASS with migration requirement (unified UX must preserve Bootstrap/DataTables conventions where applicable).
-5. Documentation governance: PASS (`plan.md`, `research.md`, `data-model.md`, `quickstart.md`, and contracts remain under `.documentation/specs/001-unified-web-experience/`).
+4. MVC application structure: PASS (`InquirySpark.Web` will use controllers and Razor views, with Razor Pages retained only where Identity UI endpoints require it).
+5. Admin UI standardization: PASS with migration requirement (unified UX must preserve Bootstrap/DataTables conventions where applicable).
+6. Documentation governance: PASS (`plan.md`, `research.md`, `data-model.md`, `quickstart.md`, and contracts remain under `.documentation/specs/001-unified-web-experience/`).
+7. Zero-warning gate: PASS (`dotnet build InquirySpark.sln -warnaserror` is required before completion evidence is accepted).
 
 Result: No blocking constitution violations detected for planning.
 
@@ -62,7 +64,7 @@ InquirySpark.Repository/
 InquirySpark.Common.Tests/
 ```
 
-**Structure Decision**: Use web-application consolidation structure centered on `InquirySpark.Web` as the unified experience layer, while extracting/reusing domain logic through `InquirySpark.Common` and `InquirySpark.Repository`. DecisionSpark and InquirySpark.Admin are source references during development and are removed from active runtime deployment when completion gates pass.
+**Structure Decision**: Use an MVC web-application consolidation structure centered on `InquirySpark.Web` as the unified experience layer, with controllers and Razor views for feature delivery and Razor Pages retained only for shared Identity UI endpoints reused from the existing `InquirySpark.Admin` authentication/sign-in implementation. Domain logic is extracted/reused through `InquirySpark.Common` and `InquirySpark.Repository`. DecisionSpark and InquirySpark.Admin are source references and parity baselines during development and are removed from active runtime deployment when completion gates pass.
 
 **Note**: `InquirySpark.Web` does not yet exist in the repository and must be scaffolded (csproj, Program.cs, Area registration, solution integration) as the first foundational task before any code tasks that reference it.
 
@@ -72,8 +74,8 @@ InquirySpark.Common.Tests/
 
 Research objectives derived from spec ambiguity/risk profile:
 
-1. Canonical identity completion-bridge strategy between overlapping admin surfaces.
-2. Capability-domain completion slicing and parity verification strategy.
+1. Reuse strategy for the existing `InquirySpark.Admin` authentication/sign-in implementation inside `InquirySpark.Web`.
+2. Capability-domain completion slicing and parity verification strategy covering all discovered capabilities from BOTH legacy applications.
 3. Canonical InquirySpark.Web route strategy with no dependency on legacy compatibility behavior.
 4. Unified navigation and terminology governance pattern for merged workflows.
 5. Operational readiness model: cutover gates, rollback procedure, and observability evidence.
@@ -95,7 +97,9 @@ To be validated after Phase 1 artifacts:
 
 1. No documentation generated outside `/.documentation/`: PASS.
 2. Plan preserves existing architectural constraints (DI, EF, response wrappers): PASS.
-3. UI standardization alignment explicitly captured in requirements and plan artifacts: PASS.
+3. MVC controller/view structure with Identity UI compatibility is explicitly captured: PASS.
+4. UI standardization alignment explicitly captured in requirements and plan artifacts: PASS.
+5. Zero-warning validation gate captured in plan/testing strategy: PASS.
 
 Result: Constitution gates remain satisfied after design planning artifacts.
 

@@ -6,7 +6,7 @@
 InquirySpark is a .NET 10 survey/inquiry management system with three main applications:
 - **InquirySpark.WebApi** - RESTful API with Swagger documentation
 - **InquirySpark.Admin** - MVC admin interface with Bootstrap 5 + DataTables
-- **InquirySpark.Web** - Razor Pages public-facing application
+- **InquirySpark.Web** - MVC web application using controllers and Razor views, with Razor Pages enabled where shared Identity UI requires it
 
 Core business logic resides in **InquirySpark.Common** (shared models/SDK) and **InquirySpark.Repository** (EF Core + services).
 
