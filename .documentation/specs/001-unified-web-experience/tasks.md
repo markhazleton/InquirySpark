@@ -26,14 +26,14 @@
 
 **Purpose**: Establish feature scaffolding, authoritative parity inventory, and planning consistency artifacts.
 
-- [ ] T001 Record greenfield-only route policy and legacy-app removal criteria in `.documentation/specs/001-unified-web-experience/contracts/greenfield-route-policy.md`.
-- [ ] T001A Enumerate capabilities from DecisionSpark and InquirySpark.Admin source code and record discovery results in `.documentation/specs/001-unified-web-experience/contracts/capability-discovery-results.md`.
-- [ ] T002 Create authoritative capability inventory from BOTH legacy applications in `.documentation/specs/001-unified-web-experience/contracts/capability-inventory-seed.md`.
-- [ ] T002A Create parity traceability matrix mapping every inventoried legacy capability to a target unified workflow, controller/view family, test asset, and cutover evidence artifact in `.documentation/specs/001-unified-web-experience/contracts/capability-parity-traceability.md`.
-- [ ] T002B Create capability family delivery plan grouped by legacy surface areas in `.documentation/specs/001-unified-web-experience/contracts/capability-family-delivery-plan.md`.
-- [ ] T001B [P] Document DecisionSpark file-storage access patterns — including file locations, data formats, read/write semantics, and security constraints — by reading `DecisionSpark/` source code and record findings in `.documentation/specs/001-unified-web-experience/contracts/decisionspark-file-storage-integration.md`. This document is the schema authority for T004C/T004D.
-- [ ] T003 [P] Create capability completion phase seed document in `.documentation/specs/001-unified-web-experience/contracts/capability-completion-phase-seed.md`.
-- [ ] T004 [P] Add unified web feature area description in `.documentation/specs/001-unified-web-experience/contracts/unified-area-description.md` describing area purpose and boundaries.
+- [X] T001 Record greenfield-only route policy and legacy-app removal criteria in `.documentation/specs/001-unified-web-experience/contracts/greenfield-route-policy.md`.
+- [X] T001A Enumerate capabilities from DecisionSpark and InquirySpark.Admin source code and record discovery results in `.documentation/specs/001-unified-web-experience/contracts/capability-discovery-results.md`.
+- [X] T002 Create authoritative capability inventory from BOTH legacy applications in `.documentation/specs/001-unified-web-experience/contracts/capability-inventory-seed.md`.
+- [X] T002A Create parity traceability matrix mapping every inventoried legacy capability to a target unified workflow, controller/view family, test asset, and cutover evidence artifact in `.documentation/specs/001-unified-web-experience/contracts/capability-parity-traceability.md`.
+- [X] T002B Create capability family delivery plan grouped by legacy surface areas in `.documentation/specs/001-unified-web-experience/contracts/capability-family-delivery-plan.md`.
+- [X] T001B [P] Document DecisionSpark file-storage access patterns — including file locations, data formats, read/write semantics, and security constraints — by reading `DecisionSpark/` source code and record findings in `.documentation/specs/001-unified-web-experience/contracts/decisionspark-file-storage-integration.md`. This document is the schema authority for T004C/T004D.
+- [X] T003 [P] Create capability completion phase seed document in `.documentation/specs/001-unified-web-experience/contracts/capability-completion-phase-seed.md`.
+- [X] T004 [P] Add unified web feature area description in `.documentation/specs/001-unified-web-experience/contracts/unified-area-description.md` describing area purpose and boundaries.
 
 ---
 
@@ -270,6 +270,14 @@ Run in parallel after T025:
 2. Team B: unified workspace UX and navigation.
 3. Team C: migration matrix and governance controls.
 4. Team D: audit/readiness and runbook evidence.
+
+---
+
+## Gate Acknowledgements
+
+| Gate | Status | Decision | Date | Rationale |
+|------|--------|----------|------|-----------|
+| critic | fail / showstopper / blocking | **Proceed** — explicit user override | 2026-04-12 | Both showstopper findings are false positives. Showstopper 1 (DB write violation): the plan creates **configuration models** (`(No EF DB mapping)` per T007; "no DB queries" per T011; "ILogger pipelines, NOT EF Database" per T050) — not EF database entities. The spec explicitly constrains tracking to `appsettings.json` / in-memory state. Showstopper 2 (identity persistence risk): in-memory/config identity bridging is the **intended design** per spec FR-015 and the terminology convention ("migration bridge supports phased transition only"). The critic reviewed the surface of the task names without applying the spec's explicit constraints. User chose to proceed. |
 
 ---
 
