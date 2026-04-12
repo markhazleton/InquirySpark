@@ -55,8 +55,6 @@ try
     }
     else
     {
-        // Register a no-op TelemetryClient so consumers get a safe instance regardless
-        builder.Services.AddApplicationInsightsTelemetry();
         Log.Information("Application Insights connection string not configured - telemetry disabled");
     }
 
