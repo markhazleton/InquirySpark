@@ -96,8 +96,20 @@ builder.Services.AddOptions<ClientUiOptions>()
     .BindConfiguration("ClientUi");
 
 // Capability governance and identity bridge services
+builder.Services.AddSingleton<IUnifiedAuditService, UnifiedAuditService>();
 builder.Services.AddSingleton<IUnifiedWebCapabilityService, UnifiedWebCapabilityService>();
 builder.Services.AddSingleton<IIdentityMigrationBridgeService, IdentityMigrationBridgeService>();
+
+// Unified navigation
+builder.Services.AddSingleton<InquirySpark.Web.Services.Navigation.UnifiedNavigationBuilder>();
+
+// Operations Support services (Charting, Audit, User Preferences)
+builder.Services.AddScoped<InquirySpark.Repository.Services.Charting.IChartDefinitionService, InquirySpark.Repository.Services.Charting.ChartDefinitionService>();
+builder.Services.AddScoped<InquirySpark.Repository.Services.Charting.IChartBuildService, InquirySpark.Repository.Services.Charting.ChartBuildService>();
+builder.Services.AddScoped<InquirySpark.Repository.Services.Charting.IFormulaParserService, InquirySpark.Repository.Services.Charting.FormulaParserService>();
+builder.Services.AddScoped<InquirySpark.Repository.Services.Charting.IChartValidationService, InquirySpark.Repository.Services.Charting.ChartValidationService>();
+builder.Services.AddScoped<InquirySpark.Repository.Services.Security.IAuditLogService, InquirySpark.Repository.Services.Security.AuditLogService>();
+builder.Services.AddScoped<InquirySpark.Repository.Services.UserPreferences.IUserPreferenceService, InquirySpark.Repository.Services.UserPreferences.UserPreferenceService>();
 
 // ── T016B: Authorization policies + Identity UI endpoint mapping ────────────
 

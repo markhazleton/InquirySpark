@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "InquirySpark.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:17269;http://localhost:17270"
+    }
+  }
+}

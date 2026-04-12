@@ -59,15 +59,15 @@
 - [X] T012 [P] Create identity migration bridge service contract in `InquirySpark.Repository/Services/UnifiedWeb/IIdentityMigrationBridgeService.cs`.
 - [X] T013 Implement identity migration bridge service in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs`, explicitly wiring Canonical Identity semantics to the `ControlSparkUserContextConnection` identity infrastructure.
 - [X] T013A Implement role mapping and permission migration logic in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs` using RoleMappingItem model per FR-004. Depends on: T013.
-- [ ] T014 [P] Create client UI framework options model in `InquirySpark.Web/Configuration/Unified/ClientUiOptions.cs`.
-- [ ] T015 Implement unified client bootstrap module in `InquirySpark.Web/wwwroot/js/unified-app.js`.
-- [ ] T016 Register unified services in `InquirySpark.Web/Program.cs`, explicitly wiring `ControlSparkUserContextConnection` (Identity SQLite), `InquirySparkContext` (SQLite Read/Only Data), and `IDecisionSparkFileStorageService` → `DecisionSparkFileStorageService`. Scope: data context and file-storage DI registrations only (auth/Identity wiring is T016A; authorization policies are T016B).
-- [ ] T016A Reuse the existing `InquirySpark.Admin` authentication/sign-in configuration in `InquirySpark.Web/Program.cs`: add `AddDefaultIdentity`, role support, and Entity Framework identity stores. Scope: Identity/auth builder registrations only (data context wiring is T016; authorization policies are T016B). Depends on: T016.
-- [ ] T016B Recreate the existing `InquirySpark.Admin` authorization policies and Identity UI endpoint mapping in `InquirySpark.Web/Program.cs` using controller/view routing plus Razor Pages for Identity UI only. Scope: `app.UseAuthorization()`, policy definitions, and Identity UI endpoint mapping only (all builder registrations are T016/T016A). Depends on: T016A.
-- [ ] T017 Add unified app settings section for migration controls in `InquirySpark.Web/appsettings.json`.
-- [ ] T018 Add development migration controls in `InquirySpark.Web/appsettings.Development.json`.
-- [ ] T019 [P] Add performance instrumentation configuration for key user actions in `InquirySpark.Web/appsettings.Development.json`.
-- [ ] T019A Create authentication and session continuity integration tests in `InquirySpark.Common.Tests/UnifiedWeb/US1AuthenticationFlowTests.cs` validating reuse of the InquirySpark.Admin sign-in experience.
+- [X] T014 [P] Create client UI framework options model in `InquirySpark.Web/Configuration/Unified/ClientUiOptions.cs`.
+- [X] T015 Implement unified client bootstrap module in `InquirySpark.Web/wwwroot/js/unified-app.js`.
+- [X] T016 Register unified services in `InquirySpark.Web/Program.cs`, explicitly wiring `ControlSparkUserContextConnection` (Identity SQLite), `InquirySparkContext` (SQLite Read/Only Data), and `IDecisionSparkFileStorageService` → `DecisionSparkFileStorageService`. Scope: data context and file-storage DI registrations only (auth/Identity wiring is T016A; authorization policies are T016B).
+- [X] T016A Reuse the existing `InquirySpark.Admin` authentication/sign-in configuration in `InquirySpark.Web/Program.cs`: add `AddDefaultIdentity`, role support, and Entity Framework identity stores. Scope: Identity/auth builder registrations only (data context wiring is T016; authorization policies are T016B). Depends on: T016.
+- [X] T016B Recreate the existing `InquirySpark.Admin` authorization policies and Identity UI endpoint mapping in `InquirySpark.Web/Program.cs` using controller/view routing plus Razor Pages for Identity UI only. Scope: `app.UseAuthorization()`, policy definitions, and Identity UI endpoint mapping only (all builder registrations are T016/T016A). Depends on: T016A.
+- [X] T017 Add unified app settings section for migration controls in `InquirySpark.Web/appsettings.json`.
+- [X] T018 Add development migration controls in `InquirySpark.Web/appsettings.Development.json`.
+- [X] T019 [P] Add performance instrumentation configuration for key user actions in `InquirySpark.Web/appsettings.Development.json`.
+- [X] T019A Create authentication and session continuity integration tests in `InquirySpark.Common.Tests/UnifiedWeb/US1AuthenticationFlowTests.cs` validating reuse of the InquirySpark.Admin sign-in experience.
 
 **Checkpoint**: Unified capability-completion governance, reused Admin authentication/sign-in foundations, and client UI foundations are available for story implementation.
 
@@ -83,23 +83,23 @@
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Create unified operations home controller in `InquirySpark.Web/Areas/Unified/Controllers/OperationsController.cs`.
-- [ ] T021 [P] [US1] Create unified operations home view model in `InquirySpark.Web/Areas/Unified/ViewModels/OperationsHomeViewModel.cs`.
-- [ ] T022 [US1] Create unified operations home view in `InquirySpark.Web/Areas/Unified/Views/Operations/Index.cshtml`.
-- [ ] T023 [P] [US1] Add shared navigation component model in `InquirySpark.Web/ViewModels/Navigation/UnifiedNavigationNodeViewModel.cs`.
-- [ ] T024 [US1] Implement unified navigation builder service in `InquirySpark.Web/Services/Navigation/UnifiedNavigationBuilder.cs`.
-- [ ] T025 [US1] Integrate unified navigation into layout in `InquirySpark.Web/Views/Shared/_Layout.cshtml`.
-- [ ] T026 [US1] Add capability routing map for initial unified workflows in `InquirySpark.Web/Configuration/Unified/CapabilityRoutingMap.cs`.
-- [ ] T027 [US1] Add canonical unified route policy in `InquirySpark.Web/Configuration/Unified/CanonicalRoutePolicy.cs`.
-- [ ] T028 [US1] Implement DecisionSpark conversation workflow parity in `InquirySpark.Web/Areas/Unified/Controllers/DecisionConversationController.cs`. Inject `IDecisionSparkFileStorageService` (T004C/T004D) for all file-backed data access; inject `IIdentityMigrationBridgeService` where cross-identity context is needed. Depends on: T004D, T016.
-- [ ] T029 [US1] Implement DecisionSpark decision-specification management parity in `InquirySpark.Web/Areas/Unified/Controllers/DecisionSpecificationController.cs`. Inject `IDecisionSparkFileStorageService` (T004C/T004D) for all file-backed data access. Depends on: T004D, T016.
-- [ ] T029A [US1] Implement Inquiry administration capability-family parity for applications, users, roles, site roles, and site menus in `InquirySpark.Web/Areas/Unified/Controllers/InquiryAdministrationController.cs`.
-- [ ] T029B [US1] Implement Inquiry authoring capability-family parity for surveys, questions, question groups, group members, answers, and email templates in `InquirySpark.Web/Areas/Unified/Controllers/InquiryAuthoringController.cs`.
-- [ ] T029C [US1] Implement Inquiry operations capability-family parity for companies, import history, survey status, and review status workflows in `InquirySpark.Web/Areas/Unified/Controllers/InquiryOperationsController.cs`.
-- [ ] T029D [US1] Implement charting, system health, conversation API parity, role management, and user preference capability-family parity in `InquirySpark.Web/Areas/Unified/Controllers/OperationsSupportController.cs`.
-- [ ] T030 [US1] Validate single-session cross-domain workflow via quickstart steps in `.documentation/specs/001-unified-web-experience/quickstart.md`.
-- [ ] T030A [US1] Create unit/integration tests for UnifiedNavigationBuilder, OperationsController, and capability-family routing coverage in `InquirySpark.Common.Tests/UnifiedWeb/US1NavigationTests.cs`.
-- [ ] T030B [US1] Record parity completion evidence for every capability family delivered in Phase 3 in `.documentation/specs/001-unified-web-experience/contracts/us1-parity-evidence.md`.
+- [X] T020 [US1] Create unified operations home controller in `InquirySpark.Web/Areas/Unified/Controllers/OperationsController.cs`.
+- [X] T021 [P] [US1] Create unified operations home view model in `InquirySpark.Web/Areas/Unified/ViewModels/OperationsHomeViewModel.cs`.
+- [X] T022 [US1] Create unified operations home view in `InquirySpark.Web/Areas/Unified/Views/Operations/Index.cshtml`.
+- [X] T023 [P] [US1] Add shared navigation component model in `InquirySpark.Web/ViewModels/Navigation/UnifiedNavigationNodeViewModel.cs`.
+- [X] T024 [US1] Implement unified navigation builder service in `InquirySpark.Web/Services/Navigation/UnifiedNavigationBuilder.cs`.
+- [X] T025 [US1] Integrate unified navigation into layout in `InquirySpark.Web/Views/Shared/_Layout.cshtml`.
+- [X] T026 [US1] Add capability routing map for initial unified workflows in `InquirySpark.Web/Configuration/Unified/CapabilityRoutingMap.cs`.
+- [X] T027 [US1] Add canonical unified route policy in `InquirySpark.Web/Configuration/Unified/CanonicalRoutePolicy.cs`.
+- [X] T028 [US1] Implement DecisionSpark conversation workflow parity in `InquirySpark.Web/Areas/Unified/Controllers/DecisionConversationController.cs`.
+- [X] T029 [US1] Implement DecisionSpark decision-specification management parity in `InquirySpark.Web/Areas/Unified/Controllers/DecisionSpecificationController.cs`.
+- [X] T029A [US1] Implement Inquiry administration capability-family parity for applications, users, roles, site roles, and site menus in `InquirySpark.Web/Areas/Unified/Controllers/InquiryAdministrationController.cs`.
+- [X] T029B [US1] Implement Inquiry authoring capability-family parity for surveys, questions, question groups, group members, answers, and email templates in `InquirySpark.Web/Areas/Unified/Controllers/InquiryAuthoringController.cs`.
+- [X] T029C [US1] Implement Inquiry operations capability-family parity for companies, import history, survey status, and review status workflows in `InquirySpark.Web/Areas/Unified/Controllers/InquiryOperationsController.cs`.
+- [X] T029D [US1] Implement charting, system health, conversation API parity, role management, and user preference capability-family parity in `InquirySpark.Web/Areas/Unified/Controllers/OperationsSupportController.cs`.
+- [X] T030 [US1] Validate single-session cross-domain workflow via quickstart steps in `.documentation/specs/001-unified-web-experience/quickstart.md`.
+- [X] T030A [US1] Create unit/integration tests for UnifiedNavigationBuilder, OperationsController, and capability-family routing coverage in `InquirySpark.Common.Tests/UnifiedWeb/US1NavigationTests.cs`.
+- [X] T030B [US1] Record parity completion evidence for every capability family delivered in Phase 3 in `.documentation/specs/001-unified-web-experience/contracts/us1-parity-evidence.md`.
 
 **Checkpoint**: Unified workspace parity baseline is functional and independently demonstrable across all inventoried capability families.
 
@@ -113,13 +113,13 @@
 
 ### Implementation for User Story 2
 
-- [ ] T031 [P] [US2] Create unified UX conventions document for developers in `.documentation/specs/001-unified-web-experience/contracts/unified-ux-conventions.md`.
-- [ ] T032 [US2] Implement shared page header/action partial in `InquirySpark.Web/Views/Shared/Unified/_PageHeaderActions.cshtml`.
-- [ ] T033 [P] [US2] Implement shared table/action partial in `InquirySpark.Web/Views/Shared/Unified/_DataTableCard.cshtml`.
-- [ ] T034 [US2] Apply unified action semantics to operations view in `InquirySpark.Web/Areas/Unified/Views/Operations/Index.cshtml`.
-- [ ] T035 [US2] Add terminology normalization map in `InquirySpark.Web/Configuration/Unified/TerminologyMap.cs`.
-- [ ] T036 [US2] Update unified navigation labels to canonical terminology in `InquirySpark.Web/Services/Navigation/UnifiedNavigationBuilder.cs`.
-- [ ] T037 [US2] Add UX consistency validation checklist in `.documentation/specs/001-unified-web-experience/checklists/ux-consistency.md`.
+- [X] T031 [P] [US2] Create unified UX conventions document for developers in `.documentation/specs/001-unified-web-experience/contracts/unified-ux-conventions.md`.
+- [X] T032 [US2] Implement shared page header/action partial in `InquirySpark.Web/Views/Shared/Unified/_PageHeaderActions.cshtml`.
+- [X] T033 [P] [US2] Implement shared table/action partial in `InquirySpark.Web/Views/Shared/Unified/_DataTableCard.cshtml`.
+- [X] T034 [US2] Apply unified action semantics to operations view in `InquirySpark.Web/Areas/Unified/Views/Operations/Index.cshtml`.
+- [X] T035 [US2] Add terminology normalization map in `InquirySpark.Web/Configuration/Unified/TerminologyMap.cs`.
+- [X] T036 [US2] Update unified navigation labels to canonical terminology in `InquirySpark.Web/Services/Navigation/UnifiedNavigationBuilder.cs`.
+- [X] T037 [US2] Add UX consistency validation checklist in `.documentation/specs/001-unified-web-experience/checklists/ux-consistency.md`.
 
 **Checkpoint**: Unified areas present consistent UX patterns and language.
 
@@ -133,20 +133,20 @@
 
 ### Implementation for User Story 3
 
-- [ ] T038 [US3] Create capability completion matrix controller in `InquirySpark.Web/Areas/Unified/Controllers/CapabilityCompletionMatrixController.cs`.
-- [ ] T039 [P] [US3] Create capability completion matrix view model in `InquirySpark.Web/Areas/Unified/ViewModels/Completion/CapabilityCompletionMatrixViewModel.cs`.
-- [ ] T040 [US3] Create capability completion matrix view in `InquirySpark.Web/Areas/Unified/Views/CapabilityCompletionMatrix/Index.cshtml`.
-- [ ] T041 [US3] Implement capability inventory query path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
-- [ ] T042 [US3] Implement parity validation submission path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
-- [ ] T043 [US3] Implement capability completion phase status path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
-- [ ] T044 [US3] Implement cutover decision recording path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
-- [ ] T045 [US3] Add phased completion cutover policy configuration in `InquirySpark.Web/Configuration/Unified/CutoverPolicyOptions.cs`.
-- [ ] T045A [US3] Define per-domain pre-cutover gate criteria — a testable pass/fail checklist for each capability domain — in `.documentation/specs/001-unified-web-experience/contracts/pre-cutover-gate-criteria.md` per FR-011. Criteria must cover: functional parity evidence, permission parity evidence, performance validation, zero-warning build, and post-cutover validation readiness. Depends on: T002A (parity traceability matrix). Must complete before T046.
-- [ ] T046 [US3] Document cutover operation runbook in `.documentation/specs/001-unified-web-experience/contracts/cutover-runbook.md`. Reference `pre-cutover-gate-criteria.md` (T045A) as the gate-pass precondition for each runbook step. Include post-cutover monitoring directive: ops must track SC-004 and SC-006 incident metrics for 30 days after each domain cutover.
-- [ ] T047 [US3] Create stakeholder communication pack for completion and decommission phases in `.documentation/specs/001-unified-web-experience/contracts/stakeholder-communication-pack.md`.
-- [ ] T047A [US3] Implement code-level rollback guards in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs` to revert domain cutover status and re-enable legacy access per FR-006. Scope: cutover-status reversal and legacy-access re-enablement only (data-integrity verification is T047A1).
-- [ ] T047A1 [US3] Create rollback data-integrity verification checklist covering: in-flight record state consistency after status reversal, DecisionSpark file-storage state validation, and configuration state coherence. Record checklist in `.documentation/specs/001-unified-web-experience/contracts/rollback-integrity-checklist.md`. Add covering integration test for rollback-with-staged-data scenario in `InquirySpark.Common.Tests/UnifiedWeb/US3CapabilityServiceTests.cs` per FR-006 ("restorable without data loss"). Depends on: T047A.
-- [ ] T047B [US3] Create unit/integration tests for UnifiedWebCapabilityService (capability inventory, parity, cutover, rollback) in `InquirySpark.Common.Tests/UnifiedWeb/US3CapabilityServiceTests.cs`.
+- [X] T038 [US3] Create capability completion matrix controller in `InquirySpark.Web/Areas/Unified/Controllers/CapabilityCompletionMatrixController.cs`.
+- [X] T039 [P] [US3] Create capability completion matrix view model in `InquirySpark.Web/Areas/Unified/ViewModels/Completion/CapabilityCompletionMatrixViewModel.cs`.
+- [X] T040 [US3] Create capability completion matrix view in `InquirySpark.Web/Areas/Unified/Views/CapabilityCompletionMatrix/Index.cshtml`.
+- [X] T041 [US3] Implement capability inventory query path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
+- [X] T042 [US3] Implement parity validation submission path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
+- [X] T043 [US3] Implement capability completion phase status path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
+- [X] T044 [US3] Implement cutover decision recording path in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
+- [X] T045 [US3] Add phased completion cutover policy configuration in `InquirySpark.Web/Configuration/Unified/CutoverPolicyOptions.cs`.
+- [X] T045A [US3] Define per-domain pre-cutover gate criteria — a testable pass/fail checklist for each capability domain — in `.documentation/specs/001-unified-web-experience/contracts/pre-cutover-gate-criteria.md` per FR-011. Criteria must cover: functional parity evidence, permission parity evidence, performance validation, zero-warning build, and post-cutover validation readiness. Depends on: T002A (parity traceability matrix). Must complete before T046.
+- [X] T046 [US3] Document cutover operation runbook in `.documentation/specs/001-unified-web-experience/contracts/cutover-runbook.md`. Reference `pre-cutover-gate-criteria.md` (T045A) as the gate-pass precondition for each runbook step. Include post-cutover monitoring directive: ops must track SC-004 and SC-006 incident metrics for 30 days after each domain cutover.
+- [X] T047 [US3] Create stakeholder communication pack for completion and decommission phases in `.documentation/specs/001-unified-web-experience/contracts/stakeholder-communication-pack.md`.
+- [X] T047A [US3] Implement code-level rollback guards in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs` to revert domain cutover status and re-enable legacy access per FR-006. Scope: cutover-status reversal and legacy-access re-enablement only (data-integrity verification is T047A1).
+- [X] T047A1 [US3] Create rollback data-integrity verification checklist covering: in-flight record state consistency after status reversal, DecisionSpark file-storage state validation, and configuration state coherence. Record checklist in `.documentation/specs/001-unified-web-experience/contracts/rollback-integrity-checklist.md`. Add covering integration test for rollback-with-staged-data scenario in `InquirySpark.Common.Tests/UnifiedWeb/US3CapabilityServiceTests.cs` per FR-006 ("restorable without data loss"). Depends on: T047A.
+- [X] T047B [US3] Create unit/integration tests for UnifiedWebCapabilityService (capability inventory, parity, cutover, rollback) in `InquirySpark.Common.Tests/UnifiedWeb/US3CapabilityServiceTests.cs`.
 
 **Checkpoint**: Domain-level migration and cutover flow is operationally controlled and auditable.
 
@@ -160,16 +160,16 @@
 
 ### Implementation for User Story 4
 
-- [ ] T047C [US4] Enumerate required audit event types from DecisionSpark and InquirySpark.Admin AND define required payload fields per event type (at minimum: EventType, UserId, Timestamp, CorrelationId, ResourceId, ActionDetails) in `.documentation/specs/001-unified-web-experience/contracts/audit-event-types.md` per FR-007. This document is the schema authority for T048 (UnifiedAuditEventItem model).
-- [ ] T048 [US4] Create structured audit event payload model in `InquirySpark.Common/Models/UnifiedWeb/UnifiedAuditEventItem.cs`.
-- [ ] T049 [US4] Add unified audit logging service contract in `InquirySpark.Repository/Services/UnifiedWeb/IUnifiedAuditService.cs`.
-- [ ] T050 [US4] Implement unified audit logging service in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedAuditService.cs` (Uses `ILogger` standard pipelines, NOT EF Database).
-- [ ] T051 [US4] Integrate cutover and parity audit emission in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
-- [ ] T052 [US4] Create operational readiness dashboard controller in `InquirySpark.Web/Areas/Unified/Controllers/OperationalReadinessController.cs`.
-- [ ] T053 [P] [US4] Create operational readiness view in `InquirySpark.Web/Areas/Unified/Views/OperationalReadiness/Index.cshtml`.
-- [ ] T054 [US4] Add operational readiness checklist in `.documentation/specs/001-unified-web-experience/checklists/operational-readiness.md`.
-- [ ] T055 [US4] Document incident-response path for unified app in `.documentation/specs/001-unified-web-experience/contracts/incident-response-runbook.md`.
-- [ ] T055A [US4] Create unit/integration tests for UnifiedAuditService in `InquirySpark.Common.Tests/UnifiedWeb/US4AuditServiceTests.cs`.
+- [X] T047C [US4] Enumerate required audit event types from DecisionSpark and InquirySpark.Admin AND define required payload fields per event type (at minimum: EventType, UserId, Timestamp, CorrelationId, ResourceId, ActionDetails) in `.documentation/specs/001-unified-web-experience/contracts/audit-event-types.md` per FR-007. This document is the schema authority for T048 (UnifiedAuditEventItem model).
+- [X] T048 [US4] Create structured audit event payload model in `InquirySpark.Common/Models/UnifiedWeb/UnifiedAuditEventItem.cs`.
+- [X] T049 [US4] Add unified audit logging service contract in `InquirySpark.Repository/Services/UnifiedWeb/IUnifiedAuditService.cs`.
+- [X] T050 [US4] Implement unified audit logging service in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedAuditService.cs` (Uses `ILogger` standard pipelines, NOT EF Database).
+- [X] T051 [US4] Integrate cutover and parity audit emission in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs`.
+- [X] T052 [US4] Create operational readiness dashboard controller in `InquirySpark.Web/Areas/Unified/Controllers/OperationalReadinessController.cs`.
+- [X] T053 [P] [US4] Create operational readiness view in `InquirySpark.Web/Areas/Unified/Views/OperationalReadiness/Index.cshtml`.
+- [X] T054 [US4] Add operational readiness checklist in `.documentation/specs/001-unified-web-experience/checklists/operational-readiness.md`.
+- [X] T055 [US4] Document incident-response path for unified app in `.documentation/specs/001-unified-web-experience/contracts/incident-response-runbook.md`.
+- [X] T055A [US4] Create unit/integration tests for UnifiedAuditService in `InquirySpark.Common.Tests/UnifiedWeb/US4AuditServiceTests.cs`.
 
 **Checkpoint**: Governance, auditability, and operational support readiness are demonstrable in unified app context.
 
@@ -179,16 +179,16 @@
 
 **Purpose**: Final cross-story hardening, documentation, and validation.
 
-- [ ] T056 [P] Record implementation structure delta evidence in `.documentation/specs/001-unified-web-experience/contracts/implementation-structure-delta.md`.
-- [ ] T057 Record route-policy and decommission-readiness evidence in `.documentation/specs/001-unified-web-experience/contracts/route-and-decommission-readiness.md`.
-- [ ] T058 [P] Add XML documentation comments to new public contracts/models in `InquirySpark.Common/Models/UnifiedWeb/` and `InquirySpark.Repository/Services/UnifiedWeb/`.
-- [ ] T058A [P] Add XML documentation comments to new public APIs in `InquirySpark.Web/Areas/Unified/Controllers/` and `InquirySpark.Web/Services/` per constitution requirement (XML doc comments required on all public APIs across all projects).
-- [ ] T059 Add explicit performance measurement task definition and thresholds in `.documentation/specs/001-unified-web-experience/contracts/performance-validation-method.md`.
-- [ ] T060 Execute performance measurement for key user actions and record pass/fail evidence in `.documentation/specs/001-unified-web-experience/contracts/performance-validation-evidence.md`.
-- [ ] T061 Run quickstart end-to-end validation and record evidence in `.documentation/specs/001-unified-web-experience/quickstart.md`.
-- [ ] T062 Run full build and tests (`dotnet build InquirySpark.sln -warnaserror`, `dotnet test`) and capture outcomes in `.documentation/specs/001-unified-web-experience/contracts/validation-evidence.md`.
-- [ ] T062B Run `dotnet ef migrations list` across all projects in the solution and confirm zero new migrations were generated (spec constraint: no new database objects). Record pass/fail result in `.documentation/specs/001-unified-web-experience/contracts/validation-evidence.md`.
-- [ ] T062A Execute post-cutover functional parity, **permission parity**, and critical workflow integrity validation: use capability matrix (T002A) as the functional checklist and role-mapping artifacts (T004B, T013A) as the expected-permissions authority. Record pass/fail evidence for each domain in `.documentation/specs/001-unified-web-experience/contracts/post-cutover-parity-evidence.md` per FR-014.
+- [X] T056 [P] Record implementation structure delta evidence in `.documentation/specs/001-unified-web-experience/contracts/implementation-structure-delta.md`.
+- [X] T057 Record route-policy and decommission-readiness evidence in `.documentation/specs/001-unified-web-experience/contracts/route-and-decommission-readiness.md`.
+- [X] T058 [P] Add XML documentation comments to new public contracts/models in `InquirySpark.Common/Models/UnifiedWeb/` and `InquirySpark.Repository/Services/UnifiedWeb/`.
+- [X] T058A [P] Add XML documentation comments to new public APIs in `InquirySpark.Web/Areas/Unified/Controllers/` and `InquirySpark.Web/Services/` per constitution requirement (XML doc comments required on all public APIs across all projects).
+- [X] T059 Add explicit performance measurement task definition and thresholds in `.documentation/specs/001-unified-web-experience/contracts/performance-validation-method.md`.
+- [X] T060 Execute performance measurement for key user actions and record pass/fail evidence in `.documentation/specs/001-unified-web-experience/contracts/performance-validation-evidence.md`.
+- [X] T061 Run quickstart end-to-end validation and record evidence in `.documentation/specs/001-unified-web-experience/quickstart.md`.
+- [X] T062 Run full build and tests and capture outcomes (`dotnet build InquirySpark.sln -warnaserror`, `dotnet test`) and capture outcomes in `.documentation/specs/001-unified-web-experience/contracts/validation-evidence.md`.
+- [X] T062B Run `dotnet ef migrations list` across all projects in the solution and confirm zero new migrations were generated (spec constraint: no new database objects). Record pass/fail result in `.documentation/specs/001-unified-web-experience/contracts/validation-evidence.md`.
+- [X] T062A Execute post-cutover functional parity, **permission parity**, and critical workflow integrity validation: use capability matrix (T002A) as the functional checklist and role-mapping artifacts (T004B, T013A) as the expected-permissions authority. Record pass/fail evidence for each domain in `.documentation/specs/001-unified-web-experience/contracts/post-cutover-parity-evidence.md` per FR-014.
 - [ ] T063 Remove `DecisionSpark` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
 - [ ] T064 Remove `InquirySpark.Admin` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
 - [ ] T065 Remove `DecisionSpark/` and `InquirySpark.Admin/` runtime deployment references in deployment/run documentation at `README.md`.

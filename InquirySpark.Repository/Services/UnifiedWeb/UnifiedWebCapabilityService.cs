@@ -15,6 +15,7 @@ public sealed class UnifiedWebCapabilityService : IUnifiedWebCapabilityService
 {
     private readonly UnifiedWebOptions _options;
     private readonly ILogger<UnifiedWebCapabilityService> _logger;
+    private readonly IUnifiedAuditService _audit;
 
     // In-memory runtime state (not persisted to DB per spec constraint)
     private readonly List<ParityValidationRecordItem> _parityRecords = [];
@@ -23,10 +24,12 @@ public sealed class UnifiedWebCapabilityService : IUnifiedWebCapabilityService
     /// <summary>Initializes a new instance of <see cref="UnifiedWebCapabilityService"/>.</summary>
     public UnifiedWebCapabilityService(
         IOptions<UnifiedWebOptions> options,
-        ILogger<UnifiedWebCapabilityService> logger)
+        ILogger<UnifiedWebCapabilityService> logger,
+        IUnifiedAuditService? auditService = null)
     {
         _options = options.Value;
         _logger = logger;
+        _audit = auditService ?? NullUnifiedAuditService.Instance;
     }
 
     // ── Capability inventory ──────────────────────────────────────────────
@@ -69,6 +72,10 @@ public sealed class UnifiedWebCapabilityService : IUnifiedWebCapabilityService
             record.FunctionalParityPassed, record.PermissionParityPassed,
             record.UxConsistencyPassed, record.PerformancePassed, record.IsFullyValidated);
 
+        _audit.EmitInfo("UC.Parity.ValidationSubmitted", record.ValidatedBy,
+            resourceId: record.CapabilityId,
+            actionDetails: $"FullyValidated={record.IsFullyValidated}");
+
         if (record.IsFullyValidated)
         {
             AdvanceCapabilityPhase(record.CapabilityId, 3, "validated");
@@ -90,7 +97,7 @@ public sealed class UnifiedWebCapabilityService : IUnifiedWebCapabilityService
             .FirstOrDefault(c => string.Equals(c.CapabilityId, capabilityId, StringComparison.OrdinalIgnoreCase));
 
         return Task.FromResult(item is null
-            ? new BaseResponse<CapabilityItem>($"Capability '{capabilityId}' not found in configuration.")
+            ? new BaseResponse<CapabilityItem>(new[] { $"Capability '{capabilityId}' not found in configuration." })
             : new BaseResponse<CapabilityItem>(item));
     }
 
@@ -117,6 +124,11 @@ public sealed class UnifiedWebCapabilityService : IUnifiedWebCapabilityService
             "[UnifiedWeb] CutoverDecision recorded for domain {Domain} legacyApp={LegacyApp} " +
             "decision={Decision} approvedBy={ApprovedBy}",
             decision.Domain, decision.LegacyApp, decision.Decision, decision.ApprovedBy);
+
+        _audit.EmitWarning("UC.Cutover.DecisionRecorded", decision.ApprovedBy,
+            resourceId: decision.Domain,
+            actionDetails: $"Decision={decision.Decision} LegacyApp={decision.LegacyApp}",
+            domain: decision.Domain);
 
         if (string.Equals(decision.Decision, "Go", StringComparison.OrdinalIgnoreCase))
         {
@@ -164,6 +176,11 @@ public sealed class UnifiedWebCapabilityService : IUnifiedWebCapabilityService
         _logger.LogWarning(
             "[UnifiedWeb] ROLLBACK: Domain {Domain} cutover reverted by {RevertedBy}. Reason: {Reason}",
             domain, revertedBy, reason);
+
+        _audit.EmitCritical("UC.Cutover.Reverted", revertedBy,
+            resourceId: domain,
+            actionDetails: reason,
+            domain: domain);
 
         return Task.FromResult(new BaseResponse<bool>(true));
     }

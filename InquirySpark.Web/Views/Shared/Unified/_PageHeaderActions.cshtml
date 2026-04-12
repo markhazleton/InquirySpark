@@ -1,0 +1,47 @@
+@using InquirySpark.Web.Models.Unified
+@model PageHeaderActionsModel
+@{
+    var title = Model?.Title ?? ViewData["Title"]?.ToString() ?? string.Empty;
+    var subtitle = Model?.Subtitle ?? ViewData["Subtitle"]?.ToString();
+    var icon = Model?.Icon ?? "bi-grid";
+    var capabilityId = Model?.CapabilityId ?? string.Empty;
+    var primaryAction = Model?.PrimaryAction;
+    var secondaryActions = Model?.SecondaryActions ?? [];
+    var backHref = Model?.BackHref;
+    var backLabel = Model?.BackLabel ?? "Back";
+}
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h1 class="h4 mb-0">
+            <i class="bi @icon me-1 text-primary"></i>@title
+        </h1>
+        @if (!string.IsNullOrWhiteSpace(subtitle))
+        {
+            <p class="text-muted mb-0 small">@subtitle</p>
+        }
+        @if (!string.IsNullOrWhiteSpace(capabilityId))
+        {
+            <span class="badge bg-secondary fw-normal small">@capabilityId</span>
+        }
+    </div>
+    <div class="d-flex gap-2">
+        @if (backHref is not null)
+        {
+            <a href="@backHref" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> @backLabel
+            </a>
+        }
+        @foreach (var action in secondaryActions)
+        {
+            <a href="@action.Href" class="btn btn-outline-@action.ButtonVariant btn-sm" title="@action.Title">
+                <i class="bi @action.Icon"></i> @action.Label
+            </a>
+        }
+        @if (primaryAction is not null)
+        {
+            <a href="@primaryAction.Href" class="btn btn-primary btn-sm" title="@primaryAction.Title">
+                <i class="bi @primaryAction.Icon"></i> @primaryAction.Label
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,170 @@
+@using InquirySpark.Web.Areas.Unified.ViewModels.Completion
+@using InquirySpark.Web.Models.Unified
+@model CapabilityCompletionMatrixViewModel
+@{
+    ViewData["Title"] = "Capability Completion Matrix";
+}
+
+@await Html.PartialAsync("Unified/_PageHeaderActions", new PageHeaderActionsModel
+{
+    Title = "Capability Completion Matrix",
+    Icon = "bi-kanban",
+    Subtitle = $"{Model.Summary.Total} capabilities tracked across {Model.DomainGroups.Count} domains. {Model.Summary.CompletionPercent}% validated or cut over.",
+})
+
+<!-- Summary stats -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-collection fs-2 text-primary"></i>
+                <div class="display-6 fw-bold">@Model.Summary.Total</div>
+                <div class="text-muted small">Total Capabilities</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-hammer fs-2 text-warning"></i>
+                <div class="display-6 fw-bold">@Model.Summary.Deployed</div>
+                <div class="text-muted small">Deployed</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-check-circle-fill fs-2 text-success"></i>
+                <div class="display-6 fw-bold">@Model.Summary.Validated</div>
+                <div class="text-muted small">Validated</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-arrow-right-circle-fill fs-2 text-primary"></i>
+                <div class="display-6 fw-bold">@Model.Summary.CutOver</div>
+                <div class="text-muted small">Cut Over</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overall progress bar -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="fw-semibold"><i class="bi bi-bar-chart-steps"></i> Overall Completion</span>
+            <span class="fw-bold text-primary">@Model.Summary.CompletionPercent%</span>
+        </div>
+        <div class="progress" style="height: 18px;">
+            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                 role="progressbar"
+                 style="width: @Model.Summary.CompletionPercent%"
+                 aria-valuenow="@Model.Summary.CompletionPercent"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
+                @Model.Summary.CompletionPercent%
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Per-domain capability tables -->
+@foreach (var group in Model.DomainGroups)
+{
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-@group.ColorVariant text-white d-flex justify-content-between align-items-center">
+            <h3 class="h5 mb-0">
+                <i class="bi @group.Icon"></i> @group.Domain
+            </h3>
+            <span class="badge bg-white text-@group.ColorVariant">
+                @group.ValidatedCount / @group.Capabilities.Count validated
+            </span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col"><i class="bi bi-hash"></i> Capability ID</th>
+                            <th scope="col"><i class="bi bi-card-text"></i> Name</th>
+                            <th scope="col"><i class="bi bi-layers"></i> Phase</th>
+                            <th scope="col"><i class="bi bi-info-circle"></i> Notes</th>
+                            <th scope="col" class="no-sort">Navigate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in group.Capabilities)
+                        {
+                            <tr>
+                                <td><code>@row.CapabilityId</code></td>
+                                <td>@row.Name</td>
+                                <td>
+                                    <span class="badge @row.PhaseBadgeClass">
+                                        @row.PhaseLabel
+                                    </span>
+                                </td>
+                                <td class="text-muted small">@(row.Notes ?? "—")</td>
+                                <td>
+                                    @if (row.UnifiedRoute is not null)
+                                    {
+                                        <a href="@row.UnifiedRoute" class="btn btn-outline-primary btn-sm" title="Open @row.Name">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">—</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-info-circle"></i> Total: @group.Capabilities.Count capabilities</span>
+            <span>
+                <div class="progress d-inline-flex align-middle" style="width: 120px; height: 10px;">
+                    <div class="progress-bar bg-@group.ColorVariant"
+                         role="progressbar"
+                         style="width: @group.CompletionPercent%"
+                         aria-valuenow="@group.CompletionPercent"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                </div>
+                <span class="ms-1 small">@group.CompletionPercent%</span>
+            </span>
+        </div>
+    </div>
+}
+
+<!-- Phase legend -->
+@if (Model.Phases.Count > 0)
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h4 class="h6 mb-0"><i class="bi bi-list-ol"></i> Phase Legend</h4>
+        </div>
+        <div class="card-body">
+            <div class="row g-2">
+                @foreach (var phase in Model.Phases)
+                {
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <span class="badge bg-secondary">Phase @phase.PhaseNumber</span>
+                            <div>
+                                <div class="fw-semibold small">@phase.Name</div>
+                                <div class="text-muted small">@phase.Description</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

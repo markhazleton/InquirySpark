@@ -1,0 +1,163 @@
+@model InquirySpark.Web.Areas.Unified.Controllers.OperationalReadinessDashboardViewModel
+
+@{
+    ViewData["Title"] = "Operational Readiness";
+    ViewData["CapabilityId"] = "OP-READINESS";
+}
+
+@* ── Summary stat cards ───────────────────────────────────────────────────── *@
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-5 fw-bold text-primary">@Model.TotalCapabilities</div>
+                <small class="text-muted">Total Capabilities</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-5 fw-bold text-success">@Model.CutOverCount</div>
+                <small class="text-muted">Cut Over</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-5 fw-bold text-warning">@Model.ValidatedCount</div>
+                <small class="text-muted">Validated (Ready)</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-5 fw-bold @(Model.AllDomainsCutOver ? "text-success" : "text-secondary")">
+                    @Model.OverallCompletionPercent%
+                </div>
+                <small class="text-muted">Overall Cut Over</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ── Overall progress bar ─────────────────────────────────────────────────── *@
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="fw-semibold"><i class="bi bi-bar-chart-line"></i> Overall Cutover Progress</span>
+            <span>@Model.CutOverCount / @Model.TotalCapabilities capabilities</span>
+        </div>
+        <div class="progress" style="height: 20px;">
+            <div class="progress-bar bg-success progress-bar-striped @(Model.AllDomainsCutOver ? "" : "progress-bar-animated")"
+                 role="progressbar"
+                 style="width: @Model.OverallCompletionPercent%"
+                 aria-valuenow="@Model.CutOverCount"
+                 aria-valuemin="0"
+                 aria-valuemax="@Model.TotalCapabilities">
+                @Model.OverallCompletionPercent%
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ── Domain readiness table ───────────────────────────────────────────────── *@
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0 h5"><i class="bi bi-check2-all"></i> Domain Readiness</h2>
+        <span class="badge bg-light text-primary">@Model.ReadyForCutoverDomains domain(s) ready for cutover</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="bi bi-grid"></i> Domain</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">Phase 4 (Cut Over)</th>
+                        <th class="text-center">Phase 3 (Validated)</th>
+                        <th class="text-center">Phase 2 (Deployed)</th>
+                        <th class="text-center">Below Phase 2</th>
+                        <th class="text-center no-sort">Status</th>
+                        <th class="no-sort">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var domain in Model.DomainSummaries)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@domain.Domain</td>
+                            <td class="text-center">@domain.Total</td>
+                            <td class="text-center">
+                                @if (domain.Phase4Count > 0)
+                                {
+                                    <span class="badge bg-success">@domain.Phase4Count</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (domain.Phase3Count > 0)
+                                {
+                                    <span class="badge bg-info">@domain.Phase3Count</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (domain.Phase2Count > 0)
+                                {
+                                    <span class="badge bg-warning text-dark">@domain.Phase2Count</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (domain.BelowPhase2Count > 0)
+                                {
+                                    <span class="badge bg-danger">@domain.BelowPhase2Count</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <span class="badge @domain.StatusBadgeClass">@domain.StatusLabel</span>
+                            </td>
+                            <td>
+                                <a asp-area="Unified" asp-controller="CapabilityCompletionMatrix" asp-action="Index"
+                                   class="btn btn-outline-primary btn-sm" title="View matrix">
+                                    <i class="bi bi-table"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle"></i> @Model.DomainSummaries.Count domains &mdash; built @Model.LastBuiltAt.ToString("u")</span>
+        <span><i class="bi bi-lightning"></i> DataTables enabled</span>
+    </div>
+</div>
+
+@* ── Gate criteria link ───────────────────────────────────────────────────── *@
+<div class="alert alert-info d-flex align-items-center" role="alert">
+    <i class="bi bi-shield-check me-2"></i>
+    <div>
+        Pre-cutover gate criteria must be satisfied before any domain cutover.
+        See <code>contracts/pre-cutover-gate-criteria.md</code> and the
+        <a asp-area="Unified" asp-controller="CapabilityCompletionMatrix" asp-action="Index"
+           class="alert-link">Capability Completion Matrix</a>.
+    </div>
+</div>

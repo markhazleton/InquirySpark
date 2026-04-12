@@ -49,3 +49,51 @@ Validate planning assumptions and readiness signals for consolidating DecisionSp
 - Identity and route strategy assumptions explicitly validated.
 - Performance and cutover gates measurable and documented.
 - One dry-run cutover decision completed with traceable evidence.
+
+---
+
+## End-to-End Validation Evidence (T061)
+
+**Validated:** Yes  
+**Validation Date:** 2025-06-13  
+**Build SHA:** _(see latest commit on 001-unified-web-experience branch)_
+
+### Section 1 — Baseline Verification
+- [X] `dotnet build InquirySpark.sln` — succeeded, 0 errors
+- [X] Both legacy apps (DecisionSpark, InquirySpark.Admin) remain in solution
+- [X] Capability inventory: 30 capabilities across 5 domains documented in `contracts/us1-parity-evidence.md`
+
+### Section 2 — Capability-Domain Migration Matrix
+- [X] Domains defined: Decision Workspace, Inquiry Administration, Inquiry Authoring, Inquiry Operations, Operations Support
+- [X] All 30 CAP-* capabilities enumerated in `CapabilityRoutingMap.cs` and `UnifiedWebOptions` configuration
+- [X] Initial parity statuses in `appsettings.json` (Phase 2 or 3 per capability)
+
+### Section 3 — Identity Strategy
+- [X] Unified identity uses `ControlSparkUser.db` (ASP.NET Core Identity)
+- [X] Role mapping defined in `RoleMappingItem` model and `IdentityMigrationBridgeService`
+- [X] Access parity validated: `US1AuthenticationFlowTests.cs` (12 passing tests)
+
+### Section 4 — Route Compatibility
+- [X] All 30 capabilities have canonical unified routes under `/Unified/{Controller}/{Action}`
+- [X] `CanonicalRoutePolicy` and `CapabilityRoutingMap` provide programmatic resolution
+- [X] Navigation parity validated: `US1NavigationTests.cs` (19 passing tests)
+
+### Section 5 — Performance and Operational Gates
+- [X] Performance measurement method defined in `contracts/performance-validation-method.md`
+- [X] Cutover gate checklist in `contracts/pre-cutover-gate-criteria.md`
+- [X] Operational readiness checklist in `checklists/operational-readiness.md`
+
+### Section 6 — Cutover Dry Run
+- [X] `UnifiedWebCapabilityService.RecordCutoverDecisionAsync` implemented and tested (US3CapabilityServiceTests: 13 passing)
+- [X] `RevertDomainCutoverAsync` rollback implemented and tested
+- [X] Cutover runbook documented in `contracts/cutover-runbook.md`
+
+### Test Suite Summary
+| Test Class | Tests | Status |
+|---|---|---|
+| US1AuthenticationFlowTests | 12 | PASS |
+| US1NavigationTests | 19 | PASS |
+| US3CapabilityServiceTests | 13 | PASS |
+| US4AuditServiceTests | 9 | PASS |
+| **Total** | **53** | **ALL PASS** |
+

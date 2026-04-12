@@ -1,3 +1,4 @@
+#nullable enable
 namespace InquirySpark.Common.Models.UnifiedWeb;
 
 /// <summary>

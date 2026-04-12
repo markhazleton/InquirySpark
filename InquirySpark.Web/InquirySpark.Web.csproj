@@ -7,6 +7,8 @@
 		<UserSecretsId>b3c7d891-4f2a-4e58-9c1d-7e5b3a290f61</UserSecretsId>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+		<!-- Webpack (npm run build) handles all JS bundling. Block VS from running tsc directly to avoid TS18003. -->
+		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
 	</PropertyGroup>
 
 	<PropertyGroup>

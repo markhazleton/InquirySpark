@@ -82,7 +82,7 @@ public sealed class IdentityMigrationBridgeService : IIdentityMigrationBridgeSer
             _logger.LogWarning(
                 "[IdentityBridge] No role mapping found for app={App} role={Role} userId={UserId}",
                 sourceApp, sourceRole, userId);
-            return Task.FromResult(new BaseResponse<bool>($"No role mapping defined for {sourceApp}/{sourceRole}."));
+            return Task.FromResult(new BaseResponse<bool>(new[] { $"No role mapping defined for {sourceApp}/{sourceRole}." }));
         }
 
         if (!mapping.IsEquivalent)

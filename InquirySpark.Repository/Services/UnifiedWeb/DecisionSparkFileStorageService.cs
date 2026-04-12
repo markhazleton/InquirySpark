@@ -49,7 +49,10 @@ public sealed class DecisionSparkFileStorageService : IDecisionSparkFileStorageS
         CancellationToken cancellationToken = default)
     {
         ValidateId(specId, nameof(specId));
-        if (version is not null) ValidateId(version, nameof(version));
+        if (version is not null)
+        {
+            ValidateId(version, nameof(version));
+        }
 
         return await _specRepository.GetAsync(specId, version, cancellationToken);
     }

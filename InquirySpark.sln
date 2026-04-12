@@ -9,10 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InquirySpark.Common", "Inqu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InquirySpark.Common.Tests", "InquirySpark.Common.Tests\InquirySpark.Common.Tests.csproj", "{9E18665A-83ED-4A9E-A2E3-0BF6A6E0E677}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InquirySpark.Admin", "InquirySpark.Admin\InquirySpark.Admin.csproj", "{085D9851-67D1-41D8-B414-76F533913BDF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecisionSpark", "DecisionSpark\DecisionSpark.csproj", "{2B792BD3-3CAC-FAE0-BB4B-42A7D287CE0E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InquirySpark.Web", "InquirySpark.Web\InquirySpark.Web.csproj", "{3F8A5E21-9B4C-4D67-A8E3-1C7F95B20D44}"
 EndProject
 Global
@@ -33,14 +29,6 @@ Global
 		{9E18665A-83ED-4A9E-A2E3-0BF6A6E0E677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E18665A-83ED-4A9E-A2E3-0BF6A6E0E677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E18665A-83ED-4A9E-A2E3-0BF6A6E0E677}.Release|Any CPU.Build.0 = Release|Any CPU
-		{085D9851-67D1-41D8-B414-76F533913BDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{085D9851-67D1-41D8-B414-76F533913BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{085D9851-67D1-41D8-B414-76F533913BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{085D9851-67D1-41D8-B414-76F533913BDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B792BD3-3CAC-FAE0-BB4B-42A7D287CE0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B792BD3-3CAC-FAE0-BB4B-42A7D287CE0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B792BD3-3CAC-FAE0-BB4B-42A7D287CE0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B792BD3-3CAC-FAE0-BB4B-42A7D287CE0E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F8A5E21-9B4C-4D67-A8E3-1C7F95B20D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F8A5E21-9B4C-4D67-A8E3-1C7F95B20D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F8A5E21-9B4C-4D67-A8E3-1C7F95B20D44}.Release|Any CPU.ActiveCfg = Release|Any CPU

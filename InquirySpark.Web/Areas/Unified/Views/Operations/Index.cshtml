@@ -1,0 +1,185 @@
+@model InquirySpark.Web.Areas.Unified.ViewModels.OperationsHomeViewModel
+@using InquirySpark.Web.Models.Unified
+@{
+    ViewData["Title"] = "Unified Operations Workspace";
+}
+
+@await Html.PartialAsync("Unified/_PageHeaderActions", new PageHeaderActionsModel
+{
+    Title    = "Unified Operations Workspace",
+    Icon     = "bi-lightning-charge-fill",
+    Subtitle = $"Welcome, {Model.UserDisplayName} — all capabilities available from this workspace.",
+})
+
+<!-- Capability completion progress -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-collection fs-1 text-primary"></i>
+                <div class="display-6 fw-bold mt-2">@Model.TotalCapabilities</div>
+                <div class="text-muted small">Total Capabilities</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-clock-history fs-1 text-secondary"></i>
+                <div class="display-6 fw-bold mt-2">@Model.CapabilitiesNotStarted</div>
+                <div class="text-muted small">Not Started</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-hammer fs-1 text-warning"></i>
+                <div class="display-6 fw-bold mt-2">@Model.CapabilitiesInProgress</div>
+                <div class="text-muted small">In Progress</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-0 shadow-sm text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+                <div class="display-6 fw-bold mt-2">@Model.CapabilitiesValidated</div>
+                <div class="text-muted small">Validated / Cut-Over</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress bar -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="fw-semibold"><i class="bi bi-kanban"></i> Capability Completion Progress</span>
+            <span class="fw-bold text-primary">@Model.CompletionPercent%</span>
+        </div>
+        <div class="progress" style="height: 20px;">
+            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                 role="progressbar"
+                 style="width: @Model.CompletionPercent%"
+                 aria-valuenow="@Model.CompletionPercent"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
+                @Model.CompletionPercent%
+            </div>
+        </div>
+        <div class="text-muted small mt-1">
+            <i class="bi bi-info-circle"></i>
+            @Model.DomainCount capability domains tracked across @Model.TotalCapabilities capabilities.
+        </div>
+    </div>
+</div>
+
+<!-- Capability family quick-links -->
+<div class="row g-3">
+    <div class="col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-info text-white">
+                <i class="bi bi-diagram-3"></i> Decision Workspace
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">AI-assisted decision conversations and specification management, migrated from DecisionSpark.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/Unified/DecisionConversation" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-chat-dots"></i> Conversations
+                    </a>
+                    <a href="/Unified/DecisionSpecification" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-file-earmark-ruled"></i> Specifications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-gear"></i> Inquiry Administration
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Applications, users, roles, and site configuration, unified from InquirySpark.Admin.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/Unified/InquiryAdministration/Applications" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-app-indicator"></i> Applications
+                    </a>
+                    <a href="/Unified/InquiryAdministration/Roles" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-shield-lock"></i> Roles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-secondary text-white">
+                <i class="bi bi-pencil-square"></i> Inquiry Authoring
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Surveys, questions, groups, and answer authoring.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/Unified/InquiryAuthoring/Surveys" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-card-list"></i> Surveys
+                    </a>
+                    <a href="/Unified/InquiryAuthoring/Questions" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-question-circle"></i> Questions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-activity"></i> Inquiry Operations
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Companies, import history, survey status, and review workflows.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/Unified/InquiryOperations/Companies" class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-building"></i> Companies
+                    </a>
+                    <a href="/Unified/InquiryOperations/SurveyStatus" class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-toggle-on"></i> Survey Status
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-warning text-dark">
+                <i class="bi bi-tools"></i> Operations Support
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">System health, chart builder, and user preferences.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/Unified/OperationsSupport/Health" class="btn btn-sm btn-outline-warning">
+                        <i class="bi bi-heart-pulse"></i> System Health
+                    </a>
+                    <a href="/Unified/OperationsSupport/ChartBuilder" class="btn btn-sm btn-outline-warning">
+                        <i class="bi bi-bar-chart-line"></i> Charts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-kanban"></i> Capability Matrix
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">Track capability completion progress, parity validation, and cutover decisions.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/Unified/CapabilityCompletionMatrix" class="btn btn-sm btn-outline-dark">
+                        <i class="bi bi-kanban"></i> Open Matrix
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
