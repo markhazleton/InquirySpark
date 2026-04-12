@@ -66,8 +66,8 @@ builder.Services.AddSingleton<FileSearchIndexer>();
 builder.Services.AddSingleton<IDecisionSpecRepository, DecisionSpecRepository>();
 builder.Services.AddHostedService<IndexRefreshHostedService>();
 
-// Conversation persistence (scoped — reads from IConfiguration)
-builder.Services.AddScoped<IConversationPersistence, FileConversationPersistence>();
+// Conversation persistence (singleton — file-based and config/logger-only dependencies)
+builder.Services.AddSingleton<IConversationPersistence, FileConversationPersistence>();
 
 // IDecisionSparkFileStorageService — thin facade over the above (T004C/T004D)
 builder.Services.AddSingleton<IDecisionSparkFileStorageService, DecisionSparkFileStorageService>();
@@ -148,6 +148,8 @@ app.MapControllerRoute(
     name: "unified",
     pattern: "Unified/{controller=Operations}/{action=Index}/{id?}",
     defaults: new { area = "Unified" });
+
+app.MapGet("/", () => Results.Redirect("/Unified/Operations"));
 
 app.MapControllerRoute(
     name: "default",
