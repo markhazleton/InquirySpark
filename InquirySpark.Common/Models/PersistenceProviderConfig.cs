@@ -50,7 +50,7 @@ public sealed record PersistenceProviderConfig
 /// </summary>
 public static class PersistenceProviderConfigValidator
 {
-    private const string SqliteProviderName = "Sqlite";
+    private const string _sqliteProviderName = "Sqlite";
 
     /// <summary>
     /// Validates the supplied configuration, throwing <see cref="InvalidOperationException"/> when invalid.
@@ -66,9 +66,9 @@ public static class PersistenceProviderConfigValidator
             throw new InvalidOperationException("Persistence provider connection string cannot be empty.");
         }
 
-        if (!string.Equals(config.ProviderName, SqliteProviderName, StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(config.ProviderName, _sqliteProviderName, StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException($"Unsupported provider '{config.ProviderName}'. Only '{SqliteProviderName}' is allowed in this baseline.");
+            throw new InvalidOperationException($"Unsupported provider '{config.ProviderName}'. Only '{_sqliteProviderName}' is allowed in this baseline.");
         }
 
         if (!config.ReadOnly)

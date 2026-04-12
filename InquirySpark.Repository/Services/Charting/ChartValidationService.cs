@@ -39,7 +39,7 @@ public class ChartValidationService(
     private readonly ILogger<ChartValidationService> _logger = logger;
 
     // JSON Schema for filter payload validation
-    private static readonly string FilterPayloadSchema = @"{
+    private static readonly string _filterPayloadSchema = @"{
         'type': 'object',
         'properties': {
             'filters': {
@@ -58,7 +58,7 @@ public class ChartValidationService(
     }";
 
     // JSON Schema for calculation payload validation
-    private static readonly string CalculationPayloadSchema = @"{
+    private static readonly string _calculationPayloadSchema = @"{
         'type': 'object',
         'properties': {
             'calculations': {
@@ -183,7 +183,7 @@ public class ChartValidationService(
             // Validate filter payload
             if (!string.IsNullOrEmpty(chartDef.FilterPayload))
             {
-                var filterSchema = JSchema.Parse(FilterPayloadSchema);
+                var filterSchema = JSchema.Parse(_filterPayloadSchema);
                 var filterJson = JObject.Parse(chartDef.FilterPayload);
 
                 if (!filterJson.IsValid(filterSchema, out IList<string> filterErrors))
@@ -196,7 +196,7 @@ public class ChartValidationService(
             // Validate calculation payload
             if (!string.IsNullOrEmpty(chartDef.CalculationPayload))
             {
-                var calcSchema = JSchema.Parse(CalculationPayloadSchema);
+                var calcSchema = JSchema.Parse(_calculationPayloadSchema);
                 var calcJson = JObject.Parse(chartDef.CalculationPayload);
 
                 if (!calcJson.IsValid(calcSchema, out IList<string> calcErrors))

@@ -1,5 +1,7 @@
 namespace InquirySpark.Common.SDK;
 
+#pragma warning disable IDE1006 // Naming Styles
+
 public class ApplicationUserRoleItem
 {
 
@@ -48,3 +50,5 @@ public class ApplicationUserRoleItem
     public bool UserInroled { get; set; }
     public bool IsUserAdmin { get; set; }
 }
+
+#pragma warning restore IDE1006 // Naming Styles

@@ -71,6 +71,13 @@ public partial class ApplicationUser
     public string Password { get; set; } = null!;
 
     /// <summary>
+    /// Gets or sets the hashed password (ASP.NET Core Identity format) for the Conversation API.
+    /// When non-null, used for authentication instead of the plaintext Password field.
+    /// </summary>
+    [DisplayName("Password Hash")]
+    public string? PasswordHash { get; set; }
+
+    /// <summary>
     /// Gets or sets the role ID of the user.
     /// </summary>
     [DisplayName("Role")]

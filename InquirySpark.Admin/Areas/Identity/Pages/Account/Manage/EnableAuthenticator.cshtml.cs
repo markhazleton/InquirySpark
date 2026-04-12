@@ -22,7 +22,7 @@ namespace ControlSpark.WebMvc.Areas.Identity.Pages.Account.Manage
         private readonly ILogger<EnableAuthenticatorModel> _logger = logger;
         private readonly UrlEncoder _urlEncoder = urlEncoder;
 
-        private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+        private const string _authenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -169,7 +169,7 @@ namespace ControlSpark.WebMvc.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 CultureInfo.InvariantCulture,
-                AuthenticatorUriFormat,
+                _authenticatorUriFormat,
                 _urlEncoder.Encode("Microsoft.AspNetCore.Identity.UI"),
                 _urlEncoder.Encode(email),
                 unformattedKey);

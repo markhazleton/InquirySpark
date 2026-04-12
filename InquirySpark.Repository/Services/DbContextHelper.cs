@@ -14,6 +14,11 @@ namespace InquirySpark.Repository.Services
                 var result = await dbOperation();
                 return new BaseResponse<T>(result);
             }
+            catch (ConversationApiException ex)
+            {
+                // Preserve HTTP status code as a prefixed error so ApiResponseHelper can map it
+                return new BaseResponse<T>([$"{ex.StatusCode}: {ex.Message}"]);
+            }
             catch (SqliteException ex)
             {
                 return new BaseResponse<T>(BuildSqliteErrors(ex));
@@ -38,6 +43,10 @@ namespace InquirySpark.Repository.Services
             {
                 var result = await dbOperation();
                 return new BaseResponseCollection<T>(result);
+            }
+            catch (ConversationApiException ex)
+            {
+                return new BaseResponseCollection<T>([$"{ex.StatusCode}: {ex.Message}"]);
             }
             catch (SqliteException ex)
             {
@@ -67,13 +76,13 @@ namespace InquirySpark.Repository.Services
 
             switch (exception.SqliteErrorCode)
             {
-                case SqliteReadOnly:
+                case _sqliteReadOnly:
                     errors.Add("The database is mounted read-only. Ensure the asset from .documentation/copilot/session-2026-04-07/sqlite-build-checklist.md is copied locally and Mode=ReadOnly is intentional.");
                     break;
-                case SqliteCantOpen:
+                case _sqliteCantOpen:
                     errors.Add("Unable to open the SQLite file. Verify the path in appsettings matches data/sqlite and that the file exists.");
                     break;
-                case SqliteNotADatabase:
+                case _sqliteNotADatabase:
                     errors.Add("The target file is not a valid SQLite database—compare hashes with sqlite-data-assets.md.");
                     break;
             }
@@ -81,8 +90,8 @@ namespace InquirySpark.Repository.Services
             return errors.ToArray();
         }
 
-        private const int SqliteReadOnly = 8;
-        private const int SqliteCantOpen = 14;
-        private const int SqliteNotADatabase = 26;
+        private const int _sqliteReadOnly = 8;
+        private const int _sqliteCantOpen = 14;
+        private const int _sqliteNotADatabase = 26;
     }
 }

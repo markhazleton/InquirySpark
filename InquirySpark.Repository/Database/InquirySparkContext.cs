@@ -276,6 +276,8 @@ public partial class InquirySparkContext : DbContext
             entity.Property(e => e.Password)
                 .HasMaxLength(150)
                 .HasDefaultValueSql("(N'password')");
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(500);
             entity.Property(e => e.RoleId)
                 .HasDefaultValueSql("((4))")
                 .HasColumnName("RoleID");
@@ -839,9 +841,15 @@ public partial class InquirySparkContext : DbContext
 
             entity.HasIndex(e => new { e.SurveyResponseNm, e.AssignedUserId }, "SurveyResponse_UK").IsUnique();
 
+            entity.HasIndex(e => e.ConversationId)
+                .IsUnique()
+                .HasDatabaseName("IX_SurveyResponse_ConversationId")
+                .HasFilter("[ConversationId] IS NOT NULL");
+
             entity.Property(e => e.SurveyResponseId).HasColumnName("SurveyResponseID");
             entity.Property(e => e.ApplicationId).HasColumnName("ApplicationID");
             entity.Property(e => e.AssignedUserId).HasColumnName("AssignedUserID");
+            entity.Property(e => e.ConversationId);
             entity.Property(e => e.DataSource).HasMaxLength(250);
             entity.Property(e => e.ModifiedDt)
                 .HasDefaultValueSql("(getdate())")

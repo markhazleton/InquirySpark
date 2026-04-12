@@ -72,10 +72,31 @@ builder.Services.AddScoped<InquirySpark.Repository.Services.Charting.IChartValid
 builder.Services.AddScoped<InquirySpark.Repository.Services.Security.IAuditLogService, InquirySpark.Repository.Services.Security.AuditLogService>();
 builder.Services.AddScoped<InquirySpark.Repository.Services.UserPreferences.IUserPreferenceService, InquirySpark.Repository.Services.UserPreferences.UserPreferenceService>();
 
+// Register Conversation API service
+builder.Services.AddScoped<InquirySpark.Repository.Services.IConversationService, InquirySpark.Repository.Services.ConversationService>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
+
+// Swagger / OpenAPI documentation
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
+    {
+        Title = "InquirySpark Conversation API",
+        Version = "v1",
+        Description = "HATEOAS-driven REST API for walking users through survey conversations."
+    });
+    options.EnableAnnotations();
+    // Include XML comments from this project
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
+});
 
 builder.Services.AddSession(options =>
 {
@@ -100,6 +121,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseHttpsRedirection();
+
+// Swagger UI (available in all environments for this API)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "InquirySpark Conversation API v1");
+    c.RoutePrefix = "swagger";
+});
 
 // Static files serve local assets from wwwroot
 app.UseStaticFiles();
