@@ -1,8 +1,8 @@
-using DecisionSpark.Core.Common;
-using DecisionSpark.Core.Models.Api;
-using DecisionSpark.Core.Models.Runtime;
-using DecisionSpark.Core.Models.Spec;
-using DecisionSpark.Core.Services;
+using InquirySpark.Common.Common;
+using InquirySpark.Common.Models.Api;
+using InquirySpark.Common.Models.Runtime;
+using InquirySpark.Common.Models.Spec;
+using InquirySpark.Common.Services;
 using DecisionSpark.Models.Api;
 using Microsoft.AspNetCore.Mvc;
 
@@ -462,3 +462,4 @@ public class ConversationController : ControllerBase
         return spec.TieStrategy?.PseudoTraits?.FirstOrDefault(t => t.Key == traitKey);
     }
 }
+

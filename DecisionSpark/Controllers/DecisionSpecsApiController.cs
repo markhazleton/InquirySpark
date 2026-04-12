@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
-using DecisionSpark.Core.Models.Spec;
-using DecisionSpark.Core.Persistence.Repositories;
-using DecisionSpark.Core.Services;
+using InquirySpark.Common.Models.Spec;
+using InquirySpark.Common.Persistence.Repositories;
+using InquirySpark.Common.Services;
 using DecisionSpark.Middleware;
 using DecisionSpark.Models.Api.DecisionSpecs;
 using Microsoft.ApplicationInsights;
@@ -473,7 +473,7 @@ public class DecisionSpecsApiController : ControllerBase
 
             // Update status
             doc.Status = request.NewStatus;
-            doc.Metadata ??= new DecisionSpark.Core.Models.Spec.DecisionSpecMetadata();
+            doc.Metadata ??= new InquirySpark.Common.Models.Spec.DecisionSpecMetadata();
             doc.Metadata.UpdatedAt = DateTimeOffset.UtcNow;
             doc.Metadata.UpdatedBy = User.Identity?.Name ?? "API";
 
@@ -795,3 +795,4 @@ public class DecisionSpecsApiController : ControllerBase
         return Convert.ToHexString(bytes)[..8].ToLowerInvariant();
     }
 }
+

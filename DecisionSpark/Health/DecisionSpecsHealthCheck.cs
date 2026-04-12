@@ -1,4 +1,4 @@
-using DecisionSpark.Core.Models.Configuration;
+using InquirySpark.Common.Models.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace DecisionSpark.Health;
@@ -32,3 +32,4 @@ public sealed class DecisionSpecsHealthCheck(IConfiguration configuration) : IHe
         }
     }
 }
+

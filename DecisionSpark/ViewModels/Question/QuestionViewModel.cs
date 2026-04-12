@@ -1,4 +1,4 @@
-using DecisionSpark.Core.Models.Api;
+using InquirySpark.Common.Models.Api;
 
 namespace DecisionSpark.ViewModels.Question;
 
@@ -74,3 +74,4 @@ public enum QuestionInputType
     SingleSelect,
     MultiSelect
 }
+

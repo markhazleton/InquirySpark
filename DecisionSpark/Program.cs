@@ -1,9 +1,9 @@
 using System.Reflection;
-using DecisionSpark.Core.Models.Configuration;
-using DecisionSpark.Core.Persistence.FileStorage;
-using DecisionSpark.Core.Persistence.Repositories;
-using DecisionSpark.Core.Services;
-using DecisionSpark.Core.Services.Validation;
+using InquirySpark.Common.Models.Configuration;
+using InquirySpark.Common.Persistence.FileStorage;
+using InquirySpark.Common.Persistence.Repositories;
+using InquirySpark.Common.Services;
+using InquirySpark.Common.Services.Validation;
 using DecisionSpark.Health;
 using DecisionSpark.Middleware;
 using DecisionSpark.Swagger;
@@ -165,7 +165,7 @@ try
     {
         var openAIService = sp.GetRequiredService<IOpenAIService>();
         var repository = sp.GetRequiredService<IDecisionSpecRepository>();
-        var validator = sp.GetRequiredService<IValidator<DecisionSpark.Core.Models.Spec.DecisionSpecDocument>>();
+        var validator = sp.GetRequiredService<IValidator<InquirySpark.Common.Models.Spec.DecisionSpecDocument>>();
         var logger = sp.GetRequiredService<ILogger<DecisionSpecDraftService>>();
         var options = builder.Configuration.GetSection(DecisionSpecsOptions.SectionName).Get<DecisionSpecsOptions>()
             ?? throw new InvalidOperationException("DecisionSpecs options are not configured.");
@@ -257,3 +257,4 @@ finally
 {
     await Log.CloseAndFlushAsync();
 }
+

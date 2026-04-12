@@ -1,7 +1,7 @@
 using DecisionSpark.Areas.Admin.ViewModels.DecisionSpecs;
-using DecisionSpark.Core.Models.Spec;
-using DecisionSpark.Core.Persistence.Repositories;
-using DecisionSpark.Core.Services;
+using InquirySpark.Common.Models.Spec;
+using InquirySpark.Common.Persistence.Repositories;
+using InquirySpark.Common.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DecisionSpark.Areas.Admin.Controllers;
@@ -526,7 +526,7 @@ public class DecisionSpecsController : Controller
 
             // Update status
             doc.Status = newStatus;
-            doc.Metadata ??= new DecisionSpark.Core.Models.Spec.DecisionSpecMetadata();
+            doc.Metadata ??= new InquirySpark.Common.Models.Spec.DecisionSpecMetadata();
             doc.Metadata.UpdatedAt = DateTimeOffset.UtcNow;
             doc.Metadata.UpdatedBy = User.Identity?.Name ?? "Admin";
 
@@ -590,16 +590,16 @@ public class DecisionSpecsController : Controller
 
     #region Helper Methods
 
-    private static DecisionSpark.Core.Models.Spec.DecisionSpecDocument MapToDocument(DecisionSpecEditViewModel viewModel)
+    private static InquirySpark.Common.Models.Spec.DecisionSpecDocument MapToDocument(DecisionSpecEditViewModel viewModel)
     {
-        return new DecisionSpark.Core.Models.Spec.DecisionSpecDocument
+        return new InquirySpark.Common.Models.Spec.DecisionSpecDocument
         {
             SpecId = viewModel.SpecId,
             Version = viewModel.Version,
             Status = viewModel.Status,
             CanonicalBaseUrl = viewModel.CanonicalBaseUrl ?? string.Empty,
             SafetyPreamble = viewModel.SafetyPreamble ?? string.Empty,
-            Metadata = new DecisionSpark.Core.Models.Spec.DecisionSpecMetadata
+            Metadata = new InquirySpark.Common.Models.Spec.DecisionSpecMetadata
             {
                 Name = viewModel.Metadata?.Name ?? string.Empty,
                 Description = viewModel.Metadata?.Description ?? string.Empty,
@@ -659,7 +659,7 @@ public class DecisionSpecsController : Controller
                     AnalyticsResolutionCode = o.FinalResult.AnalyticsResolutionCode ?? string.Empty
                 } : new FinalResultDefinition()
             }).ToList(),
-            TieStrategy = viewModel.TieStrategy != null ? new DecisionSpark.Core.Models.Spec.TieStrategy
+            TieStrategy = viewModel.TieStrategy != null ? new InquirySpark.Common.Models.Spec.TieStrategy
             {
                 Mode = viewModel.TieStrategy.Mode,
                 ClarifierMaxAttempts = viewModel.TieStrategy.ClarifierMaxAttempts,
@@ -674,13 +674,14 @@ public class DecisionSpecsController : Controller
                     Options = pt.Options?.Select(o => o.Value).ToList()
                 }).ToList(),
                 LlmPromptTemplate = viewModel.TieStrategy.LlmPromptTemplate ?? string.Empty
-            } : new DecisionSpark.Core.Models.Spec.TieStrategy(),
-            Disambiguation = viewModel.Disambiguation != null ? new DecisionSpark.Core.Models.Spec.Disambiguation
+            } : new InquirySpark.Common.Models.Spec.TieStrategy(),
+            Disambiguation = viewModel.Disambiguation != null ? new InquirySpark.Common.Models.Spec.Disambiguation
             {
                 FallbackTraitOrder = viewModel.Disambiguation.FallbackTraitOrder
-            } : new DecisionSpark.Core.Models.Spec.Disambiguation()
+            } : new InquirySpark.Common.Models.Spec.Disambiguation()
         };
     }
 
     #endregion
 }
+

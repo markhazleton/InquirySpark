@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using DecisionSpark.Core.Models.Api;
+using InquirySpark.Common.Models.Api;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 
@@ -112,3 +112,4 @@ public class NextRequestBinder : IModelBinder
         }
     }
 }
+

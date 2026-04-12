@@ -1,4 +1,4 @@
-using DecisionSpark.Core.Common;
+using InquirySpark.Common.Common;
 
 namespace DecisionSpark.Middleware;
 
@@ -117,3 +117,4 @@ public static class ApiKeyAuthenticationMiddlewareExtensions
         return builder.UseMiddleware<ApiKeyAuthenticationMiddleware>();
     }
 }
+
