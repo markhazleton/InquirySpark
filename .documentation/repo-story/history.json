@@ -1,0 +1,768 @@
+{
+  "generated_at": "2026-04-12T13:33:16.3409544+00:00",
+  "audit_parameters": {
+    "months": 12,
+    "scope": "full",
+    "compare_baseline": "2025-04",
+    "since_date": "2025-04-12",
+    "start_month": "2025-04",
+    "end_month": "2026-04"
+  },
+  "repo": {
+    "name": "InquirySpark",
+    "root": "C:/GitHub/MarkHazleton/InquirySpark",
+    "remote_origin": "https://github.com/markhazleton/InquirySpark",
+    "default_branch": "main"
+  },
+  "summary": {
+    "total_commits": 73,
+    "total_commits_in_window": 63,
+    "total_contributors": 3,
+    "total_tags": 0,
+    "history_span_days": 901
+  },
+  "timeline": {
+    "first_commit": {
+      "sha": "4a9f675d058605473c5e625c015ba207b1942a92",
+      "date": "2023-10-24T08:14:09-05:00",
+      "role": "External Contributor",
+      "subject": "Initial commit"
+    },
+    "latest_commit": {
+      "sha": "73834be32d5b05282ceae8eb55905c121f948592",
+      "date": "2026-04-12T08:27:25-05:00",
+      "role": "Lead Architect",
+      "subject": "Merge branch '002-hateoas-conversation-api' into main"
+    },
+    "commits_by_year": {
+      "2026": 39,
+      "2025": 24
+    },
+    "commits_by_month": {
+      "2026-04": 30,
+      "2025-12": 24,
+      "2026-03": 9
+    }
+  },
+  "contributors": {
+    "top": [
+      {
+        "role": "Lead Architect",
+        "commits": 42
+      },
+      {
+        "role": "Developer A",
+        "commits": 20
+      },
+      {
+        "role": "Developer B",
+        "commits": 1
+      }
+    ],
+    "all_count": 3,
+    "monthly_by_role": {
+      "2026-04": {
+        "Developer A": 20,
+        "Lead Architect": 10
+      },
+      "2025-12": {
+        "Lead Architect": 24
+      },
+      "2026-03": {
+        "Developer B": 1,
+        "Lead Architect": 8
+      }
+    }
+  },
+  "contributor_census": {
+    "role_assignments": [
+      {
+        "role": "Lead Architect",
+        "commits": 42
+      },
+      {
+        "role": "Developer A",
+        "commits": 20
+      },
+      {
+        "role": "Developer B",
+        "commits": 1
+      }
+    ]
+  },
+  "volume_metrics": {
+    "total_commits": 63,
+    "monthly_commit_distribution": {
+      "2026-04": 30,
+      "2025-12": 24,
+      "2026-03": 9
+    },
+    "merged_pr_count": 3,
+    "file_types_top": [
+      {
+        "extension": "cs",
+        "touched_files": 446
+      },
+      {
+        "extension": "md",
+        "touched_files": 382
+      },
+      {
+        "extension": "cshtml",
+        "touched_files": 88
+      },
+      {
+        "extension": "ps1",
+        "touched_files": 85
+      },
+      {
+        "extension": "map",
+        "touched_files": 58
+      },
+      {
+        "extension": "csproj",
+        "touched_files": 48
+      },
+      {
+        "extension": "json",
+        "touched_files": 46
+      },
+      {
+        "extension": "js",
+        "touched_files": 42
+      },
+      {
+        "extension": "css",
+        "touched_files": 25
+      },
+      {
+        "extension": "ts",
+        "touched_files": 22
+      },
+      {
+        "extension": "sh",
+        "touched_files": 16
+      },
+      {
+        "extension": "(no-ext)",
+        "touched_files": 8
+      },
+      {
+        "extension": "db",
+        "touched_files": 6
+      },
+      {
+        "extension": "yaml",
+        "touched_files": 5
+      },
+      {
+        "extension": "sql",
+        "touched_files": 5
+      },
+      {
+        "extension": "txt",
+        "touched_files": 4
+      },
+      {
+        "extension": "sln",
+        "touched_files": 4
+      },
+      {
+        "extension": "ico",
+        "touched_files": 4
+      },
+      {
+        "extension": "gif",
+        "touched_files": 4
+      },
+      {
+        "extension": "yml",
+        "touched_files": 4
+      }
+    ],
+    "largest_merges": [
+      {
+        "sha": "3416af283974934935e5b61556c5e53127cac277",
+        "subject": "Merge branch '001-remove-sql-server' - Complete SQLite migration baseline",
+        "files_changed": 193,
+        "additions": 7840,
+        "deletions": 80292,
+        "total_lines": 88132
+      },
+      {
+        "sha": "73834be32d5b05282ceae8eb55905c121f948592",
+        "subject": "Merge branch '002-hateoas-conversation-api' into main",
+        "files_changed": 133,
+        "additions": 30326,
+        "deletions": 50,
+        "total_lines": 30376
+      },
+      {
+        "sha": "89e68866ddd3dea28bb51cef5853d6c5f3156652",
+        "subject": "Merge remote-tracking branch 'origin/main' into 002-hateoas-conversation-api",
+        "files_changed": 105,
+        "additions": 8045,
+        "deletions": 5026,
+        "total_lines": 13071
+      },
+      {
+        "sha": "c72242d88a3bdfb33921f3e8be1110461518e02a",
+        "subject": "Merge feature: Benchmark Insights & Reporting Platform (70/70 tasks complete)",
+        "files_changed": 106,
+        "additions": 10473,
+        "deletions": 45,
+        "total_lines": 10518
+      },
+      {
+        "sha": "90ccf5d8f55de0c591850a6513c03e2ebfac7403",
+        "subject": "feat: merge spec-001 remove SQL Server - all 33 tasks complete",
+        "files_changed": 85,
+        "additions": 2860,
+        "deletions": 272,
+        "total_lines": 3132
+      },
+      {
+        "sha": "ef84e4dea5339c7557c6dfbae4d18364b2af5f2b",
+        "subject": "Merge pull request #1 from markhazleton/upgrade-to-NET10",
+        "files_changed": 12,
+        "additions": 2148,
+        "deletions": 53,
+        "total_lines": 2201
+      },
+      {
+        "sha": "30f26bd97d1a61860f098c181fe31ce9b5be8e71",
+        "subject": "Merge pull request #2 from markhazleton/upgrade-to-NET10",
+        "files_changed": 1,
+        "additions": 199,
+        "deletions": 0,
+        "total_lines": 199
+      },
+      {
+        "sha": "bb1d6c79462c3840296b6e049aab3cf1f7ca6489",
+        "subject": "Merge pull request #3 from markhazleton/dependabot/npm_and_yarn/InquirySpark.Admin/npm_and_yarn-19aefeb629",
+        "files_changed": 2,
+        "additions": 70,
+        "deletions": 78,
+        "total_lines": 148
+      },
+      {
+        "sha": "d3cdb6dcb02b1527aa2d720c70bd2c98aff770b2",
+        "subject": "On upgrade-to-NET10: Checking out main",
+        "files_changed": 2,
+        "additions": 67,
+        "deletions": 21,
+        "total_lines": 88
+      }
+    ]
+  },
+  "commit_message_metrics": {
+    "conventional_commit_count": 28,
+    "informal_commit_count": 0,
+    "spec_reference_commit_count": 0
+  },
+  "test_metrics": {
+    "test_file_count": 236,
+    "test_related_commit_count": 13
+  },
+  "governance_maturity": {
+    "constitution_path": "C:\\GitHub\\MarkHazleton\\InquirySpark\\.documentation\\memory\\constitution.md",
+    "constitution_exists": true,
+    "constitution_version": "",
+    "constitution_amendment_count": 0,
+    "active_spec_count": 0,
+    "archived_spec_directory_count": 10,
+    "governance_artifact_count": 2
+  },
+  "milestones": {
+    "tags": [],
+    "readme_evolution": {
+      "total_readme_commits": 2,
+      "commits": [
+        {
+          "sha": "9b6c3f90965f93072b57341506049dca1a48255a",
+          "date": "2026-04-07T07:05:53-05:00",
+          "role": "Developer A",
+          "subject": "docs(specs): replace retired docs/ paths with /.documentation; mark US2 complete"
+        },
+        {
+          "sha": "857a92ba8bbc04dae70d7412b9c88f74fcaa201f",
+          "date": "2025-12-04T15:01:10-06:00",
+          "role": "Lead Architect",
+          "subject": "feat: Complete SQL Server dependency removal and SQLite migration baseline"
+        }
+      ]
+    }
+  },
+  "change_patterns": {
+    "subject_type_estimates": {
+      "docs": 9,
+      "tests": 4,
+      "features": 17,
+      "fixes": 6,
+      "other": 8,
+      "chore": 11,
+      "refactor": 5,
+      "ci_build": 3
+    },
+    "hotspots": [
+      {
+        "path": "InquirySpark.Admin/InquirySpark.Admin.csproj",
+        "changes": 10
+      },
+      {
+        "path": "InquirySpark.Repository/InquirySpark.Repository.csproj",
+        "changes": 9
+      },
+      {
+        "path": "InquirySpark.Common.Tests/InquirySpark.Common.Tests.csproj",
+        "changes": 9
+      },
+      {
+        "path": "InquirySpark.Admin/Program.cs",
+        "changes": 9
+      },
+      {
+        "path": ".documentation/specs/002-hateoas-conversation-api/spec.md",
+        "changes": 6
+      },
+      {
+        "path": ".documentation/specs/002-hateoas-conversation-api/tasks.md",
+        "changes": 6
+      },
+      {
+        "path": "InquirySpark.Admin/appsettings.json",
+        "changes": 6
+      },
+      {
+        "path": "InquirySpark.Common/InquirySpark.Common.csproj",
+        "changes": 6
+      },
+      {
+        "path": "InquirySpark.WebApi/InquirySpark.WebApi.csproj",
+        "changes": 6
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/chartBuilder.d.ts.map",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/chartGallery.d.ts",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/formulaEditor.d.ts.map",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/formulaEditor.d.ts",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/chartGallery.d.ts.map",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/package.json",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/chartBuilder.d.ts",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Repository/Services/DbContextHelper.cs",
+        "changes": 5
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/site.min.js",
+        "changes": 4
+      },
+      {
+        "path": "InquirySpark.Admin/appsettings.Development.json",
+        "changes": 4
+      },
+      {
+        "path": ".github/workflows/sqlite-baseline.yml",
+        "changes": 4
+      },
+      {
+        "path": "InquirySpark.Repository/Services/DataExplorer/DataExplorerService.cs",
+        "changes": 4
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/site.min.js.map",
+        "changes": 4
+      },
+      {
+        "path": "InquirySpark.Repository/Database/InquirySparkContext.cs",
+        "changes": 4
+      },
+      {
+        "path": ".documentation/specs/001-remove-sql-server/tasks.md",
+        "changes": 4
+      },
+      {
+        "path": ".devspark/defaults/commands/devspark.release.md",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/repo-story-context.ps1",
+        "changes": 3
+      },
+      {
+        "path": "specs/001-remove-sql-server/tasks.md",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Repository/Services/Charting/ChartValidationService.cs",
+        "changes": 3
+      },
+      {
+        "path": "CHANGELOG.md",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/css/site.css.map",
+        "changes": 3
+      },
+      {
+        "path": "eng/BuildVerification.ps1",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/get-pr-context.ps1",
+        "changes": 3
+      },
+      {
+        "path": "specs/001-benchmark-insights/tasks.md",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/css/site.min.css.map",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/archive-context.ps1",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Admin/build/webpack.common.js",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/update-agent-context.ps1",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/release-context.ps1",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Admin/Views/Shared/_Layout.cshtml",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Repository/Services/Charting/ChartBuildService.cs",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/defaults/commands/devspark.harvest.md",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Admin/GlobalUsing.cs",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/create-new-feature.ps1",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/scripts/powershell/site-audit.ps1",
+        "changes": 3
+      },
+      {
+        "path": ".documentation/memory/constitution.md",
+        "changes": 3
+      },
+      {
+        "path": "InquirySpark.Admin/wwwroot/js/js/data-explorer/grid.d.ts.map",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/defaults/commands/devspark.archive.md",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/defaults/commands/devspark.taskstoissues.md",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/VERSION",
+        "changes": 3
+      },
+      {
+        "path": ".devspark/defaults/commands/devspark.discover-constitution.md",
+        "changes": 3
+      }
+    ]
+  },
+  "technical_signals": {
+    "language_presence": {
+      "python": true,
+      "javascript": true,
+      "typescript": true,
+      "powershell": true,
+      "shell": true,
+      "markdown": true
+    },
+    "has_pyproject_toml": false,
+    "has_package_json": false,
+    "has_dockerfile": false,
+    "has_github_actions": true
+  },
+  "recent": {
+    "commits": [
+      {
+        "sha": "73834be32d5b05282ceae8eb55905c121f948592",
+        "date": "2026-04-12T08:27:25-05:00",
+        "role": "Lead Architect",
+        "subject": "Merge branch '002-hateoas-conversation-api' into main"
+      },
+      {
+        "sha": "da0e1dc63e28b54499d36f36e1ace9e1e727971f",
+        "date": "2026-04-12T08:26:47-05:00",
+        "role": "Lead Architect",
+        "subject": "feat: Implement OpenAI-powered question generation and related services"
+      },
+      {
+        "sha": "e31675a00ebd8a3c85cd8d8da13d3e85e23df23c",
+        "date": "2026-04-12T08:13:03-05:00",
+        "role": "Lead Architect",
+        "subject": "Add InquirySpark refs, update telemetry, remove TS types"
+      },
+      {
+        "sha": "8ca7f30597fa2268c4e47ab9b0ae0528847d36cc",
+        "date": "2026-04-12T08:08:56-05:00",
+        "role": "Lead Architect",
+        "subject": "combine Decision Spark and Inquiry Spark"
+      },
+      {
+        "sha": "fef5eaf70b9462ac3dcf26590b0c53b7546a136c",
+        "date": "2026-04-11T19:46:15-05:00",
+        "role": "Lead Architect",
+        "subject": "fix(conversation-api): address PR review findings for links, contract, and response mapping"
+      },
+      {
+        "sha": "0c951175995d855a043ce296e7c881e30fe18f99",
+        "date": "2026-04-11T19:38:32-05:00",
+        "role": "Lead Architect",
+        "subject": "feat: add PR context and review metadata for HATEOAS Conversation API"
+      },
+      {
+        "sha": "49a63f475e48889656aaca51e4d462dda5fe6102",
+        "date": "2026-04-11T18:53:49-05:00",
+        "role": "Lead Architect",
+        "subject": "Complete conversation API quickstart validation and finalize spec"
+      },
+      {
+        "sha": "89e68866ddd3dea28bb51cef5853d6c5f3156652",
+        "date": "2026-04-11T18:00:37-05:00",
+        "role": "Lead Architect",
+        "subject": "Merge remote-tracking branch 'origin/main' into 002-hateoas-conversation-api"
+      },
+      {
+        "sha": "d1d5fdab70e5ad7cfaf022658e90833d2e1d1995",
+        "date": "2026-04-11T17:59:36-05:00",
+        "role": "Lead Architect",
+        "subject": "Add harvest report and scan JSON for April 2026"
+      },
+      {
+        "sha": "8d08297752c2e314d72428a87330cd0287c17c61",
+        "date": "2026-04-11T17:47:22-05:00",
+        "role": "Lead Architect",
+        "subject": "chore: upgrade devspark to v1.5.0"
+      },
+      {
+        "sha": "8a0b9a5aa3c8502a5348e79b09d053390ff50c43",
+        "date": "2026-04-09T00:17:17-05:00",
+        "role": "Developer A",
+        "subject": "feat(002): implement HATEOAS Conversation API"
+      },
+      {
+        "sha": "1de5f009ee66f411fc6be8ba5633454491aa61a5",
+        "date": "2026-04-08T23:25:16-05:00",
+        "role": "Developer A",
+        "subject": "docs: enforce thin admin architecture with common dtos and swagger integrations"
+      },
+      {
+        "sha": "b7612bf9c71715335193fb9f9b70b8b5f8331276",
+        "date": "2026-04-08T23:20:30-05:00",
+        "role": "Developer A",
+        "subject": "docs: resolve devspark.analyze findings in plan and tasks"
+      },
+      {
+        "sha": "b10109d497f196e2abc9295cd6a96e00460bde64",
+        "date": "2026-04-08T23:10:54-05:00",
+        "role": "Developer A",
+        "subject": "fix(002): resolve 10 analysis findings across spec and tasks"
+      },
+      {
+        "sha": "a2db061144cea0c5ff7e9d3d6347af0b0b6ad01b",
+        "date": "2026-04-08T22:58:10-05:00",
+        "role": "Developer A",
+        "subject": "feat(002): add implementation plan, tasks, and design artifacts for HATEOAS Conversation API"
+      },
+      {
+        "sha": "b998aab8973cf18800cc64886347c89fc22e0b69",
+        "date": "2026-04-08T22:37:47-05:00",
+        "role": "Developer A",
+        "subject": "gemini 3.1 specify review"
+      },
+      {
+        "sha": "fa365c7e066391804551ee2ee23a9f6b42a92b63",
+        "date": "2026-04-08T22:29:58-05:00",
+        "role": "Developer A",
+        "subject": "docs: apply GPT-5.4 clarifier updates"
+      },
+      {
+        "sha": "58d175508019684c2a31541e2292e6a98cdcd5b5",
+        "date": "2026-04-08T22:20:06-05:00",
+        "role": "Developer A",
+        "subject": "feat(002): add HATEOAS conversation API spec with clarifications"
+      },
+      {
+        "sha": "90ccf5d8f55de0c591850a6513c03e2ebfac7403",
+        "date": "2026-04-08T21:56:34-05:00",
+        "role": "Developer A",
+        "subject": "feat: merge spec-001 remove SQL Server - all 33 tasks complete"
+      },
+      {
+        "sha": "9575607d021013659473e7dc1cd1de849cf7a269",
+        "date": "2026-04-08T21:56:24-05:00",
+        "role": "Developer A",
+        "subject": "chore(spec-001): complete T033 - final terminology and documentation sweep"
+      },
+      {
+        "sha": "c45f42d1970c1e68af330f6d3f4f212a360553c0",
+        "date": "2026-04-08T21:41:57-05:00",
+        "role": "Developer A",
+        "subject": "chore: upgrade devspark to v1.3.0"
+      },
+      {
+        "sha": "0b5795934b08f7ce333a037f1b8dd0d120f69061",
+        "date": "2026-04-07T12:13:36-05:00",
+        "role": "Developer A",
+        "subject": "db churn"
+      },
+      {
+        "sha": "af8595de75d8e933f46d9613255b70b0e0c0380e",
+        "date": "2026-04-07T11:59:36-05:00",
+        "role": "Developer A",
+        "subject": "feat(us3): implement system health endpoints, integration tests, and operational docs"
+      },
+      {
+        "sha": "9b6c3f90965f93072b57341506049dca1a48255a",
+        "date": "2026-04-07T07:05:53-05:00",
+        "role": "Developer A",
+        "subject": "docs(specs): replace retired docs/ paths with /.documentation; mark US2 complete"
+      },
+      {
+        "sha": "e8a43cd7585a49a9915daaea112711a59030ddbe",
+        "date": "2026-04-07T07:05:41-05:00",
+        "role": "Developer A",
+        "subject": "docs(governance): constitution is primary authority; copilot-instructions defers to it"
+      },
+      {
+        "sha": "450929428d97ca5264e51cf315d3ed65d2ebd6d7",
+        "date": "2026-04-07T07:05:24-05:00",
+        "role": "Developer A",
+        "subject": "fix(repo): update DbContextHelper error message to /.documentation path"
+      },
+      {
+        "sha": "85bb51c408413af18776c92f179ad4f5208ab77c",
+        "date": "2026-04-07T07:04:40-05:00",
+        "role": "Developer A",
+        "subject": "fix(style): simplify null-checks to throw-expression pattern (IDE0270)"
+      },
+      {
+        "sha": "59ab857d99bfb27f02471e5fbc6cc9b5496a2591",
+        "date": "2026-04-07T07:04:27-05:00",
+        "role": "Developer A",
+        "subject": "feat(build): enforce zero-warning baseline (US2 T019-T022)"
+      },
+      {
+        "sha": "29c6486f8eb2e30054cc7502711f7a24dd2839ca",
+        "date": "2026-04-07T06:33:34-05:00",
+        "role": "Developer A",
+        "subject": "Harvest and archive run: add Guide.md, archive README, update CHANGELOG"
+      },
+      {
+        "sha": "85e66e2a72cfd2429124b00bf1620c19d7f0cfbb",
+        "date": "2026-04-07T06:20:05-05:00",
+        "role": "Developer A",
+        "subject": "Replace speckit agents/prompts with devspark framework and update project dependencies"
+      },
+      {
+        "sha": "db97a432b3f403871676a298b121cdc522346665",
+        "date": "2026-03-30T05:29:29-05:00",
+        "role": "Lead Architect",
+        "subject": "Refactor and update entity properties for nullability and default values"
+      },
+      {
+        "sha": "bb1d6c79462c3840296b6e049aab3cf1f7ca6489",
+        "date": "2026-03-30T05:20:47-05:00",
+        "role": "Lead Architect",
+        "subject": "Merge pull request #3 from markhazleton/dependabot/npm_and_yarn/InquirySpark.Admin/npm_and_yarn-19aefeb629"
+      },
+      {
+        "sha": "bb0a3ac3b8f776c2e047dc12596b24d9e100ece4",
+        "date": "2026-03-30T05:18:44-05:00",
+        "role": "Lead Architect",
+        "subject": "Fix admin asset verification step"
+      },
+      {
+        "sha": "59acb64af356de3024d9a0843d010ee01e373397",
+        "date": "2026-03-30T10:18:04Z",
+        "role": "Developer B",
+        "subject": "Bump the npm_and_yarn group across 1 directory with 5 updates"
+      },
+      {
+        "sha": "2259702b298168e3002a98af3c8aed7d61e9321b",
+        "date": "2026-03-30T05:16:07-05:00",
+        "role": "Lead Architect",
+        "subject": "Fix admin npm workflow resolution"
+      },
+      {
+        "sha": "524783e182dc355e25f2268591ce07b628949792",
+        "date": "2026-03-29T23:07:18-05:00",
+        "role": "Lead Architect",
+        "subject": "harvest: archive completed spec + legacy docs, create CHANGELOG"
+      },
+      {
+        "sha": "23ded0593fc3ce061f3272cdf6a02c51824dada2",
+        "date": "2026-03-29T22:49:34-05:00",
+        "role": "Lead Architect",
+        "subject": "chore: upgrade spec-kit to v1.5.1"
+      },
+      {
+        "sha": "c72242d88a3bdfb33921f3e8be1110461518e02a",
+        "date": "2026-03-29T22:39:33-05:00",
+        "role": "Lead Architect",
+        "subject": "Merge feature: Benchmark Insights & Reporting Platform (70/70 tasks complete)"
+      },
+      {
+        "sha": "4a156dcd06df37070f0b49ead427f92f2bbf9cd7",
+        "date": "2026-03-29T22:39:08-05:00",
+        "role": "Lead Architect",
+        "subject": "Complete Benchmark Insights implementation - All 70 tasks finished"
+      },
+      {
+        "sha": "a8517cdb01ff07723a2e855be4aa8b5a192d7f36",
+        "date": "2025-12-22T18:21:48-06:00",
+        "role": "Lead Architect",
+        "subject": "Remove .d.ts and .d.ts.map files for chart modules"
+      }
+    ]
+  }
+}

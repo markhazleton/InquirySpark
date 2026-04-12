@@ -2,7 +2,7 @@
 
 > Living orientation document for the `.documentation/` directory.
 > Stock DevSpark framework assets live under `.devspark/`; `.documentation/` is the team-owned override and work-product layer.
-> Last updated: 2026-04-11
+> Last updated: 2026-04-12
 
 ## Directory Map
 
@@ -22,13 +22,12 @@
 |------|-------------|
 | `memory/constitution.md` | Project constitution — canonical engineering principles and conventions. **Never archive.** |
 | `AGENTS.md` | Shared repository context for DevSpark agent-context hydration |
-| `copilot/harvest-2026-04-07.md` | Most recent harvest report (2026-04-07) |
+| `copilot/harvest-2026-04-12.md` | Most recent harvest report (2026-04-12) |
 
 ## Active Specs
 
-| Spec | Status | Notes |
-|------|--------|-------|
-| `specs/001-remove-sql-server/` | In-progress | US2/US3 (build baseline + quality validation) still open |
+No active spec folders are currently present under `.documentation/specs/`.
+Completed and historical spec artifacts have been moved to `.archive/`.
 
 ## Templates
 

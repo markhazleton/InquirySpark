@@ -16,3 +16,6 @@ Files here are preserved for audit and traceability only.
 | `.documentation/scripts/powershell/harvest.ps1` | 2026-04-07 | Stale speckit-era harvest script (score 18). Canonical version is `.devspark/scripts/powershell/harvest.ps1`. |
 | `docs/copilot/session-2025-12-04/` | 2026-03-29 | Legacy session docs from Bootstrap 5 / SQLite baseline work; knowledge harvested to constitution and CHANGELOG [2025-12-04]. |
 | `docs/copilot/session-2025-12-14/` | 2026-03-29 | Legacy session docs from SQL Server removal US1; knowledge harvested to CHANGELOG [2025-12-04]. |
+| 2026-04-12/ | 2026-04-12 | Superseded copilot harvest reports archived from active documentation. |
+| 2026-04-12/ | 2026-04-12 | Superseded copilot harvest reports archived from active documentation. |
+| 2026-04-12/ | 2026-04-12 | Superseded copilot harvest reports archived from active documentation. |

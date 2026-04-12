@@ -9,6 +9,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### In Progress
 - **001-remove-sql-server (US2/US3)**: Build engineer baseline (TreatWarningsAsErrors, CI workflow, BuildVerification.ps1) and quality lead validation (health endpoints, integration tests) are still open.
 
+## [2026-04-12] Archive Run
+
+### Archived
+- `.documentation/copilot/harvest-2026-04-07.md` — superseded harvest report from an earlier archive run; key outcomes are already represented in the changelog and current guide.
+- `.documentation/copilot/harvest-2026-04-11.md` — superseded harvest report from the previous run; retained only for historical traceability in `.archive/2026-04-12/`.
+
+### Key decisions preserved
+- Keep only the latest harvest report in active `.documentation/copilot/` to reduce noise in the living documentation surface.
+- Keep `.documentation/copilot/harvest-2026-04-12.md` as the current operational baseline report.
+
+## [2026-04-12] - HATEOAS Conversation API Completion
+
+Feature spec: `.documentation/specs/002-hateoas-conversation-api/`  
+Branch: `002-hateoas-conversation-api`  
+Status: Implemented and merged to `main`
+
+### Added
+- Versioned anonymous conversation API endpoints under `api/v1/conversation` with HATEOAS navigation (`next_url`, `prev_url`, `conversation_ended`).
+- Survey start flow supporting survey discovery by application and start-by-survey behavior.
+- Resume and restart conversation behavior using persisted `SurveyResponse.ConversationId`.
+- Swagger/OpenAPI documentation for start/next endpoints and response contracts.
+
+### Changed
+- Added GUID `ConversationId` support on survey response records and integrated it into conversation routing.
+- Added hashed password support for conversation authentication and wired password verification into start flow.
+- Standardized envelope and DTO usage in shared models for conversation start/next payloads.
+
+### Fixed
+- Enforced deterministic question progression and answer update behavior for resumed conversations.
+- Improved endpoint status-code mapping for conversation validation and authentication failures.
+
 ## [2026-04-11] Archive Run
 
 ### Archive run (session notes archived)

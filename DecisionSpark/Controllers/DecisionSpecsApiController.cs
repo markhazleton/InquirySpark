@@ -712,7 +712,7 @@ public class DecisionSpecsApiController : ControllerBase
 
             _logger.LogInformation("Generated LLM draft {DraftId} from instruction", draftId);
 
-            // SC-003: Track LLM draft generation telemetry
+            // Capture telemetry for generated draft characteristics and instruction profile
             _telemetry?.TrackEvent("LlmDraftGenerated", new Dictionary<string, string>
             {
                 ["DraftId"] = draftId,

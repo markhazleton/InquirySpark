@@ -71,6 +71,11 @@ Connection strings in appsettings.json use `Mode=ReadOnly` to prevent schema/dat
 - **npm build failures**: Run `npm install` manually in InquirySpark.Admin directory
 - **XML doc warnings**: These are informational; Phase 4 tasks will address documentation coverage
 
+## Repo Story
+
+An evidence-based narrative of this repository's development history, contributor patterns, and architecture:
+[Repo Story (2026-04-12)](.documentation/repo-story/repo-story-2026-04-12.md)
+
 ## Contributing
 See [specs/001-remove-sql-server/](specs/001-remove-sql-server/) for current feature specifications and implementation tasks.
 

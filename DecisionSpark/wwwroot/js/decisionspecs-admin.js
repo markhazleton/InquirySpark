@@ -3,7 +3,7 @@
  * Handles validation display, dynamic form management, and UX enhancements
  */
 
-// SC-003: LLM draft edit-count tracking state
+// Runtime state for tracking edits made after loading an LLM-generated draft
 var _llmDraftId = null;
 var _llmEditCount = 0;
 var _llmEditTrackingActive = false;
@@ -77,7 +77,7 @@ function initializeValidation() {
             e.preventDefault();
             showValidationSummary();
         } else {
-            // SC-003: record final edit count before save
+            // Emit final draft-edit telemetry before submitting a valid save
             trackLlmDraftSave();
         }
     });
