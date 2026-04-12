@@ -45,4 +45,9 @@ public sealed class OperationsController(
 
         return View(model);
     }
+
+    /// <summary>Displays the application error page (used as the global exception handler endpoint).</summary>
+    [AllowAnonymous]
+    [Route("Unified/Operations/Error")]
+    public IActionResult Error() => View("~/Views/Shared/Error.cshtml");
 }

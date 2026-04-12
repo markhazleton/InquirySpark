@@ -129,7 +129,7 @@ var app = builder.Build();
 // HTTP pipeline
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Unified/Operations/Error");
     app.UseHsts();
 }
 

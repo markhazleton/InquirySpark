@@ -2,7 +2,7 @@
 
 **Spec:** `001-unified-web-experience`  
 **Tasks:** T062, T062A, T062B  
-**Date:** 2025-06-13
+**Date:** 2026-04-12 (updated)
 
 ---
 
@@ -101,3 +101,37 @@ Current domains are at Phase 3 (Validated), NOT Phase 4 (Cut Over). Cutover exec
 2. Performance validation per `contracts/performance-validation-evidence.md`
 3. Stakeholder communication per `contracts/stakeholder-communication-pack.md`
 4. Operator sign-off
+
+---
+
+## Session 2026-04-12 — Bug Fixes and Runtime Readiness
+
+Three runtime issues discovered and resolved during view validation pass:
+
+### Fix 1: Missing `PasswordHash` Column in SQLite DB
+
+- **Root cause:** The `ApplicationUser` EF model (in `InquirySpark.Repository/Database/ApplicationUser.cs`) has a `PasswordHash` property (added in spec `002-hateoas-conversation-api`), but `data/sqlite/InquirySpark.db` was never updated to include the column. EF would throw at runtime on any `ApplicationUser` query.
+- **Fix:** Added `PasswordHash nvarchar(500) NULL` to `data/sqlite/InquirySpark.db` via `ALTER TABLE`. Updated `InquirySpark.Database/dbo/Tables/ApplicationUser.sql` to match.
+- **Constraint note:** This is NOT a new migration — the EF model property pre-existed from `002-hateoas-conversation-api`. No `DbSet` or entity was added in this spec. T062B constraint remains satisfied.
+
+### Fix 2: Missing Shared Error View
+
+- **Root cause:** `OperationalReadinessController.Index()` returns `View("Error")` as a fallback, and `InquirySpark.Web/Program.cs` referenced `/Home/Error` as the global exception handler — neither path had a view or controller action.
+- **Fix:** Created `InquirySpark.Web/Views/Shared/Error.cshtml` (minimal Bootstrap card layout linking back to dashboard).
+
+### Fix 3: Broken Exception Handler Route
+
+- **Root cause:** `app.UseExceptionHandler("/Home/Error")` referenced a non-existent `HomeController`.
+- **Fix:** Changed to `app.UseExceptionHandler("/Unified/Operations/Error")` and added a corresponding `Error()` action with `[AllowAnonymous]` to `OperationsController`.
+
+### Post-Fix Build Verification
+
+```
+dotnet build InquirySpark.sln -warnaserror
+```
+**Result: SUCCEEDED — 0 Errors, 0 Warnings** ✅
+
+```
+dotnet test InquirySpark.sln
+```
+**Result: 99 Passed, 5 Failed (same pre-existing SystemHealthTests failures), 4 Skipped** ✅

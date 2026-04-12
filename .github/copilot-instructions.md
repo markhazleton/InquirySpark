@@ -3,12 +3,12 @@
 > **Governance**: This file is a practical reference for AI coding agents. The authoritative source of engineering principles, rules, and validation criteria is the **project constitution** at [`.documentation/memory/constitution.md`](../.documentation/memory/constitution.md). When in doubt, consult the constitution. Any conflict between this file and the constitution is resolved in favor of the constitution.
 
 ## Project Overview
-InquirySpark is a .NET 10 survey/inquiry management system with three main applications:
-- **InquirySpark.WebApi** - RESTful API with Swagger documentation
-- **InquirySpark.Admin** - MVC admin interface with Bootstrap 5 + DataTables
-- **InquirySpark.Web** - MVC web application using controllers and Razor views, with Razor Pages enabled where shared Identity UI requires it
+InquirySpark is a .NET 10 unified survey/inquiry and decision-management system with one active web application:
+- **InquirySpark.Web** - Unified operations workspace (MVC + Razor Views, Areas, Bootstrap 5 + DataTables)
 
 Core business logic resides in **InquirySpark.Common** (shared models/SDK) and **InquirySpark.Repository** (EF Core + services).
+
+> **Decommissioned**: `InquirySpark.Admin` and `DecisionSpark` have been removed from the active solution (spec `001-unified-web-experience`). Their capabilities are delivered by `InquirySpark.Web/Areas/Unified/`.
 
 ## Architecture Patterns
 
@@ -76,14 +76,16 @@ builder.Services.AddTransient<ISurveyService, SurveyService>();
 
 ### Connection Strings
 - **All projects**: SQLite exclusively (SQL Server removed — see `specs/001-remove-sql-server`)
-- **Admin**: `InquirySparkConnection` (SQLite, read-only) + `ControlSparkUserContextConnection` (Identity SQLite)
-- Format: `Data Source=<path>;Mode=ReadOnly`
-- SQLite `.db` assets are immutable — `Database.Migrate()` is disabled
+- **InquirySpark.Web**: `InquirySparkConnection` (SQLite, read-only) + `ControlSparkUserContextConnection` (Identity SQLite, read-write)
+- Format: `Data Source=<path>;Mode=ReadOnly` for inquiry data; `Mode=ReadWriteCreate` for Identity
+- SQLite `.db` assets: `Database.Migrate()` is disabled — schema changes are applied manually via `sqlite3`
 
-## Admin UI Conventions (InquirySpark.Admin)
+## Unified Web UI Conventions (InquirySpark.Web)
+
+All capability views in `InquirySpark.Web/Areas/Unified/` follow the Bootstrap 5 + DataTables card template.
 
 ### Bootstrap 5 + DataTables Standard
-**All CRUD index views follow this pattern:**
+**All list views follow this pattern:**
 
 ```html
 <div class="card border-0 shadow-sm">
@@ -98,8 +100,8 @@ builder.Services.AddTransient<ISurveyService, SurveyService>();
             <table class="table table-striped table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th><i class="bi bi-{icon}"></i> Column Name</th>
-                        <th class="no-sort">Actions</th>
+                        <th scope="col"><i class="bi bi-{icon}"></i> Column Name</th>
+                        <th scope="col" class="no-sort">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,13 +138,14 @@ builder.Services.AddTransient<ISurveyService, SurveyService>();
 **Key Requirements:**
 - Use Bootstrap utility classes (no inline styles, no custom CSS)
 - Use Bootstrap Icons (bi-*) for visual indicators
-- DataTables auto-initializes on `.table` class (configured in site.js)
+- DataTables auto-initializes on `.table` class
 - Add `class="no-sort"` to action columns
-- Card layout with header/body/footer structure
-- See [BOOTSTRAP5-TABLE-TEMPLATE.md](../.documentation/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md) for complete template
+- All `<th>` elements use `scope="col"` for accessibility
+- Card layout: `card border-0 shadow-sm` → header → `card-body p-0` → footer
+- Authorization: every controller or action must have `[Authorize]` or `[AllowAnonymous]`
 
 ### NPM Build System (100% CDN-Free)
-Frontend dependencies are managed via npm, NOT LibMan or CDN:
+Frontend dependencies are managed via npm in `InquirySpark.Web/`:
 
 ```bash
 # Install dependencies
@@ -165,7 +168,7 @@ npm run build
 **Critical:** Bootstrap CSS comes from WebSpark.Bootswatch theme system, NOT npm. Only JavaScript is local.
 
 ### DataTables Configuration
-Configured in [wwwroot/js/site.js](InquirySpark.Admin/wwwroot/js/site.js):
+Configured in `InquirySpark.Web/wwwroot/js/unified-app.js`:
 - Auto-initializes all `.table` elements
 - Default: 25 rows, sorting, searching, pagination
 - Add `data-datatable="false"` to disable
@@ -179,17 +182,13 @@ Dynamic theme switching via WebSpark.Bootswatch package:
 - CSS served from embedded resources (no CDN)
 - JavaScript from local npm package
 - Theme persists in cookies
-- See [CDN-FREE-IMPLEMENTATION.md](../.documentation/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
 
 ## Global Usings
 
-### InquirySpark.Admin
+### InquirySpark.Web
 ```csharp
-global using Microsoft.AspNetCore.Http;
+// Uses GlobalUsing.cs — check before adding explicit usings
 global using Microsoft.AspNetCore.Mvc;
-global using System.Globalization;
-global using WebSpark.Bootswatch;
-global using WebSpark.HttpClientUtility;
 ```
 
 ### InquirySpark.Repository
@@ -197,13 +196,17 @@ Check existing global usings before adding namespace imports.
 
 ## Controller Patterns
 
-### Admin Controllers
-Inherit from `BaseController` which provides `_logger`:
+### Unified Area Controllers
+Seal controllers and use primary constructors; all require `[Area("Unified")]` and `[Authorize]`:
 
 ```csharp
-public class SurveysController(ILogger<SurveysController> logger) : BaseController(logger)
+[Area("Unified")]
+[Authorize]
+public sealed class InquiryAuthoringController(
+    InquirySparkContext context) : Controller
 {
-    // Use _logger for logging
+    // Direct EF read queries are acceptable in Unified area controllers
+    // (InquirySparkContext is read-only SQLite — no DbContextHelper wrapping needed)
 }
 ```
 
@@ -217,7 +220,7 @@ public class SurveyController(ISurveyService service, ILogger<SurveyController> 
 {
     protected readonly ISurveyService _service = service;
     protected readonly ILogger<SurveyController> _logger = logger;
-    
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -232,31 +235,23 @@ public class SurveyController(ISurveyService service, ILogger<SurveyController> 
 
 ### Building
 ```powershell
-# Build entire solution
-dotnet build InquirySpark.sln
+# Build entire solution (zero-warning gate)
+dotnet build InquirySpark.sln -warnaserror
 
-# Build specific project
-dotnet build InquirySpark.Admin/InquirySpark.Admin.csproj
-
-# Admin project automatically runs npm build
+# Build specific project (also runs npm pipeline)
+dotnet build InquirySpark.Web/InquirySpark.Web.csproj
 ```
 
 ### Running
 ```powershell
-# API (default: https://localhost:5001)
-dotnet run --project InquirySpark.WebApi
-
-# Admin (default: https://localhost:7001)
-dotnet run --project InquirySpark.Admin
-
-# Web (default: https://localhost:5002)
+# Unified Web Application (default: https://localhost:5002)
 dotnet run --project InquirySpark.Web
 ```
 
 ### Testing
 ```powershell
 # Run all tests
-dotnet test
+dotnet test InquirySpark.sln
 
 # Run specific test project
 dotnet test InquirySpark.Common.Tests
@@ -266,21 +261,22 @@ dotnet test InquirySpark.Common.Tests
 
 1. **Don't add Bootstrap CSS to npm** - Themes come from Bootswatch, only JS is local
 2. **Don't use inline styles** - Use Bootstrap utility classes exclusively
-3. **Don't forget `DbContextHelper.ExecuteAsync`** - Repository methods must wrap EF operations
-4. **Don't query entities directly in controllers** - Use services and response wrappers
-5. **Check for existing views** - Database has many pre-built views for complex queries
-6. **Don't bypass DataTables** - All admin tables should auto-initialize unless explicitly disabled
-7. **Use global usings** - Check GlobalUsing.cs before adding repetitive using statements
+3. **Don't forget `DbContextHelper.ExecuteAsync`** - Repository service methods must wrap EF operations
+4. **Don't query entities directly in controllers outside Unified area** - Use services and response wrappers
+5. **Check for existing DB views** - Database has many pre-built views for complex queries
+6. **Don't bypass DataTables** - All tables should auto-initialize unless explicitly disabled with `data-datatable="false"`
+7. **Use global usings** - Check `GlobalUsing.cs` before adding repetitive using statements
+8. **Don't reference InquirySpark.Admin or DecisionSpark** - Both are decommissioned; all capability work goes in `InquirySpark.Web/Areas/Unified/`
 
 ## XML Documentation
-All public APIs require XML doc comments (enabled in Common, Repository, WebApi projects):
+All public APIs require XML doc comments (enabled in Common, Repository, and Web projects):
 
 ```csharp
 /// <summary>
-/// Gets survey by unique identifier
+/// Gets survey by unique identifier.
 /// </summary>
-/// <param name="surveyId">The survey identifier</param>
-/// <returns>Survey item with question groups and members</returns>
+/// <param name="surveyId">The survey identifier.</param>
+/// <returns>Survey item with question groups and members.</returns>
 public async Task<BaseResponse<SurveyItem>> GetSurveyBySurveyId(int surveyId)
 ```
 
@@ -288,25 +284,22 @@ public async Task<BaseResponse<SurveyItem>> GetSurveyBySurveyId(int surveyId)
 
 **CRITICAL: Governed by [`.documentation/memory/constitution.md`](../.documentation/memory/constitution.md) — Constitution § V.**
 
-- **`README.md` only**: The only `.md` file permitted outside `/.documentation/` (besides `.github/copilot-instructions.md`)
-- **All other documentation**: MUST be placed in `/.documentation/copilot/session-{date}/` folders
-  - Format: `/.documentation/copilot/session-YYYY-MM-DD/` (e.g., `/.documentation/copilot/session-2026-04-07/`)
-  - Session folders group related documentation by date
-  - No `.md` files in project folders (InquirySpark.Admin, InquirySpark.Repository, etc.)
+- **`README.md` only**: The only `.md` file permitted at the project root
+- **All other documentation**: MUST be placed in `/.documentation/` subdirectories
+  - Specs: `/.documentation/specs/{spec-id}/`
+  - Session notes: `/.documentation/copilot/session-YYYY-MM-DD/`
+  - Governance: `/.github/` (copilot-instructions.md and approved governance files only)
   - The legacy `docs/` directory is **retired** — do not create files there
 
 **Examples:**
-- ✅ `/.documentation/copilot/session-2026-04-07/FEATURE-NOTES.md`
-- ✅ `/.documentation/specs/002-new-feature/plan.md`
+- ✅ `/.documentation/specs/001-unified-web-experience/plan.md`
+- ✅ `/.documentation/copilot/session-2026-04-12/NOTES.md`
 - ✅ `/README.md`
-- ❌ `docs/copilot/session-2025-12-04/anything.md`
-- ❌ `InquirySpark.Admin/BOOTSTRAP5-MODERNIZATION.md`
-- ❌ `InquirySpark.Repository/MIGRATION-GUIDE.md`
+- ❌ `docs/anything.md`
+- ❌ `InquirySpark.Web/NOTES.md`
 
 ## References
 - [Project Constitution](../.documentation/memory/constitution.md) — primary governance, rules & validation
-- [Bootstrap 5 Table Template](../.documentation/copilot/session-2025-12-04/BOOTSTRAP5-TABLE-TEMPLATE.md)
-- [Bootstrap 5 Modernization](../.documentation/copilot/session-2025-12-04/BOOTSTRAP5-MODERNIZATION.md)
-- [NPM Build Process](../.documentation/copilot/session-2025-12-04/NPM-BUILD.md)
-- [CDN-Free Implementation](../.documentation/copilot/session-2025-12-04/CDN-FREE-IMPLEMENTATION.md)
-- [DataTables Reference](../.documentation/copilot/session-2025-12-04/DATATABLES-REFERENCE.md)
+- [Unified Web Experience Spec](../.documentation/specs/001-unified-web-experience/spec.md)
+- [Capability Parity Traceability](../.documentation/specs/001-unified-web-experience/contracts/capability-parity-traceability.md)
+- [UX Conventions](../.documentation/specs/001-unified-web-experience/contracts/unified-ux-conventions.md)

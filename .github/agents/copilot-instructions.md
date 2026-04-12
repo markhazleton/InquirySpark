@@ -50,15 +50,18 @@ This file provides shared repository context that DevSpark can hydrate into agen
 
 ## Repository Focus
 
-- InquirySpark is a .NET 10 solution with `InquirySpark.WebApi`, `InquirySpark.Admin`, `InquirySpark.Web`, `InquirySpark.Common`, and `InquirySpark.Repository`.
+- InquirySpark is a .NET 10 solution with `InquirySpark.Web`, `InquirySpark.Common`, `InquirySpark.Common.Tests`, and `InquirySpark.Repository`.
+- `InquirySpark.Admin` and `DecisionSpark` have been decommissioned (spec `001-unified-web-experience`). Do not add new work to those projects.
+- `InquirySpark.Web` is the single active UI application; all capability work lives in `InquirySpark.Web/Areas/Unified/`.
 - SQLite is the only supported data store in this repository.
-- Admin UI work follows Bootstrap 5 + DataTables conventions.
+- UI work follows the Bootstrap 5 + DataTables Unified area conventions in `.github/copilot-instructions.md`.
 
 ## Build And Test
 
-- Build: `dotnet build InquirySpark.sln`
-- Test: `dotnet test`
-- Admin app: `dotnet build InquirySpark.Admin/InquirySpark.Admin.csproj` also runs the npm asset pipeline.
+- Build (zero-warning gate): `dotnet build InquirySpark.sln -warnaserror`
+- Test: `dotnet test InquirySpark.sln`
+- Web app: `dotnet build InquirySpark.Web/InquirySpark.Web.csproj` also runs the npm asset pipeline.
+- Run: `dotnet run --project InquirySpark.Web` → `https://localhost:5002`
 
 ## DevSpark Usage
 

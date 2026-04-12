@@ -189,10 +189,10 @@
 - [X] T062 Run full build and tests and capture outcomes (`dotnet build InquirySpark.sln -warnaserror`, `dotnet test`) and capture outcomes in `.documentation/specs/001-unified-web-experience/contracts/validation-evidence.md`.
 - [X] T062B Run `dotnet ef migrations list` across all projects in the solution and confirm zero new migrations were generated (spec constraint: no new database objects). Record pass/fail result in `.documentation/specs/001-unified-web-experience/contracts/validation-evidence.md`.
 - [X] T062A Execute post-cutover functional parity, **permission parity**, and critical workflow integrity validation: use capability matrix (T002A) as the functional checklist and role-mapping artifacts (T004B, T013A) as the expected-permissions authority. Record pass/fail evidence for each domain in `.documentation/specs/001-unified-web-experience/contracts/post-cutover-parity-evidence.md` per FR-014.
-- [ ] T063 Remove `DecisionSpark` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
-- [ ] T064 Remove `InquirySpark.Admin` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
-- [ ] T065 Remove `DecisionSpark/` and `InquirySpark.Admin/` runtime deployment references in deployment/run documentation at `README.md`.
-- [ ] T066 Remove `DecisionSpark` and `InquirySpark.Admin` from active deployment pipeline manifests in `.github/workflows/` and deployment configuration files.
+- [X] T063 Remove `DecisionSpark` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
+- [X] T064 Remove `InquirySpark.Admin` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
+- [X] T065 Remove `DecisionSpark/` and `InquirySpark.Admin/` runtime deployment references in deployment/run documentation at `README.md`.
+- [X] T066 Remove `DecisionSpark` and `InquirySpark.Admin` from active deployment pipeline manifests in `.github/workflows/` and deployment configuration files.
 - [ ] T067 Record post-deploy decommission verification evidence in `.documentation/specs/001-unified-web-experience/contracts/decommission-verification-evidence.md`.
 
 ---

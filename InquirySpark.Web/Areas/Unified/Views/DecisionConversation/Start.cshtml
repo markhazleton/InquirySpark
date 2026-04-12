@@ -1,84 +1,265 @@
-@model InquirySpark.Common.Models.Spec.DecisionSpec
+@model InquirySpark.Common.Models.Spec.DecisionSpecDocument
 @{
-    ViewData["Title"] = $"Conversation — {Model.SpecId}";
+    ViewData["Title"] = $"Conversation — {Model.Metadata?.Name ?? Model.SpecId}";
 }
 
-<div class="card border-0 shadow-sm mb-3">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h2 class="mb-0"><i class="bi bi-play-circle"></i> @Model.SpecId</h2>
-        <span class="badge bg-light text-primary">v@Model.Version</span>
+<div class="row g-3">
+    <!-- Left: spec overview + traits -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">
+                    <i class="bi bi-play-circle"></i>
+                    @(Model.Metadata?.Name ?? Model.SpecId)
+                </h2>
+                <span class="badge bg-light text-primary">v@Model.Version</span>
+            </div>
+            @if (Model.Metadata is not null && !string.IsNullOrEmpty(Model.Metadata.Description))
+            {
+                <div class="card-body border-bottom pb-2">
+                    <p class="mb-0 text-muted">@Model.Metadata.Description</p>
+                </div>
+            }
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.SafetyPreamble))
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-shield-check"></i> <strong>Safety preamble:</strong> @Model.SafetyPreamble
+                    </div>
+                }
+
+                <div class="row g-3 mb-3 text-center">
+                    <div class="col-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body py-2">
+                                <div class="fs-3 fw-bold text-primary">@Model.Traits.Count</div>
+                                <div class="text-muted small">Traits</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body py-2">
+                                <div class="fs-3 fw-bold text-success">@Model.Outcomes.Count</div>
+                                <div class="text-muted small">Outcomes</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body py-2">
+                                <div class="fs-3 fw-bold text-info">@Model.DerivedTraits.Count</div>
+                                <div class="text-muted small">Derived Traits</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mb-2"><i class="bi bi-list-ul"></i> Questions this conversation covers</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover align-middle" data-datatable="false">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Key</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var trait in Model.Traits.Where(t => !t.IsPseudoTrait))
+                            {
+                                <tr>
+                                    <td><code class="small">@trait.Key</code></td>
+                                    <td>@trait.QuestionText</td>
+                                    <td><span class="badge bg-secondary">@trait.AnswerType</span></td>
+                                    <td>
+                                        @if (trait.Required)
+                                        {
+                                            <span class="badge bg-danger">Required</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-light text-dark border">Optional</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Back to Specs
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        @if (!string.IsNullOrEmpty(Model.SafetyPreamble))
-        {
-            <div class="alert alert-info">
-                <i class="bi bi-shield-check"></i> <strong>Safety preamble:</strong> @Model.SafetyPreamble
+
+    <!-- Right: conversation panel -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-3" id="conversationPanel">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-chat-dots"></i> AI-Guided Conversation</h5>
             </div>
-        }
-        <div class="row g-3 mb-3">
-            <div class="col-md-4 text-center">
-                <div class="card border-0 bg-light">
-                    <div class="card-body">
-                        <div class="display-6 fw-bold text-primary">@Model.Traits.Count</div>
-                        <div class="text-muted small">Traits</div>
+            <div class="card-body" id="chatArea" style="min-height:300px; max-height:480px; overflow-y:auto;">
+                <div id="chatMessages">
+                    <div class="alert alert-info">
+                        <i class="bi bi-robot"></i>
+                        <strong>Ready to start.</strong><br />
+                        Click <strong>Start Conversation</strong> to begin answering questions for
+                        <em>@(Model.Metadata?.Name ?? Model.SpecId)</em>.
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 text-center">
-                <div class="card border-0 bg-light">
-                    <div class="card-body">
-                        <div class="display-6 fw-bold text-success">@Model.Outcomes.Count</div>
-                        <div class="text-muted small">Outcomes</div>
-                    </div>
+            <div class="card-footer">
+                <div id="startSection">
+                    <button id="btnStart" class="btn btn-success w-100" type="button"
+                            data-spec-id="@Model.SpecId">
+                        <i class="bi bi-play-circle"></i> Start Conversation
+                    </button>
                 </div>
-            </div>
-            <div class="col-md-4 text-center">
-                <div class="card border-0 bg-light">
-                    <div class="card-body">
-                        <div class="display-6 fw-bold text-info">@Model.DerivedTraits.Count</div>
-                        <div class="text-muted small">Derived Traits</div>
+                <div id="replySection" class="d-none">
+                    <div class="input-group">
+                        <input id="txtReply" type="text" class="form-control" placeholder="Your answer…" />
+                        <button id="btnSend" class="btn btn-primary" type="button">
+                            <i class="bi bi-send"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h5><i class="bi bi-list-ul"></i> Traits</h5>
-        <div class="table-responsive mb-3">
-            <table class="table table-sm table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Key</th>
-                        <th>Question</th>
-                        <th>Answer Type</th>
-                        <th>Required</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var trait in Model.Traits)
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Spec Info</h6>
+            </div>
+            <div class="card-body small">
+                <dl class="row mb-0">
+                    <dt class="col-5">Spec ID</dt>
+                    <dd class="col-7"><code>@Model.SpecId</code></dd>
+                    @if (Model.Metadata is not null)
                     {
-                        <tr>
-                            <td><code>@trait.Key</code></td>
-                            <td>@trait.QuestionText</td>
-                            <td><span class="badge bg-secondary">@trait.AnswerType</span></td>
-                            <td>
-                                @if (trait.Required)
+                        @if (!string.IsNullOrEmpty(Model.Metadata.Owner))
+                        {
+                            <dt class="col-5">Owner</dt>
+                            <dd class="col-7">@Model.Metadata.Owner</dd>
+                        }
+                        @if (Model.Metadata.Tags.Any())
+                        {
+                            <dt class="col-5">Tags</dt>
+                            <dd class="col-7">
+                                @foreach (var tag in Model.Metadata.Tags)
                                 {
-                                    <span class="badge bg-danger">Required</span>
+                                    <span class="badge bg-info text-dark me-1">@tag</span>
                                 }
-                                else
-                                {
-                                    <span class="badge bg-light text-dark">Optional</span>
-                                }
-                            </td>
-                        </tr>
+                            </dd>
+                        }
                     }
-                </tbody>
-            </table>
+                    <dt class="col-5">Status</dt>
+                    <dd class="col-7">
+                        @{
+                            var badgeClass = Model.Status switch
+                            {
+                                "Published" => "bg-success",
+                                "InReview"  => "bg-warning text-dark",
+                                "Retired"   => "bg-secondary",
+                                _           => "bg-primary"
+                            };
+                        }
+                        <span class="badge @badgeClass">@Model.Status</span>
+                    </dd>
+                </dl>
+            </div>
         </div>
     </div>
-    <div class="card-footer">
-        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left"></i> Back to List
-        </a>
-    </div>
 </div>
+
+@section Scripts {
+<script>
+(function () {
+    const specId = document.getElementById('btnStart')?.dataset.specId;
+    let sessionId = null;
+
+    function appendMessage(role, text) {
+        const msgs = document.getElementById('chatMessages');
+        const cls = role === 'assistant' ? 'text-primary' : 'text-dark';
+        const icon = role === 'assistant' ? 'bi-robot' : 'bi-person';
+        const div = document.createElement('div');
+        div.className = 'mb-2';
+        div.innerHTML = `<i class="bi ${icon} me-1 ${cls}"></i><strong class="${cls}">${role === 'assistant' ? 'Guide' : 'You'}:</strong> ${text}`;
+        msgs.appendChild(div);
+        const chatArea = document.getElementById('chatArea');
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function setLoading(loading) {
+        const btn = document.getElementById('btnSend');
+        if (btn) btn.disabled = loading;
+    }
+
+    async function startConversation() {
+        document.getElementById('chatMessages').innerHTML = '';
+        document.getElementById('startSection').classList.add('d-none');
+        document.getElementById('replySection').classList.remove('d-none');
+        setLoading(true);
+        try {
+            const res = await fetch('/conversation/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ specId: specId })
+            });
+            if (!res.ok) throw new Error('Server returned ' + res.status);
+            const data = await res.json();
+            sessionId = data.sessionId;
+            if (data.question) appendMessage('assistant', data.question);
+        } catch (e) {
+            appendMessage('assistant', '⚠️ Could not connect to the conversation service. Please check that the service is running and try again.');
+            document.getElementById('startSection').classList.remove('d-none');
+            document.getElementById('replySection').classList.add('d-none');
+        } finally {
+            setLoading(false);
+            document.getElementById('txtReply')?.focus();
+        }
+    }
+
+    async function sendReply() {
+        const input = document.getElementById('txtReply');
+        const answer = input?.value?.trim();
+        if (!answer || !sessionId) return;
+        input.value = '';
+        appendMessage('user', answer);
+        setLoading(true);
+        try {
+            const res = await fetch(`/conversation/${sessionId}/next`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ answer })
+            });
+            if (!res.ok) throw new Error('Server returned ' + res.status);
+            const data = await res.json();
+            if (data.question) {
+                appendMessage('assistant', data.question);
+            } else if (data.outcome) {
+                appendMessage('assistant', `✅ <strong>Recommended outcome:</strong> ${data.outcome}`);
+                document.getElementById('replySection').classList.add('d-none');
+            }
+        } catch (e) {
+            appendMessage('assistant', '⚠️ Error sending reply. Please try again.');
+        } finally {
+            setLoading(false);
+            input?.focus();
+        }
+    }
+
+    document.getElementById('btnStart')?.addEventListener('click', startConversation);
+
+    document.getElementById('btnSend')?.addEventListener('click', sendReply);
+
+    document.getElementById('txtReply')?.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendReply(); }
+    });
+})();
+</script>
+}

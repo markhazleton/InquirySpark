@@ -1,6 +1,9 @@
-@model IEnumerable<InquirySpark.Common.Models.Spec.DecisionSpec>
+@using InquirySpark.Common.Persistence.Repositories
+@model IEnumerable<DecisionSpecSummary>
 @{
     ViewData["Title"] = "Decision Specifications";
+    var searchVal = Context.Request.Query["search"].ToString();
+    var statusVal = Context.Request.Query["status"].ToString();
 }
 
 <div class="card border-0 shadow-sm">
@@ -10,18 +13,19 @@
             <i class="bi bi-plus-circle"></i> Create New
         </a>
     </div>
-    <div class="card-body">
-        <form method="get" class="row g-2 mb-3">
+    <div class="card-body border-bottom">
+        <form method="get" class="row g-2">
             <div class="col-md-6">
-                <input type="search" name="search" class="form-control" placeholder="Search by ID or content…"
-                       value="@Context.Request.Query["search"]" />
+                <input type="search" name="search" class="form-control" placeholder="Search by ID, name, or owner…"
+                       value="@searchVal" />
             </div>
             <div class="col-md-3">
                 <select name="status" class="form-select">
                     <option value="">All statuses</option>
-                    <option value="Draft" selected="@(Context.Request.Query["status"] == "Draft")">Draft</option>
-                    <option value="Active" selected="@(Context.Request.Query["status"] == "Active")">Active</option>
-                    <option value="Archived" selected="@(Context.Request.Query["status"] == "Archived")">Archived</option>
+                    <option value="Draft" selected="@(statusVal == "Draft" ? "selected" : null)">Draft</option>
+                    <option value="InReview" selected="@(statusVal == "InReview" ? "selected" : null)">In Review</option>
+                    <option value="Published" selected="@(statusVal == "Published" ? "selected" : null)">Published</option>
+                    <option value="Retired" selected="@(statusVal == "Retired" ? "selected" : null)">Retired</option>
                 </select>
             </div>
             <div class="col-md-auto">
@@ -31,43 +35,104 @@
         </form>
     </div>
     <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th><i class="bi bi-key"></i> Spec ID</th>
-                        <th><i class="bi bi-layers"></i> Version</th>
-                        <th><i class="bi bi-list-ul"></i> Traits</th>
-                        <th><i class="bi bi-diagram-3"></i> Outcomes</th>
-                        <th class="no-sort">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-file-earmark-text display-3 d-block mb-3"></i>
+                <p class="mb-2 fw-semibold">No decision specifications found.</p>
+                @if (!string.IsNullOrEmpty(searchVal) || !string.IsNullOrEmpty(statusVal))
+                {
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-x-circle"></i> Clear filters
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Create" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> Create the first spec
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td><code>@item.SpecId</code></td>
-                            <td><span class="badge bg-secondary">@item.Version</span></td>
-                            <td>@item.Traits.Count</td>
-                            <td>@item.Outcomes.Count</td>
-                            <td>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <a asp-action="Details" asp-route-specId="@item.SpecId" class="btn btn-outline-info" title="Details">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a asp-action="Edit" asp-route-specId="@item.SpecId" class="btn btn-outline-primary" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <a asp-action="Audit" asp-route-specId="@item.SpecId" class="btn btn-outline-secondary" title="Audit History">
-                                        <i class="bi bi-clock-history"></i>
-                                    </a>
-                                </div>
-                            </td>
+                            <th scope="col"><i class="bi bi-key"></i> Spec ID</th>
+                            <th scope="col"><i class="bi bi-card-heading"></i> Name</th>
+                            <th scope="col"><i class="bi bi-circle-half"></i> Status</th>
+                            <th scope="col"><i class="bi bi-person"></i> Owner</th>
+                            <th scope="col"><i class="bi bi-layers"></i> Version</th>
+                            <th scope="col"><i class="bi bi-list-ul"></i> Traits</th>
+                            <th scope="col"><i class="bi bi-clock"></i> Updated</th>
+                            <th scope="col" class="no-sort">Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><code>@item.SpecId</code></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Name))
+                                    {
+                                        @item.Name
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">—</span>
+                                    }
+                                    @if (item.HasUnverifiedDraft)
+                                    {
+                                        <span class="badge bg-warning text-dark ms-1" title="Has unverified draft"><i class="bi bi-exclamation-triangle"></i></span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        var badgeClass = item.Status switch
+                                        {
+                                            "Published" => "bg-success",
+                                            "InReview"  => "bg-warning text-dark",
+                                            "Retired"   => "bg-secondary",
+                                            _           => "bg-primary"  // Draft
+                                        };
+                                    }
+                                    <span class="badge @badgeClass">@item.Status</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Owner))
+                                    {
+                                        @item.Owner
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">—</span>
+                                    }
+                                </td>
+                                <td><span class="badge bg-secondary">@item.Version</span></td>
+                                <td><span class="badge bg-light text-dark border">@item.TraitCount</span></td>
+                                <td class="text-muted small">@item.UpdatedAt.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="Details" asp-route-specId="@item.SpecId" class="btn btn-outline-info" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-specId="@item.SpecId" class="btn btn-outline-primary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Audit" asp-route-specId="@item.SpecId" class="btn btn-outline-secondary" title="Audit History">
+                                            <i class="bi bi-clock-history"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
     <div class="card-footer text-muted d-flex justify-content-between align-items-center">
         <span><i class="bi bi-info-circle"></i> Total: @Model.Count() specifications</span>

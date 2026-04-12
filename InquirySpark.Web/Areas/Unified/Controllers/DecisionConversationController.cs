@@ -24,7 +24,7 @@ public sealed class DecisionConversationController(
         catch (Exception ex)
         {
             logger.LogError(ex, "[DecisionConversation] Error loading conversation list.");
-            return View(Enumerable.Empty<InquirySpark.Common.Models.Spec.DecisionSpec>());
+            return View(Enumerable.Empty<InquirySpark.Common.Persistence.Repositories.DecisionSpecSummary>());
         }
     }
 
