@@ -41,6 +41,8 @@
 **⚠️ CRITICAL**: No user-story implementation should begin until this phase is complete.
 
 - [ ] T004A Scaffold `InquirySpark.Web` project: create `InquirySpark.Web/InquirySpark.Web.csproj`, `InquirySpark.Web/Program.cs`, register Unified Area, add project to `InquirySpark.sln`, and verify `dotnet build`.
+- [ ] T004A1 Initialize CDN-free `npm run build` pipeline in `InquirySpark.Web/package.json` referencing Bootstrap, DataTables, and WebSpark.Bootswatch dependencies.
+- [ ] T004A2 Integrate `npm run build` automatic pre-build execution target into `InquirySpark.Web/InquirySpark.Web.csproj`.
 - [ ] T004B [P] Create RoleMappingItem configuration model in `InquirySpark.Common/Models/UnifiedWeb/RoleMappingItem.cs` for cross-app role/permission mapping per FR-004.
 - [ ] T005 Create CapabilityDomain configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityDomainItem.cs` (No EF DB mapping).
 - [ ] T006 [P] Create CapabilityItem configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityItem.cs`.
@@ -50,11 +52,11 @@
 - [ ] T010 Create unified governance service contract in `InquirySpark.Repository/Services/UnifiedWeb/IUnifiedWebMigrationService.cs`.
 - [ ] T011 Implement baseline migration service with response wrappers in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebMigrationService.cs` (Retrieves tracking state from IOptions/config, no DB queries).
 - [ ] T012 [P] Create identity migration bridge service contract in `InquirySpark.Repository/Services/UnifiedWeb/IIdentityMigrationBridgeService.cs`.
-- [ ] T013 Implement identity migration bridge service in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs`.
+- [ ] T013 Implement identity migration bridge service in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs`, explicitly wiring Canonical Identity semantics to the `ControlSparkUserContextConnection` identity infrastructure.
 - [ ] T013A Implement role mapping and permission migration logic in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs` using RoleMappingItem model per FR-004.
 - [ ] T014 [P] Create client UI framework options model in `InquirySpark.Web/Configuration/Unified/ClientUiOptions.cs`.
 - [ ] T015 Implement unified client bootstrap module in `InquirySpark.Web/wwwroot/js/unified-app.js`.
-- [ ] T016 Register unified services in `InquirySpark.Web/Program.cs`.
+- [ ] T016 Register unified services in `InquirySpark.Web/Program.cs`, explicitly wiring `ControlSparkUserContextConnection` (Identity SQLite) and `InquirySparkContext` (SQLite Read/Only Data).
 - [ ] T017 Add unified app settings section for migration controls in `InquirySpark.Web/appsettings.json`.
 - [ ] T018 Add development migration controls in `InquirySpark.Web/appsettings.Development.json`.
 - [ ] T019 [P] Add performance instrumentation configuration for key user actions in `InquirySpark.Web/appsettings.Development.json`.
