@@ -1,0 +1,51 @@
+{
+  "name": "inquiryspark-web",
+  "version": "1.0.0",
+  "description": "InquirySpark.Web unified experience client-side dependencies",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:prod",
+    "build:dev": "webpack --config build/webpack.dev.js",
+    "build:prod": "webpack --config build/webpack.prod.js",
+    "watch": "webpack --watch --config build/webpack.dev.js",
+    "clean": "node -e \"const fs=require('fs');['wwwroot/js/site.js','wwwroot/js/site.min.js','wwwroot/css/site.css','wwwroot/css/site.min.css'].forEach(f=>{if(fs.existsSync(f))fs.unlinkSync(f)})\"",
+    "postinstall": "npm run build",
+    "update-check": "npm outdated"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "datatables.net": "^2.3.5",
+    "datatables.net-bs5": "^2.3.5",
+    "datatables.net-buttons": "^3.2.5",
+    "datatables.net-buttons-bs5": "^3.2.5",
+    "datatables.net-responsive": "^3.0.7",
+    "datatables.net-responsive-bs5": "^3.0.7",
+    "datatables.net-select": "^3.1.3",
+    "datatables.net-select-bs5": "^3.1.3",
+    "jquery": "^3.7.1",
+    "jquery-validation": "^1.21.0",
+    "jquery-validation-unobtrusive": "^4.0.0",
+    "jszip": "^3.10.1",
+    "pdfmake": "^0.2.20"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.32",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^14.0.0",
+    "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^8.0.0",
+    "mini-css-extract-plugin": "^2.9.4",
+    "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.3.15",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.7.3",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^6.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

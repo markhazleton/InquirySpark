@@ -43,22 +43,22 @@
 
 **⚠️ CRITICAL**: No user-story implementation should begin until this phase is complete.
 
-- [ ] T004A Scaffold `InquirySpark.Web` project: create `InquirySpark.Web/InquirySpark.Web.csproj`, `InquirySpark.Web/Program.cs`, register Unified Area, and add project to `InquirySpark.sln`. Do NOT run build verification yet — the npm pipeline (T004A1/T004A2) must exist first or the build will fail.
-- [ ] T004A1 Initialize CDN-free `npm run build` pipeline in `InquirySpark.Web/package.json` referencing Bootstrap, DataTables, and WebSpark.Bootswatch dependencies.
-- [ ] T004A2 Integrate `npm run build` automatic pre-build execution target into `InquirySpark.Web/InquirySpark.Web.csproj`. After this task completes, run `dotnet build InquirySpark.sln -warnaserror` to verify the full scaffold + npm pipeline produces a zero-warning build. Depends on: T004A, T004A1.
-- [ ] T004B [P] Create RoleMappingItem configuration model in `InquirySpark.Common/Models/UnifiedWeb/RoleMappingItem.cs` for cross-app role/permission mapping per FR-004.
-- [ ] T004C [P] Create DecisionSpark file-storage service contract in `InquirySpark.Repository/Services/UnifiedWeb/IDecisionSparkFileStorageService.cs` using patterns documented in T001B. Interface must expose typed read/write operations for each DecisionSpark data domain (conversations, decision specifications, etc.).
-- [ ] T004D Implement `InquirySpark.Repository/Services/UnifiedWeb/DecisionSparkFileStorageService.cs`, adapting DecisionSpark's file-based data mechanisms for use in InquirySpark.Web per the integration contract in `contracts/decisionspark-file-storage-integration.md`. Depends on: T004C, T001B.
-- [ ] T005 Create CapabilityDomain configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityDomainItem.cs` (No EF DB mapping).
-- [ ] T006 [P] Create CapabilityItem configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityItem.cs`.
-- [ ] T007 [P] Create CapabilityPhase configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityPhaseItem.cs` (renamed from MigrationPhaseItem per spec terminology: "capability completion" = building features; "migration" = data/identity transitions only).
-- [ ] T008 [P] Create ParityValidationRecord configuration model in `InquirySpark.Common/Models/UnifiedWeb/ParityValidationRecordItem.cs`.
-- [ ] T009 [P] Create CutoverDecisionRecord configuration model in `InquirySpark.Common/Models/UnifiedWeb/CutoverDecisionRecordItem.cs`.
-- [ ] T010 Create unified capability-completion governance service contract in `InquirySpark.Repository/Services/UnifiedWeb/IUnifiedWebCapabilityService.cs`.
-- [ ] T011 Implement baseline capability-completion service with response wrappers in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs` (Retrieves capability tracking state from IOptions/config, no DB queries).
-- [ ] T012 [P] Create identity migration bridge service contract in `InquirySpark.Repository/Services/UnifiedWeb/IIdentityMigrationBridgeService.cs`.
-- [ ] T013 Implement identity migration bridge service in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs`, explicitly wiring Canonical Identity semantics to the `ControlSparkUserContextConnection` identity infrastructure.
-- [ ] T013A Implement role mapping and permission migration logic in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs` using RoleMappingItem model per FR-004. Depends on: T013.
+- [X] T004A Scaffold `InquirySpark.Web` project: create `InquirySpark.Web/InquirySpark.Web.csproj`, `InquirySpark.Web/Program.cs`, register Unified Area, and add project to `InquirySpark.sln`. Do NOT run build verification yet — the npm pipeline (T004A1/T004A2) must exist first or the build will fail.
+- [X] T004A1 Initialize CDN-free `npm run build` pipeline in `InquirySpark.Web/package.json` referencing Bootstrap, DataTables, and WebSpark.Bootswatch dependencies.
+- [X] T004A2 Integrate `npm run build` automatic pre-build execution target into `InquirySpark.Web/InquirySpark.Web.csproj`. After this task completes, run `dotnet build InquirySpark.sln -warnaserror` to verify the full scaffold + npm pipeline produces a zero-warning build. Depends on: T004A, T004A1.
+- [X] T004B [P] Create RoleMappingItem configuration model in `InquirySpark.Common/Models/UnifiedWeb/RoleMappingItem.cs` for cross-app role/permission mapping per FR-004.
+- [X] T004C [P] Create DecisionSpark file-storage service contract in `InquirySpark.Repository/Services/UnifiedWeb/IDecisionSparkFileStorageService.cs` using patterns documented in T001B. Interface must expose typed read/write operations for each DecisionSpark data domain (conversations, decision specifications, etc.).
+- [X] T004D Implement `InquirySpark.Repository/Services/UnifiedWeb/DecisionSparkFileStorageService.cs`, adapting DecisionSpark's file-based data mechanisms for use in InquirySpark.Web per the integration contract in `contracts/decisionspark-file-storage-integration.md`. Depends on: T004C, T001B.
+- [X] T005 Create CapabilityDomain configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityDomainItem.cs` (No EF DB mapping).
+- [X] T006 [P] Create CapabilityItem configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityItem.cs`.
+- [X] T007 [P] Create CapabilityPhase configuration model in `InquirySpark.Common/Models/UnifiedWeb/CapabilityPhaseItem.cs` (renamed from MigrationPhaseItem per spec terminology: "capability completion" = building features; "migration" = data/identity transitions only).
+- [X] T008 [P] Create ParityValidationRecord configuration model in `InquirySpark.Common/Models/UnifiedWeb/ParityValidationRecordItem.cs`.
+- [X] T009 [P] Create CutoverDecisionRecord configuration model in `InquirySpark.Common/Models/UnifiedWeb/CutoverDecisionRecordItem.cs`.
+- [X] T010 Create unified capability-completion governance service contract in `InquirySpark.Repository/Services/UnifiedWeb/IUnifiedWebCapabilityService.cs`.
+- [X] T011 Implement baseline capability-completion service with response wrappers in `InquirySpark.Repository/Services/UnifiedWeb/UnifiedWebCapabilityService.cs` (Retrieves capability tracking state from IOptions/config, no DB queries).
+- [X] T012 [P] Create identity migration bridge service contract in `InquirySpark.Repository/Services/UnifiedWeb/IIdentityMigrationBridgeService.cs`.
+- [X] T013 Implement identity migration bridge service in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs`, explicitly wiring Canonical Identity semantics to the `ControlSparkUserContextConnection` identity infrastructure.
+- [X] T013A Implement role mapping and permission migration logic in `InquirySpark.Repository/Services/UnifiedWeb/IdentityMigrationBridgeService.cs` using RoleMappingItem model per FR-004. Depends on: T013.
 - [ ] T014 [P] Create client UI framework options model in `InquirySpark.Web/Configuration/Unified/ClientUiOptions.cs`.
 - [ ] T015 Implement unified client bootstrap module in `InquirySpark.Web/wwwroot/js/unified-app.js`.
 - [ ] T016 Register unified services in `InquirySpark.Web/Program.cs`, explicitly wiring `ControlSparkUserContextConnection` (Identity SQLite), `InquirySparkContext` (SQLite Read/Only Data), and `IDecisionSparkFileStorageService` → `DecisionSparkFileStorageService`. Scope: data context and file-storage DI registrations only (auth/Identity wiring is T016A; authorization policies are T016B).
