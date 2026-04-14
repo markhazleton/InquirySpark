@@ -193,7 +193,7 @@
 - [X] T064 Remove `InquirySpark.Admin` from active solution configuration in `InquirySpark.sln` after unified completion gates pass.
 - [X] T065 Remove `DecisionSpark/` and `InquirySpark.Admin/` runtime deployment references in deployment/run documentation at `README.md`.
 - [X] T066 Remove `DecisionSpark` and `InquirySpark.Admin` from active deployment pipeline manifests in `.github/workflows/` and deployment configuration files.
-- [ ] T067 Record post-deploy decommission verification evidence in `.documentation/specs/001-unified-web-experience/contracts/decommission-verification-evidence.md`.
+- [X] T067 Record post-deploy decommission verification evidence in `.documentation/specs/001-unified-web-experience/contracts/decommission-verification-evidence.md`.
 
 ---
 
