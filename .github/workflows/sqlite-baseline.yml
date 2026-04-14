@@ -56,44 +56,44 @@ jobs:
         echo "❌ Build or tests failed - check logs above"
         exit 1
 
-  admin-npm-build:
-    name: Admin NPM Build (${{ matrix.os }})
+  web-npm-build:
+    name: Web NPM Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    
+
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        
+
     - name: Install npm dependencies
-      working-directory: InquirySpark.Admin
+      working-directory: InquirySpark.Web
       run: npm ci
-      
+
     - name: Run npm build (copy frontend assets)
-      working-directory: InquirySpark.Admin
+      working-directory: InquirySpark.Web
       run: npm run build
-      
+
     - name: Verify frontend bundle outputs
       shell: bash
       run: |
-        if [ ! -f "InquirySpark.Admin/wwwroot/js/site.min.js" ]; then
+        if [ ! -f "InquirySpark.Web/wwwroot/js/site.min.js" ]; then
           echo "❌ Missing built JavaScript bundle: wwwroot/js/site.min.js"
           exit 1
         fi
-        if [ ! -f "InquirySpark.Admin/wwwroot/css/site.min.css" ]; then
+        if [ ! -f "InquirySpark.Web/wwwroot/css/site.min.css" ]; then
           echo "❌ Missing built stylesheet bundle: wwwroot/css/site.min.css"
           exit 1
         fi
-        if [ ! -d "InquirySpark.Admin/wwwroot/fonts" ]; then
+        if [ ! -d "InquirySpark.Web/wwwroot/fonts" ]; then
           echo "❌ Missing copied font assets: wwwroot/fonts"
           exit 1
         fi
@@ -146,7 +146,7 @@ jobs:
   build-summary:
     name: Build Summary
     runs-on: ubuntu-latest
-    needs: [build-and-test, admin-npm-build, sqlite-data-integrity]
+    needs: [build-and-test, web-npm-build, sqlite-data-integrity]
     if: always()
     
     steps:

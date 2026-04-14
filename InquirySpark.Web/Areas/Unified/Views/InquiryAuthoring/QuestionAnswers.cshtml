@@ -1,0 +1,42 @@
+@model List<InquirySpark.Repository.Database.QuestionAnswer>
+@{
+    ViewData["Title"] = "Question Answers";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><i class="bi bi-list-check"></i> Question Answers</h2>
+        <span class="badge bg-light text-primary">@Model.Count answers</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th><i class="bi bi-hash"></i> ID</th>
+                        <th><i class="bi bi-question-circle"></i> Question</th>
+                        <th><i class="bi bi-sort-numeric-up"></i> Sort</th>
+                        <th><i class="bi bi-tag"></i> Short Name</th>
+                        <th><i class="bi bi-card-text"></i> Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.QuestionAnswerId</td>
+                            <td>@(item.Question?.QuestionNm ?? item.QuestionId.ToString())</td>
+                            <td>@item.QuestionAnswerSort</td>
+                            <td><code>@item.QuestionAnswerShortNm</code></td>
+                            <td>@item.QuestionAnswerNm</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle"></i> Total: @Model.Count answers</span>
+        <span><i class="bi bi-lightning"></i> DataTables enabled</span>
+    </div>
+</div>

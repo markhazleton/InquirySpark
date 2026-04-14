@@ -18,6 +18,7 @@
     [CompanyID]           INT              NULL,
     [ModifiedID]          INT              CONSTRAINT [DF__Applicati__Modif__08B54D69] DEFAULT ((1)) NOT NULL,
     [ModifiedDT]          DATETIME         CONSTRAINT [DF__Applicati__Modif__09A971A2] DEFAULT (getdate()) NOT NULL,
+    [PasswordHash]        NVARCHAR (500)   NULL,
     CONSTRAINT [ApplicationUser_PK] PRIMARY KEY NONCLUSTERED ([ApplicationUserID] ASC),
     CONSTRAINT [FK_ApplicationUser_Company] FOREIGN KEY ([CompanyID]) REFERENCES [dbo].[Company] ([CompanyID]),
     CONSTRAINT [FK_ApplicationUser_SiteRole] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[SiteRole] ([Id]),

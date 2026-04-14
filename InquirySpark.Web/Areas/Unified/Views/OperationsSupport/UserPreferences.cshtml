@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "User Preferences";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0"><i class="bi bi-sliders"></i> User Preferences</h2>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i>
+            User preferences are managed client-side. Theme and display settings persist in your browser session.
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-palette"></i> Theme</h5>
+                        <p class="card-text text-muted small">
+                            Select your preferred Bootswatch theme using the theme switcher in the navigation bar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-table"></i> Table Display</h5>
+                        <p class="card-text text-muted small">
+                            DataTables state (page size, sort order, filters) is saved automatically for 24 hours per browser session.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <i class="bi bi-info-circle"></i> Preferences are stored in your browser's local storage.
+    </div>
+</div>

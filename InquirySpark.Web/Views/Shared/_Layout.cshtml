@@ -1,0 +1,108 @@
+@inject InquirySpark.Web.Services.Navigation.UnifiedNavigationBuilder NavBuilder
+@{
+    var currentYear = DateTime.Now.Year.ToString();
+    var navNodes = NavBuilder.Build();
+    var currentPath = Context.Request.Path.Value?.ToLowerInvariant() ?? string.Empty;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="InquirySpark — Unified Operations Workspace" />
+    <meta name="author" content="Mark Hazleton" />
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+    <title>@ViewData["Title"] - InquirySpark</title>
+
+    <!-- Bundled Site CSS (Bootstrap + Bootstrap Icons + DataTables) -->
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+
+    @RenderSection("HeadScripts", required: false)
+</head>
+<body id="page-top">
+
+<header>
+    <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary" id="mainNav">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="Unified" asp-controller="Operations" asp-action="Index">
+                <i class="bi bi-lightning-charge-fill text-primary"></i> InquirySpark
+            </a>
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarUnified"
+                    aria-controls="navbarUnified" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarUnified">
+                <ul class="navbar-nav flex-grow-1">
+                    @foreach (var node in navNodes.OrderBy(n => n.Order))
+                    {
+                        if (node.IsGroup)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle @(currentPath.StartsWith(node.NavKey) ? "active" : "")"
+                                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi @node.Icon"></i> @node.Label
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach (var child in node.Children.OrderBy(c => c.Order))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item @(currentPath.StartsWith(child.NavKey) ? "active" : "")"
+                                               href="@child.Href" data-unified-nav="@child.NavKey">
+                                                <i class="bi @child.Icon"></i> @child.Label
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentPath == node.NavKey || currentPath.StartsWith(node.NavKey + "/") ? "active" : "")"
+                                   href="@node.Href" data-unified-nav="@node.NavKey"
+                                   @(currentPath == node.NavKey ? "aria-current=\"page\"" : "")>
+                                    <i class="bi @node.Icon"></i> @node.Label
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main" class="content-container pb-3">
+    <section class="container-fluid pt-4 mt-4 mb-4 pb-4">
+        @RenderBody()
+    </section>
+</main>
+
+<footer class="py-3 bg-body-tertiary border-top">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted small">
+                <i class="bi bi-lightning-charge-fill text-primary"></i>
+                &copy; @currentYear InquirySpark — Unified Operations Workspace
+            </span>
+            <span class="text-muted small">
+                <i class="bi bi-shield-check text-success"></i> Powered by .NET 10
+            </span>
+        </div>
+    </div>
+</footer>
+
+<!-- PDFMake Virtual File System (required for PDF fonts) -->
+<script src="~/js/vfs_fonts.js" asp-append-version="true"></script>
+
+<!-- Bundled Site JS (jQuery, Bootstrap, DataTables, and all dependencies) -->
+<script src="~/js/site.min.js" asp-append-version="true"></script>
+
+<!-- Unified client bootstrap -->
+<script src="~/js/unified-app.js" asp-append-version="true"></script>
+
+@RenderSection("Scripts", required: false)
+</body>
+</html>

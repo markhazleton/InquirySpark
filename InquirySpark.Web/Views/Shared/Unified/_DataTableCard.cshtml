@@ -1,0 +1,72 @@
+@using InquirySpark.Web.Models.Unified
+@model DataTableCardModel
+@{
+    var exportClass = (Model?.ExportEnabled ?? false) ? " datatable-export" : string.Empty;
+    var tableId = Model?.TableId ?? "dataTable";
+    var createHref = Model?.CreateHref;
+    var capabilityId = Model?.CapabilityId;
+}
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+            <i class="bi @(Model?.Icon ?? "bi-table")"></i> @(Model?.Title ?? string.Empty)
+        </h2>
+        @if (createHref is not null)
+        {
+            <a href="@createHref" class="btn btn-light btn-sm">
+                <i class="bi bi-plus-circle"></i> @(Model?.CreateLabel ?? "Create New")
+            </a>
+        }
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table id="@tableId" class="table table-striped table-hover align-middle mb-0@exportClass">
+                @if (Model?.Columns.Count > 0)
+                {
+                    <thead class="table-light">
+                        <tr>
+                            @foreach (var col in Model.Columns)
+                            {
+                                if (col.NoSort)
+                                {
+                                    <th class="no-sort">
+                                        @if (!string.IsNullOrWhiteSpace(col.Icon)) { <i class="bi @col.Icon"></i> }
+                                        @col.Label
+                                    </th>
+                                }
+                                else
+                                {
+                                    <th>
+                                        @if (!string.IsNullOrWhiteSpace(col.Icon)) { <i class="bi @col.Icon"></i> }
+                                        @col.Label
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                }
+                @if (Model?.TableBody is not null)
+                {
+                    @Model.TableBody
+                }
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        @if (Model?.TotalCount.HasValue == true)
+        {
+            <span><i class="bi bi-info-circle"></i> Total: @Model.TotalCount records</span>
+        }
+        else
+        {
+            <span>&nbsp;</span>
+        }
+        <span>
+            @if (!string.IsNullOrWhiteSpace(capabilityId))
+            {
+                <span class="badge bg-secondary fw-normal me-2">@capabilityId</span>
+            }
+            <i class="bi bi-lightning"></i> DataTables enabled
+        </span>
+    </div>
+</div>

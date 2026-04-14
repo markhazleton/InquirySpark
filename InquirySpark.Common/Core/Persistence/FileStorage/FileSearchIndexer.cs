@@ -237,6 +237,12 @@ public class FileSearchIndexer
     private async Task SaveIndexAsync(Dictionary<string, DecisionSpecIndexEntry> index, CancellationToken cancellationToken)
     {
         var indexPath = Path.Combine(_options.RootPath, _options.IndexFileName);
+        var indexDirectory = Path.GetDirectoryName(indexPath);
+        if (!string.IsNullOrWhiteSpace(indexDirectory))
+        {
+            Directory.CreateDirectory(indexDirectory);
+        }
+
         var entries = index.Values.OrderBy(e => e.SpecId).ToList();
         var json = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = true });
 

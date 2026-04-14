@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="card border-danger mt-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>An error occurred</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted mb-3">
+            Something went wrong processing your request. Please try again or contact support if the problem persists.
+        </p>
+        <a asp-area="Unified" asp-controller="Operations" asp-action="Index" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-house me-1"></i>Return to Dashboard
+        </a>
+    </div>
+</div>
