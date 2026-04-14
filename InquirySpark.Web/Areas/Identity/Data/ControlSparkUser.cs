@@ -1,3 +1,7 @@
+// TODO(identity-migration): Namespace kept as ControlSpark.WebMvc.Areas.Identity.Data for EF Core identity schema
+// compatibility — the ControlSparkUser.db SQLite schema was originally created under the ControlSpark.WebMvc
+// namespace and the table/column names are locked to it. Rename to InquirySpark.Web.Areas.Identity.Data once
+// the identity database schema is migrated. See spec FR-015 and contracts/decommission-verification-evidence.md.
 using Microsoft.AspNetCore.Identity;
 
 namespace ControlSpark.WebMvc.Areas.Identity.Data;

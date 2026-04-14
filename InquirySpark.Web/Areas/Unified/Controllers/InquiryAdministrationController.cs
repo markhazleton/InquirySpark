@@ -15,8 +15,7 @@ public sealed class InquiryAdministrationController(
     InquirySparkContext context) : Controller
 {
     // ── Applications (CAP-IA-001) ─────────────────────────────────────────
-
-    [Route("Unified/InquiryAdministration/Applications")]
+    /// <summary>Lists all registered applications.</summary>    [Route("Unified/InquiryAdministration/Applications")]
     public async Task<IActionResult> Applications(CancellationToken cancellationToken = default)
     {
         var items = await context.Applications
@@ -26,6 +25,7 @@ public sealed class InquiryAdministrationController(
         return View(nameof(Applications), items);
     }
 
+    /// <summary>Shows details for the application with the specified identifier.</summary>
     [Route("Unified/InquiryAdministration/Applications/{id:int}")]
     public async Task<IActionResult> ApplicationDetails(int id, CancellationToken cancellationToken = default)
     {
@@ -37,8 +37,7 @@ public sealed class InquiryAdministrationController(
     }
 
     // ── Application Users (CAP-IA-002) ────────────────────────────────────
-
-    [Route("Unified/InquiryAdministration/ApplicationUsers")]
+    /// <summary>Lists all application users.</summary>    [Route("Unified/InquiryAdministration/ApplicationUsers")]
     public async Task<IActionResult> ApplicationUsers(CancellationToken cancellationToken = default)
     {
         var items = await context.ApplicationUsers
@@ -48,6 +47,7 @@ public sealed class InquiryAdministrationController(
 
     // ── Application User Roles (CAP-IA-003) ──────────────────────────────
 
+    /// <summary>Lists all application user role assignments.</summary>
     [Route("Unified/InquiryAdministration/ApplicationUserRoles")]
     public async Task<IActionResult> ApplicationUserRoles(CancellationToken cancellationToken = default)
     {
@@ -59,6 +59,7 @@ public sealed class InquiryAdministrationController(
 
     // ── Application Surveys (CAP-IA-004) ──────────────────────────────────
 
+    /// <summary>Lists all application-to-survey associations.</summary>
     [Route("Unified/InquiryAdministration/ApplicationSurveys")]
     public async Task<IActionResult> ApplicationSurveys(CancellationToken cancellationToken = default)
     {
@@ -71,6 +72,7 @@ public sealed class InquiryAdministrationController(
 
     // ── App Properties (CAP-IA-005) ───────────────────────────────────────
 
+    /// <summary>Lists all application property settings.</summary>
     [Route("Unified/InquiryAdministration/AppProperties")]
     public async Task<IActionResult> AppProperties(CancellationToken cancellationToken = default)
     {
@@ -79,8 +81,7 @@ public sealed class InquiryAdministrationController(
     }
 
     // ── Roles (CAP-IA-024) ────────────────────────────────────────────────
-
-    [Route("Unified/InquiryAdministration/Roles")]
+    /// <summary>Lists all configured roles.</summary>    [Route("Unified/InquiryAdministration/Roles")]
     public async Task<IActionResult> Roles(CancellationToken cancellationToken = default)
     {
         var items = await context.Roles.ToListAsync(cancellationToken);
@@ -89,6 +90,7 @@ public sealed class InquiryAdministrationController(
 
     // ── Lookup: Application Types (CAP-IA-018) ────────────────────────────
 
+    /// <summary>Lists application type lookup values.</summary>
     [Route("Unified/InquiryAdministration/LuApplicationTypes")]
     public async Task<IActionResult> LuApplicationTypes(CancellationToken cancellationToken = default)
     {
@@ -97,8 +99,7 @@ public sealed class InquiryAdministrationController(
     }
 
     // ── Lookup: Question Types (CAP-IA-019) ───────────────────────────────
-
-    [Route("Unified/InquiryAdministration/LuQuestionTypes")]
+    /// <summary>Lists question type lookup values.</summary>    [Route("Unified/InquiryAdministration/LuQuestionTypes")]
     public async Task<IActionResult> LuQuestionTypes(CancellationToken cancellationToken = default)
     {
         var items = await context.LuQuestionTypes.ToListAsync(cancellationToken);
@@ -107,6 +108,7 @@ public sealed class InquiryAdministrationController(
 
     // ── Lookup: Review Status (CAP-IA-020) ───────────────────────────────
 
+    /// <summary>Lists review status lookup values.</summary>
     [Route("Unified/InquiryAdministration/LuReviewStatus")]
     public async Task<IActionResult> LuReviewStatus(CancellationToken cancellationToken = default)
     {
@@ -115,8 +117,7 @@ public sealed class InquiryAdministrationController(
     }
 
     // ── Lookup: Survey Response Status (CAP-IA-021) ───────────────────────
-
-    [Route("Unified/InquiryAdministration/LuSurveyResponseStatus")]
+    /// <summary>Lists survey response status lookup values.</summary>    [Route("Unified/InquiryAdministration/LuSurveyResponseStatus")]
     public async Task<IActionResult> LuSurveyResponseStatus(CancellationToken cancellationToken = default)
     {
         var items = await context.LuSurveyResponseStatuses.ToListAsync(cancellationToken);
@@ -124,8 +125,7 @@ public sealed class InquiryAdministrationController(
     }
 
     // ── Lookup: Survey Types (CAP-IA-022) ─────────────────────────────────
-
-    [Route("Unified/InquiryAdministration/LuSurveyTypes")]
+    /// <summary>Lists survey type lookup values.</summary>    [Route("Unified/InquiryAdministration/LuSurveyTypes")]
     public async Task<IActionResult> LuSurveyTypes(CancellationToken cancellationToken = default)
     {
         var items = await context.LuSurveyTypes.ToListAsync(cancellationToken);
@@ -134,6 +134,7 @@ public sealed class InquiryAdministrationController(
 
     // ── Lookup: Units of Measure (CAP-IA-023) ─────────────────────────────
 
+    /// <summary>Lists unit of measure lookup values.</summary>
     [Route("Unified/InquiryAdministration/LuUnitOfMeasures")]
     public async Task<IActionResult> LuUnitOfMeasures(CancellationToken cancellationToken = default)
     {

@@ -17,6 +17,7 @@ public sealed class InquiryOperationsController(
 {
     // ── Companies (CAP-IA-012) ────────────────────────────────────────────
 
+    /// <summary>Lists all companies from the read-only inquiry data store.</summary>
     [Route("Unified/InquiryOperations/Companies")]
     public async Task<IActionResult> Companies(CancellationToken cancellationToken = default)
     {
@@ -24,6 +25,7 @@ public sealed class InquiryOperationsController(
         return View(nameof(Companies), items);
     }
 
+    /// <summary>Shows details for the company with the specified identifier.</summary>
     [Route("Unified/InquiryOperations/Companies/{id:int}")]
     public async Task<IActionResult> CompanyDetails(int id, CancellationToken cancellationToken = default)
     {
@@ -33,6 +35,7 @@ public sealed class InquiryOperationsController(
 
     // ── Import Histories (CAP-IA-013) ─────────────────────────────────────
 
+    /// <summary>Lists all data import history records.</summary>
     [Route("Unified/InquiryOperations/ImportHistories")]
     public async Task<IActionResult> ImportHistories(CancellationToken cancellationToken = default)
     {
@@ -41,8 +44,7 @@ public sealed class InquiryOperationsController(
     }
 
     // ── Survey Status (CAP-IA-014) ────────────────────────────────────────
-
-    [Route("Unified/InquiryOperations/SurveyStatus")]
+    /// <summary>Displays survey status overview across all surveys.</summary>    [Route("Unified/InquiryOperations/SurveyStatus")]
     public async Task<IActionResult> SurveyStatus(CancellationToken cancellationToken = default)
     {
         var items = await context.Surveys
@@ -53,6 +55,7 @@ public sealed class InquiryOperationsController(
 
     // ── Survey Review Status (CAP-IA-015) ─────────────────────────────────
 
+    /// <summary>Displays survey review status for all surveys pending review.</summary>
     [Route("Unified/InquiryOperations/SurveyReviewStatus")]
     public async Task<IActionResult> SurveyReviewStatus(CancellationToken cancellationToken = default)
     {
@@ -63,6 +66,7 @@ public sealed class InquiryOperationsController(
 
     // ── Site Roles (CAP-IA-016) ───────────────────────────────────────────
 
+    /// <summary>Lists all site role definitions.</summary>
     [Route("Unified/InquiryOperations/SiteRoles")]
     public async Task<IActionResult> SiteRoles(CancellationToken cancellationToken = default)
     {
@@ -72,6 +76,7 @@ public sealed class InquiryOperationsController(
 
     // ── Site App Menus (CAP-IA-017) ───────────────────────────────────────
 
+    /// <summary>Lists all site application menu entries.</summary>
     [Route("Unified/InquiryOperations/SiteAppMenus")]
     public async Task<IActionResult> SiteAppMenus(CancellationToken cancellationToken = default)
     {

@@ -19,6 +19,7 @@ public sealed class OperationsSupportController(
 {
     // ── System Health (CAP-DS-007, CAP-IA-028) ────────────────────────────
 
+    /// <summary>Displays system health status including SQLite connectivity (anonymous access allowed).</summary>
     [Route("Unified/OperationsSupport/Health")]
     [AllowAnonymous]
     public IActionResult Health()
@@ -40,8 +41,7 @@ public sealed class OperationsSupportController(
     }
 
     // ── Chart Builder (CAP-IA-026) ────────────────────────────────────────
-
-    [Route("Unified/OperationsSupport/ChartBuilder")]
+    /// <summary>Displays the chart builder interface for Analyst and Administrator roles.</summary>    [Route("Unified/OperationsSupport/ChartBuilder")]
     [Authorize(Policy = "Analyst")]
     public async Task<IActionResult> ChartBuilder()
     {
@@ -57,6 +57,7 @@ public sealed class OperationsSupportController(
 
     // ── Chart Settings (CAP-IA-025) ────────────────────────────────────────
 
+    /// <summary>Lists all chart configuration settings for Analyst and Administrator roles.</summary>
     [Route("Unified/OperationsSupport/ChartSettings")]
     [Authorize(Policy = "Analyst")]
     public async Task<IActionResult> ChartSettings(CancellationToken cancellationToken = default)
@@ -67,6 +68,7 @@ public sealed class OperationsSupportController(
 
     // ── User Preferences (CAP-IA-029) ─────────────────────────────────────
 
+    /// <summary>Renders the user preferences UI shell; preference data is managed client-side.</summary>
     [Route("Unified/OperationsSupport/UserPreferences")]
     public IActionResult UserPreferences()
     {

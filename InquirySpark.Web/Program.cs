@@ -7,6 +7,9 @@
 //   T016B — Authorization policies + Identity UI endpoint mapping
 // ============================================================
 
+// TODO(identity-migration): These usings reference decommissioned-project namespaces kept for EF Core identity
+// schema compatibility. Remove once ControlSparkUser and ControlSparkUserContext are migrated to
+// InquirySpark.Web.Areas.Identity.Data. See spec FR-015 and contracts/decommission-verification-evidence.md.
 using ControlSpark.WebMvc.Areas.Identity.Data;
 using InquirySpark.Admin.Areas.Identity.Data;
 using InquirySpark.Common.Models.Configuration;

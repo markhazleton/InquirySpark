@@ -17,6 +17,7 @@ public sealed class InquiryAuthoringController(
 {
     // ── Surveys (CAP-IA-006) ──────────────────────────────────────────────
 
+    /// <summary>Lists all surveys from the read-only inquiry data store.</summary>
     [Route("Unified/InquiryAuthoring/Surveys")]
     public async Task<IActionResult> Surveys(CancellationToken cancellationToken = default)
     {
@@ -26,6 +27,7 @@ public sealed class InquiryAuthoringController(
         return View(nameof(Surveys), items);
     }
 
+    /// <summary>Shows details for the survey with the specified identifier.</summary>
     [Route("Unified/InquiryAuthoring/Surveys/{id:int}")]
     public async Task<IActionResult> SurveyDetails(int id, CancellationToken cancellationToken = default)
     {
@@ -38,6 +40,7 @@ public sealed class InquiryAuthoringController(
 
     // ── Survey Email Templates (CAP-IA-007) ───────────────────────────────
 
+    /// <summary>Lists all survey email templates.</summary>
     [Route("Unified/InquiryAuthoring/SurveyEmailTemplates")]
     public async Task<IActionResult> SurveyEmailTemplates(CancellationToken cancellationToken = default)
     {
@@ -49,6 +52,7 @@ public sealed class InquiryAuthoringController(
 
     // ── Questions (CAP-IA-008) ────────────────────────────────────────────
 
+    /// <summary>Lists all questions from the read-only inquiry data store.</summary>
     [Route("Unified/InquiryAuthoring/Questions")]
     public async Task<IActionResult> Questions(CancellationToken cancellationToken = default)
     {
@@ -58,6 +62,7 @@ public sealed class InquiryAuthoringController(
         return View(nameof(Questions), items);
     }
 
+    /// <summary>Shows details for the question with the specified identifier.</summary>
     [Route("Unified/InquiryAuthoring/Questions/{id:int}")]
     public async Task<IActionResult> QuestionDetails(int id, CancellationToken cancellationToken = default)
     {
@@ -70,6 +75,7 @@ public sealed class InquiryAuthoringController(
 
     // ── Question Groups (CAP-IA-009) ──────────────────────────────────────
 
+    /// <summary>Lists all question groups with their parent survey.</summary>
     [Route("Unified/InquiryAuthoring/QuestionGroups")]
     public async Task<IActionResult> QuestionGroups(CancellationToken cancellationToken = default)
     {
@@ -81,6 +87,7 @@ public sealed class InquiryAuthoringController(
 
     // ── Question Group Members (CAP-IA-010) ───────────────────────────────
 
+    /// <summary>Lists all question group member mappings.</summary>
     [Route("Unified/InquiryAuthoring/QuestionGroupMembers")]
     public async Task<IActionResult> QuestionGroupMembers(CancellationToken cancellationToken = default)
     {
@@ -93,6 +100,7 @@ public sealed class InquiryAuthoringController(
 
     // ── Question Answers (CAP-IA-011) ─────────────────────────────────────
 
+    /// <summary>Lists all question answer options.</summary>
     [Route("Unified/InquiryAuthoring/QuestionAnswers")]
     public async Task<IActionResult> QuestionAnswers(CancellationToken cancellationToken = default)
     {
