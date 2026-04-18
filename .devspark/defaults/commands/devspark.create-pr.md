@@ -1,8 +1,9 @@
 ---
 description: Draft or update a spec-aware pull request with task, checklist, and gate visibility before review.
-scripts:
-  sh: .devspark/scripts/bash/create-pr.sh --mode preflight --json $ARGUMENTS
-  ps: .devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS
+handoffs:
+  - label: Review Pull Request
+    agent: devspark.pr-review
+    prompt: Review the pull request for constitution compliance
 ---
 
 ## User Input
@@ -29,9 +30,13 @@ This command is advisory. Dirty trees, missing specs, incomplete tasks, unresolv
 
 ## Outline
 
+**Multi-app support**: If this repository uses multi-app mode (`.documentation/devspark.json` exists with `mode: "multi-app"`), check for `--app <id>` in the user input to scope this workflow to a specific application. When app context is provided, resolve artifacts from `{app.path}/.documentation/` instead of the repository root `.documentation/`. Print the resolved scope (app name, doc root) at the start of output.
+
 ### 1. Run Preflight Context
 
-Run `{SCRIPT}` once from the repository root and parse the returned JSON.
+> **Script Resolution**: Before running `.devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS`, apply the 2-tier override check — if `.documentation/scripts/powershell/<filename>` (PowerShell) or `.documentation/scripts/bash/<filename>` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
+
+Run `.devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS` once from the repository root and parse the returned JSON.
 
 Use the script output as the source of truth for:
 
@@ -148,7 +153,7 @@ After creation or update, report:
 - whether it is draft or ready for review
 - any warnings that still remain unresolved
 
-## Notes
+## Guidelines
 
 - Branches with no spec are valid. If a quickfix record exists for the current branch, use it before falling back to branch name, diff stats, and commit subjects.
 - If task or checklist artifacts are missing, report that plainly and continue with a lighter draft.

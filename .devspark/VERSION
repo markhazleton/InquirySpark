@@ -1,4 +1,4 @@
-version: 1.5.0
-installed: 2026-04-11
+version: 2.0.0
+installed: 2026-04-18
 method: copilot-quickstart
-migrated-from: 0.1.2
+migrated-from: fresh
