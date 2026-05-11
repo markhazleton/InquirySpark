@@ -1,6 +1,15 @@
 # InquirySpark
 Spark Your Inquiry, Ignite Insights.
 
+**Live Site**: [https://inquiry.makeboldspark.com](https://inquiry.makeboldspark.com)
+
+## About
+
+InquirySpark is a .NET 10 unified survey/inquiry and decision-management system delivered through a single MVC web application backed by read-only SQLite databases. It demonstrates modern ASP.NET Core architecture with Bootstrap 5, EF Core 10, and ASP.NET Core Identity.
+
+> Built by [Mark Hazleton](https://markhazleton.com) — Mark Hazleton, Solutions Architect
+> InquirySpark is part of the [Make Bold Spark](https://makeboldspark.com) portfolio of technical demonstrations.
+
 ## Overview
 InquirySpark is a .NET 10 unified survey/inquiry and decision-management system delivered through a single MVC web application backed by read-only SQLite databases. The solution contains:
 
